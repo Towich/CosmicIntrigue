@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.towich.cosmicintrigue.data.source.MyLocationListener
 import com.towich.cosmicintrigue.databinding.FragmentFirstBinding
 
 /**
@@ -32,8 +33,10 @@ class FirstFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        MyLocationListener.setUpLocationListener(requireContext())
+
         binding.buttonFirst.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+            binding.textviewFirst.text = "latitude = ${MyLocationListener.imHere?.latitude} longitude=${MyLocationListener.imHere?.longitude}"
         }
     }
 
