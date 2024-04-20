@@ -23,12 +23,15 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.towich.cosmicintrigue.data.util.MyLocationListener
 import com.towich.cosmicintrigue.R
+import com.towich.cosmicintrigue.data.repository.MainRepository
 import com.towich.cosmicintrigue.databinding.ActivityMapsBinding
+import com.towich.cosmicintrigue.ui.util.App
+import com.towich.cosmicintrigue.ui.util.ViewModelFactory
+import com.towich.cosmicintrigue.ui.viewmodel.MapViewModel
 
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class GameActivity : AppCompatActivity() {
 
-    private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var myLocationListener: MyLocationListener
@@ -42,10 +45,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
+//        val mapFragment = supportFragmentManager
+//            .findFragmentById(R.id.map) as SupportMapFragment
+//        mapFragment.getMapAsync(this)
 
         myLocationListener = MyLocationListener { newLocation: Location ->
             Toast.makeText(
@@ -68,33 +73,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
-    override fun onMapReady(googleMap: GoogleMap) {
-        mMap = googleMap
-
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
-
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ),
-                0
-            )
-        }
-        mMap.isMyLocationEnabled = true
-    }
 
     private fun getLocationUpdates() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(applicationContext)

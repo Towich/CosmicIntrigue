@@ -1,11 +1,11 @@
 package com.towich.cosmicintrigue.data.util
 
 import android.location.Location
-import com.google.android.gms.location.LocationListener
+import android.location.LocationListener
 
 class MyLocationListener(
     private val onMyLocationChanged: (newLocation: Location) -> Unit
-): LocationListener {
+) : LocationListener {
     override fun onLocationChanged(p0: Location) {
         onMyLocationChanged(p0)
     }
