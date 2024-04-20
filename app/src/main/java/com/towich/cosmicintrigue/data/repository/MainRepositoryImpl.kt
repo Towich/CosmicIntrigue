@@ -3,15 +3,20 @@ package com.towich.cosmicintrigue.data.repository
 import android.util.Log
 import com.google.gson.Gson
 import com.towich.cosmicintrigue.data.model.GeoPositionModel
+import com.towich.cosmicintrigue.data.model.TaskGeoPositionModel
+import com.towich.cosmicintrigue.data.network.ApiResult
+import com.towich.cosmicintrigue.data.network.ApiService
 import com.towich.cosmicintrigue.data.source.Constants
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import retrofit2.Response
 import ua.naiksoftware.stomp.StompClient
 import ua.naiksoftware.stomp.dto.LifecycleEvent
 import ua.naiksoftware.stomp.dto.StompMessage
 
 class MainRepositoryImpl(
+    private val apiService: ApiService,
     private val gson: Gson,
     private val mStompClient: StompClient,
 ) : MainRepository {
@@ -97,5 +102,19 @@ class MainRepositoryImpl(
         }
 
 
+    }
+
+    override suspend fun getStartTaskMarks(): ApiResult<List<TaskGeoPositionModel>> {
+        return try {
+            val response: Response<List<TaskGeoPositionModel>> = apiService.getStartTaskMarks()
+
+            if(response.isSuccessful){
+                ApiResult.Success(response.body() ?: listOf())
+            } else{
+                ApiResult.Error(response.message())
+            }
+        } catch (e: Exception){
+            ApiResult.Error(e.message ?: "unknown error")
+        }
     }
 }
