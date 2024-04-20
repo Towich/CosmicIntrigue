@@ -6,6 +6,7 @@ import com.towich.cosmicintrigue.data.repository.MainRepository
 import com.towich.cosmicintrigue.ui.viewmodel.MapViewModel
 
 
+@Suppress("UNCHECKED_CAST")
 class ViewModelFactory(
     private val repository: MainRepository
 ): ViewModelProvider.Factory {

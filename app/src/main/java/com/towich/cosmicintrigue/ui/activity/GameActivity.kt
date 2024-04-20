@@ -33,11 +33,7 @@ import com.towich.cosmicintrigue.ui.viewmodel.MapViewModel
 class GameActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMapsBinding
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var myLocationListener: MyLocationListener
 
-    private lateinit var locationRequest: LocationRequest
-    private lateinit var locationCallback: LocationCallback
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,16 +48,16 @@ class GameActivity : AppCompatActivity() {
 //            .findFragmentById(R.id.map) as SupportMapFragment
 //        mapFragment.getMapAsync(this)
 
-        myLocationListener = MyLocationListener { newLocation: Location ->
-            Toast.makeText(
-                applicationContext,
-                "${newLocation.latitude} ${newLocation.longitude}",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
+//        myLocationListener = MyLocationListener { newLocation: Location ->
+//            Toast.makeText(
+//                applicationContext,
+//                "${newLocation.latitude} ${newLocation.longitude}",
+//                Toast.LENGTH_SHORT
+//            ).show()
+//        }
 
-        getLocationUpdates()
-        startLocationUpdates()
+//        getLocationUpdates()
+//        startLocationUpdates()
     }
 
     /**
@@ -74,29 +70,5 @@ class GameActivity : AppCompatActivity() {
      * installed Google Play services and returned to the app.
      */
 
-    private fun getLocationUpdates() {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(applicationContext)
-        locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000L)
-            .setMinUpdateDistanceMeters(0f)
-            .setMinUpdateIntervalMillis(1000L)
-            .build()
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult) {
-                if (locationResult.locations.isNotEmpty()) {
-                    val location = locationResult.lastLocation
 
-                    Log.i("MY_LOCATION", "${location?.longitude} ${location?.latitude}")
-                }
-            }
-        }
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun startLocationUpdates() {
-        fusedLocationClient.requestLocationUpdates(
-            locationRequest,
-            locationCallback,
-            null /* Looper */
-        )
-    }
 }
