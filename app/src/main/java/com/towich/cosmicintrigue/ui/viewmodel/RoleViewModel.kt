@@ -3,8 +3,11 @@ package com.towich.cosmicintrigue.ui.viewmodel
 import androidx.lifecycle.ViewModel
 
 class RoleViewModel(): ViewModel() {
-    public fun GetRole():String
+    public fun GetRole():Boolean
     {
-        return " "//TODO
+        TODO("Получение статуса игрока" +
+                "мирный - false" +
+                "импостер - true")
     }
+
 }
