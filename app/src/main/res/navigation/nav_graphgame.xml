@@ -72,9 +72,6 @@
         <action
             android:id="@+id/action_DeathFragment_to_FinalFragment2"
             app:destination="@id/FinalFragment" />
-        <action
-            android:id="@+id/action_DeathFragment_to_MapFragment2"
-            app:destination="@id/MapFragment" />
     </fragment>
     <include app:graph="@navigation/nav_graphmenu" />
 </navigation>
