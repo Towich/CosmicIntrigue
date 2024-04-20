@@ -13,7 +13,7 @@ import com.towich.cosmicintrigue.data.model.ReadyPlayer
 class WaitAdapter(val userId : Int) :RecyclerView.Adapter<WaitAdapter.WaitViewHolder>(){
     class WaitViewHolder(val binding: WroomViewBinding):RecyclerView.ViewHolder(binding.root)
     var players : List<ReadyPlayer> = ArrayList()
-    public fun setReady(player: List<ReadyPlayer>){
+    fun setReady(player: List<ReadyPlayer>){
         players = player
         notifyDataSetChanged()
     }

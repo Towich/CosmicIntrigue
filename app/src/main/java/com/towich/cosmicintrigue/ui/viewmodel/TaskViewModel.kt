@@ -6,10 +6,12 @@ class TaskViewModel(): ViewModel() {
 
 
     fun interruptTask(){
-        TODO("Отправка данных о прерывании")
+        TODO("Отправка данных о прерывании" +
+                "post запрос")
     }
     fun finishTask(){
-        TODO("Отправка данных о завершении")
+        TODO("Отправка данных о завершении"+
+                "post запрос")
     }
 
 }
