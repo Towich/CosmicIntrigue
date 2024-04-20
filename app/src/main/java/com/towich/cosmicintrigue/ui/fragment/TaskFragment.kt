@@ -1,6 +1,7 @@
 package com.towich.cosmicintrigue.ui.fragment
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -32,6 +33,18 @@ class TaskFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Создаем таймер на 5 секунд
+        object : CountDownTimer(5000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                // Этот метод вызывается каждую секунду до истечения таймера
+            }
+
+            override fun onFinish() {
+                // Этот метод вызывается по истечении таймера (через 5 секунд)
+                true.also { binding.task.isEnabled = it } // Включаем кнопку после истечения таймера
+            }
+        }.start()
 
         binding.task.setOnClickListener {
             findNavController().navigate(R.id.action_MapFragment_to_VoteFragment2)
