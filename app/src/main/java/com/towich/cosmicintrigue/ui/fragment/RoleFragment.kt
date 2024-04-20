@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.towich.cosmicintrigue.R
 import com.towich.cosmicintrigue.databinding.FragmentRoleBinding
 
 /**
@@ -31,11 +32,11 @@ class RoleFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-/*
-        binding.buttonFirst.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+
+        binding.button3.setOnClickListener {
+            findNavController().navigate(R.id.action_menu_to_game)
         }
- */
+
     }
 
     override fun onDestroyView() {

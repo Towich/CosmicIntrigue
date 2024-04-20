@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.towich.cosmicintrigue.data.model.Player
 import com.towich.cosmicintrigue.data.model.ReadyPlayer
+import androidx.navigation.fragment.findNavController
+import com.towich.cosmicintrigue.R
 import com.towich.cosmicintrigue.databinding.FragmentWroomBinding
 import com.towich.cosmicintrigue.ui.adapters.VoteAdapter
 import com.towich.cosmicintrigue.ui.adapters.WaitAdapter
@@ -30,6 +32,7 @@ class WRoomFragment : Fragment() {
 
         _binding = FragmentWroomBinding.inflate(inflater, container, false)
         return binding.root
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -38,14 +41,9 @@ class WRoomFragment : Fragment() {
         val adap = WaitAdapter(2)
         binding.rec.adapter = adap//TODO
         binding.rec.layoutManager = LinearLayoutManager(context)
-        binding.button2.setOnClickListener{
-            adap.setReady(l)
+        binding.button2.setOnClickListener {
+            findNavController().navigate(R.id.action_WRoomFragment_to_gameActivity)
         }
-/*
-        binding.buttonSecond.setOnClickListener {
-            findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
-        }
- */
     }
 
     override fun onDestroyView() {

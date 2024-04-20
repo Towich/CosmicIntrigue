@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.maps.SupportMapFragment
 import com.towich.cosmicintrigue.R
 import com.towich.cosmicintrigue.databinding.FragmentLoginBinding
 import com.towich.cosmicintrigue.ui.util.App

@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.towich.cosmicintrigue.R
 import com.towich.cosmicintrigue.data.model.Player
 import com.towich.cosmicintrigue.databinding.FragmentVoteBinding
 import com.towich.cosmicintrigue.ui.adapters.VoteAdapter
@@ -38,6 +40,7 @@ class VoteFragment : Fragment() {
         binding.rec.adapter = VoteAdapter({},arrayListOf(Player(2,"user"),Player(3,"123")),2)//TODO
         binding.rec.layoutManager = LinearLayoutManager(context)
         binding.button5.setOnClickListener{
+            findNavController().navigate(R.id.action_MapFragment_to_VoteFragment2)
         }
     }
 

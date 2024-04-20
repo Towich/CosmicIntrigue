@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.towich.cosmicintrigue.R
 import com.towich.cosmicintrigue.databinding.FragmentFinalBinding
 
 class FinalFragment: Fragment(){
@@ -28,11 +29,9 @@ class FinalFragment: Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-/*
-        binding.buttonFirst.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+        binding.button8.setOnClickListener {
+            findNavController().navigate(R.id.action_FinalFragment_to_nav_graph)
         }
-*/
 
     }
 
