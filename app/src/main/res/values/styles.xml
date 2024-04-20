@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ButtonMainFilled">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:backgroundTint">@color/primary</item>
+        <item name="android:minHeight">60dp</item>
+    </style>
+    <style name="ButtonMainOutlined">
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:backgroundTint">#00000000</item>
+        <item name="strokeColor">@color/primary</item>
+        <item name="android:minHeight">60dp</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+    <style name="Text40">
+        <item name="android:textSize">40dp</item>
+    </style>
+    <style name="Text32">
+        <item name="android:textSize">40dp</item>
+    </style>
+</resources>

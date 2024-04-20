@@ -3,26 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/LoginFragment">
 
     <fragment
-        android:id="@+id/FirstFragment"
-        android:name="com.towich.cosmicintrigue.FirstFragment"
+        android:id="@+id/LoginFragment"
+        android:name="com.towich.cosmicintrigue.LoginFragment"
         android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
-
-        <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_login"/>
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.towich.cosmicintrigue.SecondFragment"
+        android:id="@+id/WRoomFragment"
+        android:name="com.towich.cosmicintrigue.WRoomFragment"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
-
-        <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_wroom"/>
 </navigation>
