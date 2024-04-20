@@ -16,7 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/title"
-        android:textAppearance="@style/Text40" />
+        android:textAppearance="@style/Text40"
+        android:visibility="visible" />
 
     <Space
         android:layout_width="match_parent"
@@ -29,7 +30,8 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/login_hint"
-        android:inputType="text" />
+        android:inputType="text"
+        android:visibility="visible" />
 
     <Space
         android:layout_width="match_parent"
