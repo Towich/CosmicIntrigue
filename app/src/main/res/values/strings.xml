@@ -4,11 +4,14 @@
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
     <string name="title">Космическая Интрига: Парковый Эпос</string>
     <string name="login_hint">Логин</string>
     <string name="vote_fragment_label">Комната ожидания</string>
+    <string name="role_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
+    <string name="role_label">Ваша роль</string>
+    <string name="role_tasks">Ваша Задача</string>
+    <string name="interupt">Прервать</string>
+    <string name="next">Продолжить</string>
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
         volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
