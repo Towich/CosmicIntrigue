@@ -2,6 +2,7 @@ package com.towich.cosmicintrigue.ui.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.google.android.gms.maps.model.LatLng
 import androidx.lifecycle.viewModelScope
 import com.towich.cosmicintrigue.data.model.GeoPositionModel
 import com.towich.cosmicintrigue.data.repository.MainRepository
@@ -11,7 +12,6 @@ import kotlinx.coroutines.launch
 class MapViewModel(
     private val repository: MainRepository
 ): ViewModel() {
-
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
 
