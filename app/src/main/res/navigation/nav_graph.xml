@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/LoginFragment"
-        android:name="com.towich.cosmicintrigue.LoginFragment"
+        android:name="com.towich.cosmicintrigue.ui.fragment.LoginFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_login"/>
     <fragment
         android:id="@+id/WRoomFragment"
-        android:name="com.towich.cosmicintrigue.WRoomFragment"
+        android:name="com.towich.cosmicintrigue.ui.fragment.WRoomFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_wroom"/>
 </navigation>

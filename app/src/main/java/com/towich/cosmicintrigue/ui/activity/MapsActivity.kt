@@ -1,4 +1,4 @@
-package com.towich.cosmicintrigue
+package com.towich.cosmicintrigue.ui.activity
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -21,6 +21,8 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.towich.cosmicintrigue.data.util.MyLocationListener
+import com.towich.cosmicintrigue.R
 import com.towich.cosmicintrigue.databinding.ActivityMapsBinding
 
 

@@ -1,19 +1,16 @@
-package com.towich.cosmicintrigue
+package com.towich.cosmicintrigue.ui.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.towich.cosmicintrigue.databinding.FragmentDeathBinding
+import com.towich.cosmicintrigue.databinding.FragmentMapBinding
 
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
-class DeathFragment : Fragment() {
+class MapFragment: Fragment(){
 
-    private var _binding: FragmentDeathBinding? = null
+    private var _binding: FragmentMapBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -24,7 +21,7 @@ class DeathFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentDeathBinding.inflate(inflater, container, false)
+        _binding = FragmentMapBinding.inflate(inflater, container, false)
         return binding.root
 
     }
@@ -35,7 +32,8 @@ class DeathFragment : Fragment() {
         binding.buttonFirst.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
- */
+*/
+
     }
 
     override fun onDestroyView() {
