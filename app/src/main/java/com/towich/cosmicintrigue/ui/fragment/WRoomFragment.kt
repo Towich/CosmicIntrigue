@@ -43,7 +43,7 @@ class WRoomFragment : Fragment() {
         binding.rec.layoutManager = LinearLayoutManager(context)
         binding.wroom.setOnClickListener {
             findNavController().navigate(R.id.action_WRoomFragment_to_gameActivity)
-            //wromViewModel.SendLogin(binding.wrom.text.toString())
+            //wromViewModel.SendWrom(binding.wrom.text.toString())
         }
     }
 

@@ -35,7 +35,7 @@ class TaskFragment : Fragment() {
 
         binding.task.setOnClickListener {
             findNavController().navigate(R.id.action_MapFragment_to_VoteFragment2)
-            //taskViewModel.SendLogin(binding.task.text.toString())
+            //taskViewModel.SendTask(binding.task.text.toString())
         }
     }
 
