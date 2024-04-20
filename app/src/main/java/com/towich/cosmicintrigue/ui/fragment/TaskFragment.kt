@@ -33,9 +33,9 @@ class TaskFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.button6.setOnClickListener {
-            findNavController().navigate(R.id.action_MapFragment_to_VoteFragment2)
-        }
+//        binding.button6.setOnClickListener {
+//            findNavController().navigate(R.id.action_MapFragment_to_VoteFragment2)
+//        }
     }
 
     override fun onDestroyView() {
