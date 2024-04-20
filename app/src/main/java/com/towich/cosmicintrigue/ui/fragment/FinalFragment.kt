@@ -29,7 +29,7 @@ class FinalFragment: Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.button8.setOnClickListener {
+        binding.proceed.setOnClickListener {
             findNavController().navigate(R.id.action_FinalFragment_to_nav_graph)
         }
 
