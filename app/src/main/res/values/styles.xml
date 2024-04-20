@@ -12,6 +12,15 @@
         <item name="android:minHeight">60dp</item>
         <item name="strokeWidth">1dp</item>
     </style>
+    <style name="MainLayout">
+        <item name="android:paddingLeft">35dp</item>
+        <item name="android:paddingTop">60dp</item>
+        <item name="android:paddingRight">35dp</item>
+        <item name="android:paddingBottom">60dp</item>
+        ="60dp"
+        ="35dp"
+        ="60dp"
+    </style>
     <style name="Text40">
         <item name="android:textSize">40sp</item>
     </style>
