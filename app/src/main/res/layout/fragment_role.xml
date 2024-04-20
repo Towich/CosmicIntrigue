@@ -5,7 +5,6 @@
     style="@style/MainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RoleFragment">
     android:orientation="vertical"
     android:paddingBottom="60dp"
     tools:context=".ui.fragment.RoleFragment">
