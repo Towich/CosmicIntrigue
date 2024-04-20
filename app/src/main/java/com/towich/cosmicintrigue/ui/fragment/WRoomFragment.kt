@@ -1,18 +1,18 @@
-package com.towich.cosmicintrigue
+package com.towich.cosmicintrigue.ui.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.towich.cosmicintrigue.databinding.FragmentVoteBinding
+import com.towich.cosmicintrigue.databinding.FragmentWroomBinding
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
  */
-class VoteFragment : Fragment() {
+class WRoomFragment : Fragment() {
 
-    private var _binding: FragmentVoteBinding? = null
+    private var _binding: FragmentWroomBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -23,7 +23,7 @@ class VoteFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentVoteBinding.inflate(inflater, container, false)
+        _binding = FragmentWroomBinding.inflate(inflater, container, false)
         return binding.root
 
     }

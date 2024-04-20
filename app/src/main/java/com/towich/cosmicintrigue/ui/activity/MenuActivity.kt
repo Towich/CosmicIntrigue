@@ -1,14 +1,9 @@
-package com.towich.cosmicintrigue
+package com.towich.cosmicintrigue.ui.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.snackbar.Snackbar
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import android.view.Menu
-import android.view.MenuItem
+import com.towich.cosmicintrigue.R
 import com.towich.cosmicintrigue.databinding.ActivityMenuBinding
 
 class MenuActivity : AppCompatActivity() {
