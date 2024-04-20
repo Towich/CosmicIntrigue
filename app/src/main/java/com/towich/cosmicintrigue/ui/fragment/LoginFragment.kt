@@ -32,8 +32,8 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.login.setOnClickListener{
-            loginViewModel.sendLogin(binding.Login.text.toString())
+        binding.loginButton.setOnClickListener{
+            loginViewModel.sendLogin(binding.loginEditText.text.toString())
             findNavController().navigate(R.id.action_Login_to_WRoom)
         }
     }

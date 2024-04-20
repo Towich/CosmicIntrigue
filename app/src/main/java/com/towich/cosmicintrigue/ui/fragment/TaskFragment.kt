@@ -49,11 +49,11 @@ class TaskFragment : Fragment() {
 
             override fun onFinish() {
                 // Этот метод вызывается по истечении таймера (через 5 секунд)
-                true.also { binding.task.isEnabled = it } // Включаем кнопку после истечения таймера
+                true.also { binding.taskSuccessButton.isEnabled = it } // Включаем кнопку после истечения таймера
             }
         }.start()
 
-        binding.task.setOnClickListener {
+        binding.taskSuccessButton.setOnClickListener {
             findNavController().navigate(R.id.action_MapFragment_to_VoteFragment2)
             //taskViewModel.SendLogin(binding.task.text.toString())
         }

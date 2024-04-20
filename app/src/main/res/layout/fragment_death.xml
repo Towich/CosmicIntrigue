@@ -8,20 +8,27 @@
     android:orientation="vertical"
     style="@style/MainLayout"
     tools:context=".ui.fragment.TaskFragment">
-
-
     <TextView
-        android:id="@+id/textView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/deathM"
-        android:textAlignment="center"
-        android:textSize="34sp" />
+        android:textAppearance="@style/Text40"
+        android:textAlignment="center" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
 
     <ImageView
-        android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:src="@drawable/frame" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
 
 </LinearLayout>
