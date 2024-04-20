@@ -1,9 +1,12 @@
 package com.towich.cosmicintrigue.ui.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.towich.cosmicintrigue.data.model.GeoPositionModel
+import com.towich.cosmicintrigue.data.model.TaskGeoPositionModel
+import com.towich.cosmicintrigue.data.network.ApiResult
 import com.towich.cosmicintrigue.data.repository.MainRepository
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
@@ -14,6 +17,9 @@ class MapViewModel(
 
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
+    val currentTaskMarks: MutableLiveData<List<TaskGeoPositionModel>> by lazy {
+        MutableLiveData<List<TaskGeoPositionModel>>()
+    }
 
     fun initGeoPositionsStompClient(
         onReceivedGeoPosition: (geoPosition: GeoPositionModel) -> Unit
@@ -27,5 +33,20 @@ class MapViewModel(
     }
     fun sendGeoPosition(geoPosition: GeoPositionModel) {
         repository.sendGeoPosition(compositeDisposable, geoPosition)
+    }
+
+    fun getStartTaskMarks() {
+        viewModelScope.launch {
+            when (val result = repository.getStartTaskMarks()) {
+                is ApiResult.Success -> {
+                    currentTaskMarks.value = result.data
+                }
+
+                is ApiResult.Error -> {
+                    Log.e("MapViewModel", result.error)
+                }
+            }
+        }
+
     }
 }
