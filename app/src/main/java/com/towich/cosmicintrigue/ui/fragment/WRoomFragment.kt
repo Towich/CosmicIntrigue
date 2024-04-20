@@ -5,7 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.towich.cosmicintrigue.data.model.Player
+import com.towich.cosmicintrigue.data.model.ReadyPlayer
 import com.towich.cosmicintrigue.databinding.FragmentWroomBinding
+import com.towich.cosmicintrigue.ui.adapters.VoteAdapter
+import com.towich.cosmicintrigue.ui.adapters.WaitAdapter
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -25,11 +30,17 @@ class WRoomFragment : Fragment() {
 
         _binding = FragmentWroomBinding.inflate(inflater, container, false)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        var l = arrayListOf(ReadyPlayer(2,"user",false), ReadyPlayer(3,"123",true))
+        val adap = WaitAdapter(2)
+        binding.rec.adapter = adap//TODO
+        binding.rec.layoutManager = LinearLayoutManager(context)
+        binding.button2.setOnClickListener{
+            adap.setReady(l)
+        }
 /*
         binding.buttonSecond.setOnClickListener {
             findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
