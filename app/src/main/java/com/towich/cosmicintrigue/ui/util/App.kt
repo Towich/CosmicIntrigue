@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.towich.cosmicintrigue.data.network.ApiRoutes
 import com.towich.cosmicintrigue.data.network.ApiService
+import com.towich.cosmicintrigue.data.network.StompController
 import com.towich.cosmicintrigue.data.repository.MainRepository
 import com.towich.cosmicintrigue.data.repository.MainRepositoryImpl
 import com.towich.cosmicintrigue.data.source.Constants
@@ -53,8 +54,14 @@ class App : Application() {
     private val apiService: ApiService =
         retrofit.create(ApiService::class.java)
 
-    private val repository: MainRepository =
+    private val stompController: StompController = StompController(
+        mStompClient = stompClient,
+        gson = gson
+    )
+
+    val repository: MainRepository =
         MainRepositoryImpl(
+            stompController = stompController,
             apiService = apiService,
             gson = gson,
             mStompClient = stompClient

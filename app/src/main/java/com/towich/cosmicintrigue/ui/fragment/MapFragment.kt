@@ -3,6 +3,7 @@ package com.towich.cosmicintrigue.ui.fragment
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -31,10 +32,15 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.towich.cosmicintrigue.R
 import com.towich.cosmicintrigue.data.model.GeoPositionModel
 import com.towich.cosmicintrigue.data.model.TaskGeoPositionModel
+import com.towich.cosmicintrigue.data.source.Constants
 import com.towich.cosmicintrigue.data.util.MyLocationListener
 import com.towich.cosmicintrigue.databinding.FragmentMapBinding
 import com.towich.cosmicintrigue.ui.util.App
 import com.towich.cosmicintrigue.ui.viewmodel.MapViewModel
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 class MapFragment : Fragment(), OnMapReadyCallback {
 
@@ -76,44 +82,70 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         }
 
-        viewModel.initGeoPositionsStompClient(
-            onReceivedGeoPosition = { geoPosition: GeoPositionModel ->
-                Toast.makeText(requireContext(), "New mark!", Toast.LENGTH_SHORT).show()
-                if (geoPosition.latitude != null && geoPosition.longitude != null) {
-                    val latLngGeoPos = LatLng(geoPosition.latitude, geoPosition.longitude)
+        viewModel.subscribeGeoPosTopic { geoPosition: GeoPositionModel ->
+            if (geoPosition.latitude != null && geoPosition.longitude != null) {
+                val latLngGeoPos = LatLng(geoPosition.latitude, geoPosition.longitude)
 
-                    for(mark in listOfUsersMarks){
-                        if(mark.first == geoPosition.id){
-                            mark.second?.remove()
-                        }
+                for (mark in listOfUsersMarks) {
+                    if (mark.first == geoPosition.id) {
+                        mark.second?.remove()
                     }
+                }
 
-                    val marker = map.addMarker(MarkerOptions()
+                val marker = map.addMarker(
+                    MarkerOptions()
                         .position(latLngGeoPos)
                         .title("YAY")
-                    )
+                )
 
-                    listOfUsersMarks.add(Pair(geoPosition.id, marker))
+                listOfUsersMarks.add(Pair(geoPosition.id, marker))
 
-                }
             }
-        )
+        }
 
-        // Create the observer which updates the UI.
-        val nameObserver = Observer<List<TaskGeoPositionModel>> { listOfTaskGeoPositions ->
-            // Update the UI
-            for(taskGeo in listOfTaskGeoPositions){
-                if(taskGeo.latitude != null && taskGeo.longitude != null) {
-                    map.addMarker(MarkerOptions()
-                        .position(LatLng(taskGeo.latitude, taskGeo.longitude))
-                        .title("Task")
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+
+        viewModel.subscribeCoordinatesTopic { listOfTasksGeoPositions ->
+            map.clear()
+            listOfTasksMarks.clear()
+
+            listOfTasksGeoPositions.forEach {
+                Log.i(
+                    "MapFragment",
+                    "id = ${it.id}, latitude = ${it.latitude}, longitude = ${it.longitude}"
+                )
+
+                if(it.latitude != null && it.longitude != null) {
+                    listOfTasksMarks.add(
+                        Pair(
+                            first = it.id,
+                            second = map.addMarker(
+                                MarkerOptions()
+                                    .position(LatLng(it.latitude, it.longitude))
+                                    .title("Task")
+                                    .icon(
+                                        BitmapDescriptorFactory.defaultMarker(
+                                            BitmapDescriptorFactory.HUE_AZURE
+                                        )
+                                    )
+                            )
+                        )
                     )
                 }
             }
         }
 
-        viewModel.currentTaskMarks.observe(viewLifecycleOwner, nameObserver)
+
+
+        binding.floatingActionButton2.setOnClickListener {
+            viewModel.sendTaskGeoPositionModel(
+                TaskGeoPositionModel(3, 10.0, 10.0)
+            )
+
+            Log.i(
+                "MapFragment",
+                "distance = ${distanceInKm(55.801017, 37.805728, 55.670091, 37.480906)}"
+            )
+        }
 
         viewModel.getStartTaskMarks()
         getLocationUpdates()
@@ -122,10 +154,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        // Add a marker in Moscow and move the camera
+        val park50years = LatLng(55.684132, 37.502607)
+//        googleMap.addMarker(MarkerOptions().position(park50years).title("Marker in Park 50 years"))
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(park50years, 14.5f))
 
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
@@ -145,6 +177,32 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             )
         }
         googleMap.isMyLocationEnabled = true
+
+        // Create the observer which updates the UI.
+        val nameObserver = Observer<List<TaskGeoPositionModel>> { listOfTaskGeoPositions ->
+            // Update the UI
+            for (taskGeo in listOfTaskGeoPositions) {
+                if (taskGeo.latitude != null && taskGeo.longitude != null && taskGeo.completed != true) {
+                    listOfTasksMarks.add(
+                        Pair(
+                            taskGeo.id,
+                            map.addMarker(
+                                MarkerOptions()
+                                    .position(LatLng(taskGeo.latitude, taskGeo.longitude))
+                                    .title("Task ${taskGeo.id}")
+                                    .icon(
+                                        BitmapDescriptorFactory.defaultMarker(
+                                            BitmapDescriptorFactory.HUE_AZURE
+                                        )
+                                    )
+                            )
+                        )
+                    )
+                }
+            }
+        }
+
+        viewModel.currentTaskMarks.observe(viewLifecycleOwner, nameObserver)
     }
 
     override fun onDestroyView() {
@@ -157,7 +215,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             LocationServices.getFusedLocationProviderClient(requireContext().applicationContext)
         locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000L)
             .setMinUpdateDistanceMeters(0f)
-            .setMinUpdateIntervalMillis(1000L)
+            .setMinUpdateIntervalMillis(5000L)
             .build()
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
@@ -171,7 +229,17 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                             longitude = location?.longitude
                         )
                     )
-                    Log.i("MY_LOCATION", "${location?.longitude} ${location?.latitude}")
+
+//                    Log.i("MapFragment")
+
+                    val taskIdToShow = getTaskIdToCompleteIfNearby(currLocation = location)
+                    if(taskIdToShow != null){
+                        Log.i("MapFragment", "Task ${taskIdToShow} is ready to start completing!")
+//                        binding.buttonmap.visibility =
+//                        binding.buttonmap.text = "Выполнить задание #$taskIdToShow"
+                    }
+
+                    Log.i("MY_LOCATION", "${location?.latitude} ${location?.longitude}")
                 }
             }
         }
@@ -184,5 +252,45 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             locationCallback,
             null /* Looper */
         )
+    }
+
+    private fun distanceInKm(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
+        val radius = 6371 // Радиус Земли в километрах
+        val latDistance = Math.toRadians(lat2 - lat1)
+        val lonDistance = Math.toRadians(lon2 - lon1)
+        val a = sin(latDistance / 2) * sin(latDistance / 2) +
+                cos(Math.toRadians(lat1)) * cos(Math.toRadians(lat2)) *
+                sin(lonDistance / 2) * sin(lonDistance / 2)
+        val c = 2 * atan2(sqrt(a), sqrt(1 - a))
+        return radius * c
+    }
+
+    private fun getTaskIdToCompleteIfNearby(currLocation: Location?): Long? {
+        if(currLocation == null){
+            return null
+        }
+
+        var foundedTaskId: Long? = null
+        for(taskGeoPos in listOfTasksMarks){
+            if(taskGeoPos.second != null){
+                val distance = distanceInKm(
+                    lat1 = currLocation.latitude,
+                    lon1 = currLocation.longitude,
+                    lat2 = taskGeoPos.second?.position?.latitude ?: 0.0,
+                    lon2 = taskGeoPos.second?.position?.longitude ?: 0.0
+                )
+//                Log.i("MapFragment", "CHECK DISTANCE | my location: lat = ${currLocation.latitude} lon = ${currLocation.longitude}")
+//                Log.i("MapFragment", "CHECK DISTANCE | id = ${taskGeoPos.first}, distance = ${distance} km.")
+//                Log.i("MapFragment", "CHECK DISTANCE | id = ${taskGeoPos.first}, latitude = ${taskGeoPos.second?.position?.latitude}")
+//                Log.i("MapFragment", "CHECK DISTANCE | id = ${taskGeoPos.first}, longitude = ${taskGeoPos.second?.position?.longitude}")
+//                Log.i("MapFragment", "-------------------------------------------------------------------------------------------------")
+                if(distance < Constants.DISTANCE_TO_COMPLETE_QUEST){
+//                    return taskGeoPos.first
+                    foundedTaskId = taskGeoPos.first
+                }
+            }
+        }
+//        return null
+        return foundedTaskId
     }
 }

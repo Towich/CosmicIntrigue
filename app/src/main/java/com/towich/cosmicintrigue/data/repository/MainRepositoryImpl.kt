@@ -6,9 +6,11 @@ import com.towich.cosmicintrigue.data.model.GeoPositionModel
 import com.towich.cosmicintrigue.data.model.TaskGeoPositionModel
 import com.towich.cosmicintrigue.data.network.ApiResult
 import com.towich.cosmicintrigue.data.network.ApiService
+import com.towich.cosmicintrigue.data.network.StompController
 import com.towich.cosmicintrigue.data.source.Constants
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Response
 import ua.naiksoftware.stomp.StompClient
@@ -16,6 +18,7 @@ import ua.naiksoftware.stomp.dto.LifecycleEvent
 import ua.naiksoftware.stomp.dto.StompMessage
 
 class MainRepositoryImpl(
+    private val stompController: StompController,
     private val apiService: ApiService,
     private val gson: Gson,
     private val mStompClient: StompClient,
@@ -42,67 +45,47 @@ class MainRepositoryImpl(
         )
     }
 
-    override fun initGeoPositionsStompClient(
+    override fun sendTaskGeoPositionModel(
         compositeDisposable: CompositeDisposable,
-        onReceivedGeoPosition: (geoPosition: GeoPositionModel) -> Unit
+        taskGeoPositionModel: TaskGeoPositionModel
     ) {
-        //настраиваем подписку на топик
-        val topicSubscribe = mStompClient.topic(Constants.GEO_POS)
-            .subscribeOn(Schedulers.io(), false)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ topicMessage: StompMessage ->
-                Log.d("StompClient", topicMessage.payload)
-
-                // десериализуем сообщение
-                val geoPosition: GeoPositionModel =
-                    gson.fromJson(topicMessage.payload, GeoPositionModel::class.java)
-
-                Log.i(
-                    "StompClient",
-                    "RECEIVED GEOPOSITION: longitude = ${geoPosition.longitude}, latitude = ${geoPosition.latitude}"
-                )
-//                addMessage(getPosition) // пишем сообщение в БД и в LiveData
-                onReceivedGeoPosition(geoPosition)
-            },
-                {
-                    Log.e("StompClient", "Error!", it) //обработка ошибок
-                }
-            )
-
-        //подписываемся на состояние WebSocket'a
-        val lifecycleSubscribe = mStompClient.lifecycle()
-            .subscribeOn(Schedulers.io(), false)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { lifecycleEvent: LifecycleEvent ->
-                when (lifecycleEvent.type!!) {
-                    LifecycleEvent.Type.OPENED -> Log.d(
-                        "StompClient",
-                        "Stomp connection opened"
-                    )
-
-                    LifecycleEvent.Type.ERROR -> Log.e(
-                        "StompClient",
-                        "Error",
-                        lifecycleEvent.exception
-                    )
-
-                    LifecycleEvent.Type.FAILED_SERVER_HEARTBEAT,
-                    LifecycleEvent.Type.CLOSED -> {
-                        Log.d("StompClient", "Stomp connection closed")
+        val request =
+            mStompClient.send(Constants.COORDINATES_LINK_SOCKET, gson.toJson(taskGeoPositionModel))
+        compositeDisposable.add(
+            request.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        Log.d(
+                            "StompClient",
+                            "SEND TASK GEOPOSITION: latitude = ${taskGeoPositionModel.latitude}$, longitude = ${taskGeoPositionModel.longitude}"
+                        )
+                    },
+                    {
+                        Log.e("StompClient", "Stomp error", it)
                     }
-                }
-            }
-
-        compositeDisposable.add(lifecycleSubscribe)
-        compositeDisposable.add(topicSubscribe)
-
-        // открываем соединение
-        if (!mStompClient.isConnected) {
-            mStompClient.connect()
-        }
-
-
+                )
+        )
     }
+
+    override fun initGeoPositionsStompClient(
+        compositeDisposable: CompositeDisposable
+    ) {
+        stompController.initGeoPositionsStompClient(compositeDisposable)
+    }
+
+    override fun subscribeGeoPosTopic(
+        onReceivedGeoPosition: (geoPosition: GeoPositionModel) -> Unit
+    ): Disposable {
+        return stompController.subscribeGeoPosTopic(onReceivedGeoPosition)
+    }
+
+    override fun subscribeCoordinatesTopic(
+        onReceivedCoordinatesList: (listOfTasksGeoPositions: List<TaskGeoPositionModel>) -> Unit
+    ): Disposable {
+        return stompController.subscribeCoordinatesTopic(onReceivedCoordinatesList)
+    }
+
 
     override suspend fun getStartTaskMarks(): ApiResult<List<TaskGeoPositionModel>> {
         return try {
@@ -116,5 +99,19 @@ class MainRepositoryImpl(
         } catch (e: Exception){
             ApiResult.Error(e.message ?: "unknown error")
         }
+
+//        return ApiResult.Success(
+//            listOf(
+//                TaskGeoPositionModel(
+//                    id = 77, latitude = 55.8010271, longitude = 37.8057306
+//                ),
+//                TaskGeoPositionModel(
+//                    id = 50, latitude = 51.8010271, longitude = 31.8057306
+//                ),
+//                TaskGeoPositionModel(
+//                    id = 55, latitude = 50.8010271 , longitude = 30.8057306
+//                )
+//            )
+//        )
     }
 }
