@@ -41,7 +41,7 @@ class RoleFragment : Fragment() {
         val role = roleViewModel.GetRole()
         binding.role.text = if(role) getString(R.string.app_name) else getString(R.string.app_name)
         binding.RoleText.text = if(role) getString(R.string.role_text) else getString(R.string.role_text)
-        binding.button3.setOnClickListener {
+        binding.role.setOnClickListener {
             findNavController().navigate(R.id.action_menu_to_game)
         }
 

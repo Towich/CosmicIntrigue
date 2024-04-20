@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -23,16 +24,16 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.towich.cosmicintrigue.R
 import com.towich.cosmicintrigue.data.model.GeoPositionModel
+import com.towich.cosmicintrigue.data.model.TaskGeoPositionModel
 import com.towich.cosmicintrigue.data.util.MyLocationListener
 import com.towich.cosmicintrigue.databinding.FragmentMapBinding
 import com.towich.cosmicintrigue.ui.util.App
-import com.towich.cosmicintrigue.ui.util.ViewModelFactory
 import com.towich.cosmicintrigue.ui.viewmodel.MapViewModel
 
 class MapFragment : Fragment(), OnMapReadyCallback {
@@ -49,7 +50,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
 
-    private val listOfMarks = mutableListOf<Pair<Long, Marker?>>()
+    private val listOfUsersMarks = mutableListOf<Pair<Long, Marker?>>()
+    private val listOfTasksMarks = mutableListOf<Pair<Long, Marker?>>()
 
     private val binding get() = _binding!!
 
@@ -68,7 +70,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.button4.setOnClickListener {
+        binding.buttonmap.setOnClickListener {
             findNavController().navigate(R.id.action_RoleFragment_to_MapFragment6)
             //findNavController().navigate(R.id.action_MapFragment_to_VoteFragment2)
 
@@ -80,7 +82,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 if (geoPosition.latitude != null && geoPosition.longitude != null) {
                     val latLngGeoPos = LatLng(geoPosition.latitude, geoPosition.longitude)
 
-                    for(mark in listOfMarks){
+                    for(mark in listOfUsersMarks){
                         if(mark.first == geoPosition.id){
                             mark.second?.remove()
                         }
@@ -91,12 +93,29 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                         .title("YAY")
                     )
 
-                    listOfMarks.add(Pair(geoPosition.id, marker))
+                    listOfUsersMarks.add(Pair(geoPosition.id, marker))
 
                 }
             }
         )
 
+        // Create the observer which updates the UI.
+        val nameObserver = Observer<List<TaskGeoPositionModel>> { listOfTaskGeoPositions ->
+            // Update the UI
+            for(taskGeo in listOfTaskGeoPositions){
+                if(taskGeo.latitude != null && taskGeo.longitude != null) {
+                    map.addMarker(MarkerOptions()
+                        .position(LatLng(taskGeo.latitude, taskGeo.longitude))
+                        .title("Task")
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                    )
+                }
+            }
+        }
+
+        viewModel.currentTaskMarks.observe(viewLifecycleOwner, nameObserver)
+
+        viewModel.getStartTaskMarks()
         getLocationUpdates()
         startLocationUpdates()
     }

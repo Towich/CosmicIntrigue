@@ -31,7 +31,7 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.proceed.setOnClickListener{
+        binding.login.setOnClickListener{
             loginViewModel.SendLogin(binding.Login.text.toString())
 
         }

@@ -57,7 +57,7 @@ class VoteFragment : Fragment() {
             TODO("Закончить голосование")
             //maxOf(listB)
         }
-        binding.button5.setOnClickListener{
+        binding.vote.setOnClickListener{
             findNavController().navigate(R.id.action_MapFragment_to_VoteFragment2)
         }
     }
