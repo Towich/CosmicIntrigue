@@ -33,7 +33,7 @@ class RoleFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.button3.setOnClickListener {
+        binding.role.setOnClickListener {
             findNavController().navigate(R.id.action_menu_to_game)
         }
 

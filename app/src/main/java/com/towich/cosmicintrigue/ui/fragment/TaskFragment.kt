@@ -33,7 +33,7 @@ class TaskFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.button6.setOnClickListener {
+        binding.task.setOnClickListener {
             findNavController().navigate(R.id.action_MapFragment_to_VoteFragment2)
         }
     }

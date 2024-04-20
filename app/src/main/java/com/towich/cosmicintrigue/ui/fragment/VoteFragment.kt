@@ -39,7 +39,7 @@ class VoteFragment : Fragment() {
 
         binding.rec.adapter = VoteAdapter({},arrayListOf(Player(2,"user"),Player(3,"123")),2)//TODO
         binding.rec.layoutManager = LinearLayoutManager(context)
-        binding.button5.setOnClickListener{
+        binding.vote.setOnClickListener{
             findNavController().navigate(R.id.action_MapFragment_to_VoteFragment2)
         }
     }

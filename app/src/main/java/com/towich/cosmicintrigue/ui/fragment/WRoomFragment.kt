@@ -41,7 +41,7 @@ class WRoomFragment : Fragment() {
         val adap = WaitAdapter(2)
         binding.rec.adapter = adap//TODO
         binding.rec.layoutManager = LinearLayoutManager(context)
-        binding.button2.setOnClickListener {
+        binding.wroom.setOnClickListener {
             findNavController().navigate(R.id.action_WRoomFragment_to_gameActivity)
         }
     }

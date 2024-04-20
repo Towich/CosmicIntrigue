@@ -68,7 +68,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.button4.setOnClickListener {
+        binding.buttonmap.setOnClickListener {
             findNavController().navigate(R.id.action_RoleFragment_to_MapFragment6)
             //findNavController().navigate(R.id.action_MapFragment_to_VoteFragment2)
 

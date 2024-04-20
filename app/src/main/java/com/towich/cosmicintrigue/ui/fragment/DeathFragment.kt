@@ -32,7 +32,7 @@ class DeathFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.proceed.setOnClickListener {
+        binding.death.setOnClickListener {
             findNavController().navigate(R.id.action_DeathFragment_to_FinalFragment2)
         }
     }
