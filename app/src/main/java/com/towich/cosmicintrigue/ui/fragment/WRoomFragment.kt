@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import com.towich.cosmicintrigue.R
 import com.towich.cosmicintrigue.databinding.FragmentWroomBinding
 
 /**
@@ -30,11 +32,9 @@ class WRoomFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-/*
-        binding.buttonSecond.setOnClickListener {
-            findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
+        binding.button2.setOnClickListener {
+            findNavController().navigate(R.id.action_WRoomFragment_to_gameActivity)
         }
- */
     }
 
     override fun onDestroyView() {

@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import com.towich.cosmicintrigue.R
 import com.towich.cosmicintrigue.databinding.FragmentVoteBinding
 
 /**
@@ -30,11 +32,10 @@ class VoteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-/*
-        binding.buttonSecond.setOnClickListener {
-            findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
+
+        binding.button5.setOnClickListener {
+            findNavController().navigate(R.id.action_MapFragment_to_VoteFragment2)
         }
- */
     }
 
     override fun onDestroyView() {
