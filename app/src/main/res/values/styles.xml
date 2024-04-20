@@ -13,9 +13,12 @@
         <item name="strokeWidth">1dp</item>
     </style>
     <style name="Text40">
-        <item name="android:textSize">40dp</item>
+        <item name="android:textSize">40sp</item>
     </style>
     <style name="Text32">
-        <item name="android:textSize">40dp</item>
+        <item name="android:textSize">32sp</item>
+    </style>
+    <style name="Text24">
+        <item name="android:textSize">24sp</item>
     </style>
 </resources>

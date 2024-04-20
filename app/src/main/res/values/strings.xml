@@ -8,6 +8,7 @@
     <string name="previous">Previous</string>
     <string name="title">Космическая Интрига: Парковый Эпос</string>
     <string name="login_hint">Логин</string>
+    <string name="vote_fragment_label">Комната ожидания</string>
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
         volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
