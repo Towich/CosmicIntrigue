@@ -52,12 +52,12 @@ class VoteFragment : Fragment() {
             a: List<Pair<Int?,Int>> ->
             val (listA, listB) =a.unzip()
             adap.endVote(listA,listB)
-            binding.vote.visibility = View.VISIBLE
+            binding.VoteButton.visibility = View.VISIBLE
 
             TODO("Закончить голосование")
             //maxOf(listB)
         }
-        binding.vote.setOnClickListener{
+        binding.VoteButton.setOnClickListener{
             findNavController().navigate(R.id.action_MapFragment_to_VoteFragment2)
         }
     }

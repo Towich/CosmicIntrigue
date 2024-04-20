@@ -17,4 +17,7 @@
     <string name="error">ошибка</string>
     <string name="ready">Готов</string>
     <string name="cancel">Отмена</string>
+    <string name="imposterWon">Предатели победили</string>
+    <string name="peacefulWon">Мирные победили</string>
+    <string name="taskName">Ваше задание</string>
 </resources>
