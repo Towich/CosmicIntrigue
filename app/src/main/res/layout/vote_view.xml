@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/Name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/Votes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="TextView"
+        android:textAlignment="textEnd"
+        android:visibility="visible" />
+
+    <Space
+        android:layout_width="10dp"
+        android:visibility="visible"
+        android:layout_height="match_parent"/>
+
+    <ProgressBar
+        android:id="@+id/Progressbar"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:max="10"
+        android:maxWidth="50dp"
+        android:maxHeight="25dp"
+        android:minWidth="20dp"
+        android:minHeight="25dp"
+        android:mirrorForRtl="true"
+        android:progress="7"
+        android:progressTint="@color/primary"
+        android:visibility="visible" />
+
+    <Button
+        android:id="@+id/VoteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Button"
+        android:visibility="gone" />
+</LinearLayout>
