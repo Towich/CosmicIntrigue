@@ -10,15 +10,12 @@ class VoteViewModel(): ViewModel() {
     fun vote(id: Int?){
         TODO("Голосование за игрока по id, null - пропуск голосования")
     }
-    fun getVotes(callback: (List<Pair<Int,Int>>) -> Unit){
+    fun getVotes(callback: (List<Pair<Int?,Int>>) -> Unit){
         TODO("Получение резудьтатов голосования " +
                 "первый - id" +
                 "второй - кол-во голосов")
     }
-    fun onDeath(callback: ()->Unit){
-        TODO("Переход на экран смерти")
-    }
-    fun OnVoteEnd(callback: ()->Unit){
-        TODO("Возврат на карту после конца голосования")
+    fun getUserId():Int{
+        TODO("Возвращает id пользователя")
     }
 }

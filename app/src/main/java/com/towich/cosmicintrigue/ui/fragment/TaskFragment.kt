@@ -6,9 +6,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.towich.cosmicintrigue.R
 import com.towich.cosmicintrigue.databinding.FragmentTaskBinding
+import com.towich.cosmicintrigue.ui.util.App
+import com.towich.cosmicintrigue.ui.viewmodel.RoleViewModel
+import com.towich.cosmicintrigue.ui.viewmodel.TaskViewModel
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -21,6 +25,9 @@ class TaskFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    val taskViewModel : TaskViewModel by viewModels{
+        (requireContext().applicationContext as App).viewModelFactory
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
