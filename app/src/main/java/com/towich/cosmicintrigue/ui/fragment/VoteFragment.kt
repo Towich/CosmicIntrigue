@@ -1,11 +1,15 @@
 package com.towich.cosmicintrigue.ui.fragment
 
 import android.os.Bundle
+import android.os.PersistableBundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.towich.cosmicintrigue.data.model.Player
 import com.towich.cosmicintrigue.databinding.FragmentVoteBinding
+import com.towich.cosmicintrigue.ui.adapters.VoteAdapter
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -30,11 +34,11 @@ class VoteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-/*
-        binding.buttonSecond.setOnClickListener {
-            findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
+
+        binding.rec.adapter = VoteAdapter({},arrayListOf(Player(2,"user"),Player(3,"123")),2)//TODO
+        binding.rec.layoutManager = LinearLayoutManager(context)
+        binding.button5.setOnClickListener{
         }
- */
     }
 
     override fun onDestroyView() {
