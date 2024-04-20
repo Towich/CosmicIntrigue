@@ -6,14 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.towich.cosmicintrigue.databinding.FragmentLoginBinding
+import com.towich.cosmicintrigue.databinding.FragmentDeathBinding
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class LoginFragment : Fragment() {
+class DeathFragment : Fragment() {
 
-    private var _binding: FragmentLoginBinding? = null
+    private var _binding: FragmentDeathBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -24,7 +24,7 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentLoginBinding.inflate(inflater, container, false)
+        _binding = FragmentDeathBinding.inflate(inflater, container, false)
         return binding.root
 
     }
