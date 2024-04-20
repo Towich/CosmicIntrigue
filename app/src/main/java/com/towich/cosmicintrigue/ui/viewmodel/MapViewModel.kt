@@ -21,20 +21,6 @@ class MapViewModel(
         MutableLiveData<List<TaskGeoPositionModel>>()
     }
 
-    fun initGeoPositionsStompClient(
-        onReceivedGeoPosition: (geoPosition: GeoPositionModel) -> Unit
-    ){
-        repository.initGeoPositionsStompClient(
-            compositeDisposable = compositeDisposable,
-            onReceivedGeoPosition = { geoPosition: GeoPositionModel ->
-                onReceivedGeoPosition(geoPosition)
-            }
-        )
-    }
-    fun sendGeoPosition(geoPosition: GeoPositionModel) {
-        repository.sendGeoPosition(compositeDisposable, geoPosition)
-    }
-
     fun getStartTaskMarks() {
         viewModelScope.launch {
             when (val result = repository.getStartTaskMarks()) {
@@ -49,4 +35,28 @@ class MapViewModel(
         }
 
     }
+
+    fun subscribeGeoPosTopic(
+        onReceivedGeoPosition: (geoPosition: GeoPositionModel) -> Unit
+    ){
+        repository.subscribeGeoPosTopic(onReceivedGeoPosition)
+    }
+
+
+    fun sendGeoPosition(geoPosition: GeoPositionModel) {
+        repository.sendGeoPosition(compositeDisposable, geoPosition)
+    }
+
+    fun subscribeCoordinatesTopic(
+        onReceivedCoordinatesList: (listOfTasksGeoPositions: List<TaskGeoPositionModel>) -> Unit
+    ){
+        repository.subscribeCoordinatesTopic(onReceivedCoordinatesList)
+    }
+
+
+    fun sendTaskGeoPositionModel(taskGeoPositionModel: TaskGeoPositionModel) {
+        repository.sendTaskGeoPositionModel(compositeDisposable, taskGeoPositionModel)
+    }
+
+
 }
