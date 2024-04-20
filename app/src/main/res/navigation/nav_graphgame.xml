@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph">
+
+    <fragment
+        android:id="@+id/MapFragment"
+        android:name="com.towich.cosmicintrigue.ui.fragment.MapFragment"
+        android:label="@string/third_fragment_label"
+        tools:layout="@layout/fragment_wroom">
+        <action
+            android:id="@+id/action_MapFragment_to_TaskFragment4"
+            app:destination="@id/TaskFragment" />
+        <action
+            android:id="@+id/action_MapFragment_to_VoteFragment2"
+            app:destination="@id/VoteFragment" />
+        <action
+            android:id="@+id/action_MapFragment_to_DeathFragment"
+            app:destination="@id/DeathFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/RoleFragment"
+        android:name="com.towich.cosmicintrigue.ui.fragment.RoleFragment"
+        android:label="@string/forth_fragment_label"
+        tools:layout="@layout/fragment_wroom">
+        <action
+            android:id="@+id/action_RoleFragment_to_MapFragment6"
+            app:destination="@id/MapFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/TaskFragment"
+        android:name="com.towich.cosmicintrigue.ui.fragment.TaskFragment"
+        android:label="@string/fifth_fragment_label"
+        tools:layout="@layout/fragment_wroom">
+        <action
+            android:id="@+id/action_TaskFragment_to_VoteFragment3"
+            app:destination="@id/VoteFragment" />
+        <action
+            android:id="@+id/action_TaskFragment_to_DeathFragment"
+            app:destination="@id/DeathFragment" />
+        <action
+            android:id="@+id/action_TaskFragment_to_MapFragment2"
+            app:destination="@id/MapFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/FinalFragment"
+        android:name="com.towich.cosmicintrigue.ui.fragment.FinalFragment"
+        android:label="@string/sixth_fragment_label"
+        tools:layout="@layout/fragment_wroom"/>
+    <fragment
+        android:id="@+id/VoteFragment"
+        android:name="com.towich.cosmicintrigue.ui.fragment.VoteFragment"
+        android:label="@string/seventh_fragment_label"
+        tools:layout="@layout/fragment_wroom">
+        <action
+            android:id="@+id/action_VoteFragment_to_DeathFragment2"
+            app:destination="@id/DeathFragment" />
+        <action
+            android:id="@+id/action_VoteFragment_to_MapFragment2"
+            app:destination="@id/MapFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/DeathFragment"
+        android:name="com.towich.cosmicintrigue.ui.fragment.DeathFragment"
+        android:label="@string/eighth_fragment_label"
+        tools:layout="@layout/fragment_wroom">
+        <action
+            android:id="@+id/action_DeathFragment_to_FinalFragment2"
+            app:destination="@id/FinalFragment" />
+        <action
+            android:id="@+id/action_DeathFragment_to_MapFragment2"
+            app:destination="@id/MapFragment" />
+    </fragment>
+</navigation>
