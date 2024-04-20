@@ -13,6 +13,7 @@ import com.towich.cosmicintrigue.ui.viewmodel.VoteViewModel
 import com.towich.cosmicintrigue.ui.viewmodel.WRoomViewModel
 
 
+@Suppress("UNCHECKED_CAST")
 class ViewModelFactory(
     private val repository: MainRepository
 ): ViewModelProvider.Factory {

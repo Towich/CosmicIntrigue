@@ -46,7 +46,7 @@
         android:layout_weight="1" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/wroom"
         style="@style/ButtonMainFilled"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
