@@ -6,12 +6,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.towich.cosmicintrigue.R
 import com.towich.cosmicintrigue.data.model.Player
 import com.towich.cosmicintrigue.databinding.FragmentVoteBinding
 import com.towich.cosmicintrigue.ui.adapters.VoteAdapter
+import com.towich.cosmicintrigue.ui.util.App
+import com.towich.cosmicintrigue.ui.util.ViewModelFactory
+import com.towich.cosmicintrigue.ui.viewmodel.TaskViewModel
+import com.towich.cosmicintrigue.ui.viewmodel.VoteViewModel
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -24,6 +29,9 @@ class VoteFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    val voteViewModel : VoteViewModel by viewModels{
+        (requireContext().applicationContext as App).viewModelFactory
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,10 +44,20 @@ class VoteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.rec.adapter = VoteAdapter({},arrayListOf(Player(2,"user"),Player(3,"123")),2)//TODO
+        val players = voteViewModel.getPlayers()
+        val adap =  VoteAdapter({a: Int? -> voteViewModel.vote(a)},players,voteViewModel.getUserId())
+        binding.rec.adapter = adap
         binding.rec.layoutManager = LinearLayoutManager(context)
-        binding.vote.setOnClickListener{
+        voteViewModel.getVotes {
+            a: List<Pair<Int?,Int>> ->
+            val (listA, listB) =a.unzip()
+            adap.endVote(listA,listB)
+            binding.VoteButton.visibility = View.VISIBLE
+
+            TODO("Закончить голосование")
+            //maxOf(listB)
+        }
+        binding.VoteButton.setOnClickListener{
             findNavController().navigate(R.id.action_MapFragment_to_VoteFragment2)
         }
     }

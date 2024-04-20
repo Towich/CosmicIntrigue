@@ -1,13 +1,18 @@
 package com.towich.cosmicintrigue.ui.fragment
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.towich.cosmicintrigue.R
 import com.towich.cosmicintrigue.databinding.FragmentTaskBinding
+import com.towich.cosmicintrigue.ui.util.App
+import com.towich.cosmicintrigue.ui.viewmodel.RoleViewModel
+import com.towich.cosmicintrigue.ui.viewmodel.TaskViewModel
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -20,6 +25,9 @@ class TaskFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    val taskViewModel : TaskViewModel by viewModels{
+        (requireContext().applicationContext as App).viewModelFactory
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,8 +41,21 @@ class TaskFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.task.setOnClickListener {
+        // Создаем таймер на 5 секунд
+        object : CountDownTimer(5000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                // Этот метод вызывается каждую секунду до истечения таймера
+            }
+
+            override fun onFinish() {
+                // Этот метод вызывается по истечении таймера (через 5 секунд)
+                true.also { binding.taskSuccessButton.isEnabled = it } // Включаем кнопку после истечения таймера
+            }
+        }.start()
+
+        binding.taskSuccessButton.setOnClickListener {
             findNavController().navigate(R.id.action_MapFragment_to_VoteFragment2)
+            //taskViewModel.SendLogin(binding.task.text.toString())
         }
     }
 

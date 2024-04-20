@@ -4,7 +4,8 @@ import androidx.lifecycle.ViewModel
 
 class DeathViewModel(): ViewModel() {
 
-    fun SetWaitCallback(callback:()->Unit){
-        TODO("проброс навигации перехода в финал")
+    public fun SetFinalCallback(callback:()->Unit){
+        TODO("проброс навигации перехода в финал" +
+                "без запроса")
     }
 }

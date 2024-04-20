@@ -5,9 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.towich.cosmicintrigue.R
 import com.towich.cosmicintrigue.databinding.FragmentRoleBinding
+import com.towich.cosmicintrigue.ui.util.App
+import com.towich.cosmicintrigue.ui.viewmodel.RoleViewModel
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -20,6 +23,9 @@ class RoleFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    val roleViewModel : RoleViewModel by viewModels{
+        (requireContext().applicationContext as App).viewModelFactory
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,9 +38,11 @@ class RoleFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.role.setOnClickListener {
-            findNavController().navigate(R.id.action_menu_to_game)
+        val role = roleViewModel.GetRole()
+        binding.roleName.text = if(role) "Предатель" else "Мирный"
+        binding.RoleText.text = if(role) getString(R.string.role_text) else getString(R.string.role_text)
+        binding.roleButton.setOnClickListener {
+            findNavController().navigate(R.id.action_RoleFragment_to_MapFragment6)
         }
 
     }

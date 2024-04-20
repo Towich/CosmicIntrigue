@@ -1,48 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    style="@style/MainLayout"
     tools:context=".ui.fragment.TaskFragment">
 
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="222dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="48dp"
-            android:text="Задание 1"
-            android:textAlignment="center"
-            android:textSize="34sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.496"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/taskName"
+        android:textAlignment="center"
+        android:textAppearance="@style/Text40" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
 
     <TextView
-        android:id="@+id/textView2"
-        android:layout_width="341dp"
-        android:layout_height="141dp"
-        android:layout_marginTop="292dp"
-        android:text="Подождите 2 минуты"
+        android:id="@+id/taskText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/error"
         android:textAlignment="center"
-        android:textSize="34sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textAppearance="@style/Text40" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
 
     <Button
-        android:id="@+id/task"
-        android:layout_width="320dp"
-        android:layout_height="90dp"
-        android:layout_marginBottom="88dp"
-        android:backgroundTint="#FF122ABA"
-        android:text="Продолжить"
-        android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:id="@+id/taskCancelButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/ButtonMainOutlined"
+        android:text="@string/cancel" />
+    <Button
+        android:id="@+id/taskSuccessButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/ButtonMainFilled"
+        android:text="@string/cancel"
+        android:visibility="gone"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

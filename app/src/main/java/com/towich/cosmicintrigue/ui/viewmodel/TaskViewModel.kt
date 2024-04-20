@@ -4,20 +4,14 @@ import androidx.lifecycle.ViewModel
 
 class TaskViewModel(): ViewModel() {
 
-    /*
-    fun checkTaskClear(){
-        TODO("Проверка на доступность задания(не занято)")
-    }
-    fun startTask(){
-        TODO("Отправка данных о начале задания игроком")
-    }
 
-    */
     fun interruptTask(){
-        TODO("Отправка данных о прерывании")
+        TODO("Отправка данных о прерывании" +
+                "post запрос")
     }
     fun finishTask(){
-        TODO("Отправка данных о завершении")
+        TODO("Отправка данных о завершении"+
+                "post запрос")
     }
 
 }

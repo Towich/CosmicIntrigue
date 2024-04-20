@@ -17,7 +17,7 @@ class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
-    val loginViewModel : LoginViewModel by viewModels{
+    private val loginViewModel : LoginViewModel by viewModels{
             (requireContext().applicationContext as App).viewModelFactory
         }
 
@@ -31,9 +31,10 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.login.setOnClickListener{
-            loginViewModel.SendLogin(binding.Login.text.toString())
 
+        binding.loginButton.setOnClickListener{
+            loginViewModel.sendLogin(binding.loginEditText.text.toString())
+            findNavController().navigate(R.id.action_Login_to_WRoom)
         }
     }
 
