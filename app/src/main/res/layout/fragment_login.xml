@@ -25,7 +25,7 @@
         android:layout_weight="1" />
 
     <EditText
-        android:id="@+id/editTextText"
+        android:id="@+id/Login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -39,9 +39,9 @@
         android:layout_weight="1" />
 
     <Button
-        android:id="@+id/button"
-        style="@style/ButtonMainOutlined"
+        android:id="@+id/login"
+        style="@style/ButtonMainFilled"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:text="@string/next" />
 </LinearLayout>
