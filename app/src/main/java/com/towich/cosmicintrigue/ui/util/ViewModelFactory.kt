@@ -41,7 +41,9 @@ class ViewModelFactory(
                 ) as T
             }
             modelClass.isAssignableFrom(TaskViewModel::class.java) -> {
-                TaskViewModel() as T
+                TaskViewModel(
+                    repository = repository
+                ) as T
             }
             modelClass.isAssignableFrom(VoteViewModel::class.java) -> {
                 VoteViewModel() as T

@@ -38,4 +38,7 @@ interface MainRepository {
 
     fun toggleReadyPlayer()
     fun updateIsImposter(newIsImposter: Boolean?)
+
+    fun setCurrTaskId(id: Long)
+    fun getCurrTaskId(): Long
 }

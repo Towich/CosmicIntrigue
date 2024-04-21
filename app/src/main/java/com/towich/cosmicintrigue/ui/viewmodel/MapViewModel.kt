@@ -73,6 +73,10 @@ class MapViewModel(
         return repository.getCurrentPlayer()?.id
     }
 
+    fun setCurrTaskId(id: Long){
+        repository.setCurrTaskId(id)
+    }
+
     override fun onCleared() {
         super.onCleared()
 
