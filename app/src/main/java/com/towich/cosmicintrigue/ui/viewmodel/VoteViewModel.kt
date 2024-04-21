@@ -10,6 +10,7 @@ class VoteViewModel(): ViewModel() {
     //TODO (список голосующих игроков)
     //TODO(Добавить проверку на смерть игрока)
     fun getPlayers():List<Player>{
+        //return
         TODO("Список игроков ичаствующих в голосовании" +
                 "запрос get")
     }
