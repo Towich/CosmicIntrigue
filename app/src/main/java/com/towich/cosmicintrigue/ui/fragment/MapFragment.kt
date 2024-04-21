@@ -37,6 +37,7 @@ import com.towich.cosmicintrigue.data.util.MyLocationListener
 import com.towich.cosmicintrigue.databinding.FragmentMapBinding
 import com.towich.cosmicintrigue.ui.util.App
 import com.towich.cosmicintrigue.ui.viewmodel.MapViewModel
+import io.reactivex.disposables.CompositeDisposable
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -145,14 +146,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         binding.buttonmap.setOnClickListener {
             findNavController().navigate(R.id.action_Map_to_Task)
         }
-        binding.floatingActionButton2.setOnClickListener {
-            findNavController().navigate(R.id.action_Map_to_Vote)
-        }
 
         viewModel.getStartTaskMarks()
         getLocationUpdates()
         startLocationUpdates()
-
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -243,7 +240,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                         binding.buttonmap.text = "Выполнить задание #$taskIdToShow"
                     }
                     else{
-                        //binding.buttonmap.visibility = View.GONE
+                        binding.buttonmap.visibility = View.GONE
                     }
 
                     Log.i("MY_LOCATION", "${location?.latitude} ${location?.longitude}")

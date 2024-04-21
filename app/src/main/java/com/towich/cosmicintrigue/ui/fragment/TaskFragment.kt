@@ -44,15 +44,13 @@ class TaskFragment : Fragment() {
         taskViewModel.setOnCompleteCallback({
             binding.taskCancelButton.visibility = View.GONE
             binding.taskSuccessButton.visibility = View.VISIBLE
-            binding.taskText.text = "Готово"
         }, {
-                a:Long -> binding.taskText.text = (a/1000).toString() + " \nСекунд осталось"
+                a:Long -> binding.taskText.text = a.toString()
             })
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        taskViewModel.onDestroy()
         _binding = null
     }
 }

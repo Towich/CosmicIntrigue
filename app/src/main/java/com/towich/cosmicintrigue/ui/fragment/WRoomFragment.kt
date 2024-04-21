@@ -64,7 +64,6 @@ class WRoomFragment : Fragment() {
             binding.wroomButtonDisable.visibility = View.GONE
             wRoomViewModel.ready.value = false
         }
-        wRoomViewModel.getOwner(viewLifecycleOwner)
     }
 
     override fun onDestroyView() {
