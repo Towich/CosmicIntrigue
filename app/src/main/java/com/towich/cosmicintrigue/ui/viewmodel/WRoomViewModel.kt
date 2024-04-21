@@ -17,7 +17,6 @@ class WRoomViewModel(
     val ready: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }
-
     fun getId(): Long {
         //TODO("получение id без запроса")
         return repository.getCurrentPlayer()?.id ?: -1
