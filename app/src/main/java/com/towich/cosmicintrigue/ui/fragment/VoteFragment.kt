@@ -48,15 +48,15 @@ class VoteFragment : Fragment() {
         val adap =  VoteAdapter({a: Int? -> voteViewModel.setVote(a)},players,voteViewModel.getUserId())
         binding.rec.adapter = adap
         binding.rec.layoutManager = LinearLayoutManager(context)
-        voteViewModel.getVotes {
+        voteViewModel.getVotes ({
             a: List<Pair<Int?,Int>> ->
-            val (listA, listB) =a.unzip()
-            adap.endVote(listA,listB)
+            adap.endVote(a)
             binding.VoteButton.visibility = View.VISIBLE
 
             TODO("Закончить голосование")
             //maxOf(listB)
-        }
+        },
+            {})
         binding.VoteButton.setOnClickListener{
             findNavController().navigate(R.id.action_MapFragment_to_VoteFragment2)
         }

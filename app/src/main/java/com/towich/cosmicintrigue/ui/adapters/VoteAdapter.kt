@@ -23,12 +23,18 @@ class VoteAdapter(var onVote:(Int?)->Unit, players: List<Player>, val userId : I
         }
     }
 
-    public fun endVote(Ids: List<Int?>,Votes: List<Int>){
+    public fun endVote(Votes: List<Pair<Int?,Int>>){
+        val (listA:List<Int?>, listB:List<Int>) =Votes.unzip()
+        listA
         for(i in Users.indices)
         {
+            TODO("123")
+            /*
             val it = Users.get(i)
-            it.numVotes = Votes.get(Ids.indexOf(it.id))
+            it.numVotes = Votes.get(Votes.indexOf(it.id))
             notifyItemChanged(i)
+            */
+             
         }
     }
     fun SetVotedId(id: Int){
