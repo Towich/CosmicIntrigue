@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 class RoleViewModel(): ViewModel() {
     fun GetRole():Boolean
     {
+        return true
         TODO("Получение роли игрока" +
                 "мирный - false" +
                 "импостер - true" +

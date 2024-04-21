@@ -34,12 +34,19 @@ class WRoomViewModel(
         object : CountDownTimer(6000, 1000) {
             override fun onTick(millisUntilFinished: Long) {}
             override fun onFinish() {
-                players.value = arrayListOf(Player(1,"user",false,false),
+                players.value = arrayListOf(Player(1,"user",true,false),
                     Player(2,"player1",true,false),
                     Player(3,"player2",true,false))
             }
         }.start()
-
+        object : CountDownTimer(8000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {}
+            override fun onFinish() {
+                players.value = arrayListOf(Player(1,"user",true,true),
+                    Player(2,"player1",true,false),
+                    Player(3,"player2",true,false))
+            }
+        }.start()
     }
     fun getOwner(lf:LifecycleOwner){
         ready.observe(lf){
