@@ -14,49 +14,38 @@ import com.towich.cosmicintrigue.ui.util.App
 import com.towich.cosmicintrigue.ui.viewmodel.RoleViewModel
 import com.towich.cosmicintrigue.ui.viewmodel.TaskViewModel
 
-/**
- * A simple [Fragment] subclass as the second destination in the navigation.
- */
 class TaskFragment : Fragment() {
 
     private var _binding: FragmentTaskBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
-    val taskViewModel : TaskViewModel by viewModels{
+    private val taskViewModel : TaskViewModel by viewModels{
         (requireContext().applicationContext as App).viewModelFactory
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         _binding = FragmentTaskBinding.inflate(inflater, container, false)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // Создаем таймер на 5 секунд
-        object : CountDownTimer(5000, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                // Этот метод вызывается каждую секунду до истечения таймера
-            }
-
-            override fun onFinish() {
-                // Этот метод вызывается по истечении таймера (через 5 секунд)
-                true.also { binding.taskSuccessButton.isEnabled = it } // Включаем кнопку после истечения таймера
-            }
-        }.start()
-
         binding.taskSuccessButton.setOnClickListener {
-            findNavController().navigate(R.id.action_MapFragment_to_VoteFragment2)
-            //taskViewModel.SendLogin(binding.task.text.toString())
+            taskViewModel.finishTask()
+            findNavController().navigate(R.id.action_TaskFragment_to_MapFragment2)
         }
+        binding.taskCancelButton.setOnClickListener {
+            taskViewModel.interruptTask()
+            findNavController().navigate(R.id.action_TaskFragment_to_MapFragment2)
+        }
+        taskViewModel.setOnCompleteCallback({
+            binding.taskCancelButton.visibility = View.GONE
+            binding.taskSuccessButton.visibility = View.VISIBLE
+        }, {
+                a:Long -> binding.taskText.text = a.toString()
+            })
     }
 
     override fun onDestroyView() {

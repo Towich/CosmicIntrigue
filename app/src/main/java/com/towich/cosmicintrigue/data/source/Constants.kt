@@ -9,4 +9,8 @@ object Constants {
     const val GEO_POS = "/topic/chat"
     // указываем endpoint метода, на который будем слать сообщения
     const val CHAT_LINK_SOCKET = "/api/v1/chat/sock"
+    // время работы таймера голосования
+    const val VOTE_TIMER_MILIS = 20000L
+    // время работы таймера задания
+    const val TASK_TIMER_MILIS = 5000L
 }

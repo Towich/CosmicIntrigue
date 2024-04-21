@@ -40,7 +40,7 @@ class RoleFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val role = roleViewModel.GetRole()
         binding.roleName.text = if(role) "Предатель" else "Мирный"
-        binding.RoleText.text = if(role) getString(R.string.role_text) else getString(R.string.role_text)
+        binding.RoleText.text = if(role) "sus" else "amogus"
         binding.roleButton.setOnClickListener {
             findNavController().navigate(R.id.action_RoleFragment_to_MapFragment6)
         }

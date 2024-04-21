@@ -29,9 +29,9 @@ class WaitAdapter(val userId : Int) :RecyclerView.Adapter<WaitAdapter.WaitViewHo
         {
             var p = players.get(position)
             this.loginText.text = p.login
-            this.readyText.text = if(p.ready) "Готов" else "Не Готов"
+            this.readyText.text = if(p.ready) "Готов" else "Не готов"
             if(p.id == userId)
-                this.back.setBackgroundColor(Color.RED)
+                this.back.setBackgroundColor(Color.parseColor("#F0F0F0"))
             this.readyText.setTextColor(if(p.ready) Color.parseColor("#FF0000") else Color.parseColor("#00FF00"))
         }
     }

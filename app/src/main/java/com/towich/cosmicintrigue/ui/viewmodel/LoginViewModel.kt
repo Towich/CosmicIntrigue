@@ -8,4 +8,7 @@ class LoginViewModel(): ViewModel() {
         TODO("Отправка логина на сервер" +
                 "post запрос")
     }
+    fun setIdRecieved(callback:()->Unit){
+        TODO("навиагция при получении id")
+    }
 }
