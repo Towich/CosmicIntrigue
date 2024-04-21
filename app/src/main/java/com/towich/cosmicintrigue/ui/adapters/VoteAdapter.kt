@@ -17,7 +17,7 @@ class VoteAdapter(var onVote:(Long?)->Unit, players: List<Player>, val userId : 
     var votedId: Int = 0
     var Users : ArrayList<AdaptedPlayer> = ArrayList()
     init{
-        Users.add(AdaptedPlayer(null,"продолжить",false,true,-1))
+        Users.add(AdaptedPlayer(null,"пропустить",false,true,-1))
         players.forEach{
             Users.add(AdaptedPlayer(it.id,it.login,userId == it.id,false,-1))
         }
@@ -25,7 +25,6 @@ class VoteAdapter(var onVote:(Long?)->Unit, players: List<Player>, val userId : 
 
     public fun endVote(Votes: List<Pair<Long?,Int>>){
         val (listA:List<Long?>, listB:List<Int>) =Votes.unzip()
-        var y = listA.get(2)
         for(i in Users.indices)
         {
             val it = Users.get(i)
@@ -56,10 +55,11 @@ class VoteAdapter(var onVote:(Long?)->Unit, players: List<Player>, val userId : 
             val p:AdaptedPlayer  = Users.get(position)
             this.Progressbar.max = Users.count()
             this.Name.text = p.login
+            this.background.setBackgroundColor(Color.parseColor("#00FFFFFF"))
             if(p.isUser)
-                this.background.setBackgroundColor(Color.parseColor("#00FF00"))
+                this.background.setBackgroundColor(Color.parseColor("#E8EBFD"))
             if(p.isVoted)
-                this.background.setBackgroundColor(Color.parseColor("#0000FF"))
+                this.background.setBackgroundColor(Color.parseColor("#F9EBEB"))
             if(p.numVotes < 0)
             {
                 this.Progressbar.visibility = View.GONE

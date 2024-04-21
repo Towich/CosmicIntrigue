@@ -133,14 +133,16 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
 
         binding.floatingActionButton2.setOnClickListener {
-            viewModel.sendTaskGeoPositionModel(
-                TaskGeoPositionModel(3, 10.0, 10.0)
-            )
+//            viewModel.sendTaskGeoPositionModel(
+//                TaskGeoPositionModel(3, 10.0, 10.0)
+//            )
 
-            Log.i(
-                "MapFragment",
-                "distance = ${distanceInKm(55.801017, 37.805728, 55.670091, 37.480906)}"
-            )
+            findNavController().navigate(R.id.action_Map_to_Vote)
+
+//            Log.i(
+//                "MapFragment",
+//                "distance = ${distanceInKm(55.801017, 37.805728, 55.670091, 37.480906)}"
+//            )
         }
 
         binding.buttonmap.setOnClickListener {
@@ -226,7 +228,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
                     viewModel.sendGeoPosition(
                         GeoPositionModel(
-                            id = 2,
+                            id = viewModel.getPlayerId() ?: -1,
                             latitude = location?.latitude,
                             longitude = location?.longitude
                         )
@@ -235,11 +237,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
                     val taskIdToShow = getTaskIdToCompleteIfNearby(currLocation = location)
                     if(taskIdToShow != null){
+                        viewModel.setCurrTaskId(taskIdToShow)
                         Log.i("MapFragment", "Task ${taskIdToShow} is ready for start completing!")
                         binding.buttonmap.visibility = View.VISIBLE
                         binding.buttonmap.text = "Выполнить задание #$taskIdToShow"
                     }
                     else{
+                        viewModel.setCurrTaskId(-1)
                         binding.buttonmap.visibility = View.GONE
                     }
 

@@ -38,9 +38,9 @@ class RoleFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val role = roleViewModel.GetRole()
+        val role = roleViewModel.getRole()
         binding.roleName.text = if(role) "Предатель" else "Мирный"
-        binding.RoleText.text = if(role) "sus" else "amogus"
+        binding.RoleText.text = if(role) "Убить всех " else "Выполнить задания или найти предателя"
         binding.roleButton.setOnClickListener {
             findNavController().navigate(R.id.action_Role_to_Map)
         }

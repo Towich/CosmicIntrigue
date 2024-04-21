@@ -2,6 +2,7 @@ package com.towich.cosmicintrigue.data.repository
 
 import android.util.Log
 import com.google.gson.Gson
+import com.towich.cosmicintrigue.data.model.GameState
 import com.towich.cosmicintrigue.data.model.GeoPositionModel
 import com.towich.cosmicintrigue.data.model.Player
 import com.towich.cosmicintrigue.data.model.TaskGeoPositionModel
@@ -16,9 +17,6 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Response
 import ua.naiksoftware.stomp.StompClient
-import ua.naiksoftware.stomp.dto.LifecycleEvent
-import ua.naiksoftware.stomp.dto.StompMessage
-import kotlin.math.log
 
 class MainRepositoryImpl(
     private val stompController: StompController,
@@ -27,6 +25,11 @@ class MainRepositoryImpl(
     private val mStompClient: StompClient,
     private val sessionStorage: SessionStorage
 ) : MainRepository {
+
+    var onReceivedGameStateUpdateUI: (gameState: GameState) -> Unit = {
+
+    }
+
     override fun sendGeoPosition(
         compositeDisposable: CompositeDisposable,
         geoPositionModel: GeoPositionModel
@@ -112,37 +115,37 @@ class MainRepositoryImpl(
         return stompController.subscribeCoordinatesTopic(onReceivedCoordinatesList)
     }
 
-    override fun subscribeUsersTopic(onReceivedPlayersList: (players: List<Player>) -> Unit): Disposable {
-        return stompController.subscribeUsersTopic(onReceivedPlayersList)
+    override fun subscribeUsersTopic(onReceivedGameState: (gameState: GameState) -> Unit): Disposable {
+        return stompController.subscribeUsersTopic(onReceivedGameState)
     }
 
 
     override suspend fun getStartTaskMarks(): ApiResult<List<TaskGeoPositionModel>> {
-//        return try {
-//            val response: Response<List<TaskGeoPositionModel>> = apiService.getStartTaskMarks()
-//
-//            if(response.isSuccessful){
-//                ApiResult.Success(response.body() ?: listOf())
-//            } else{
-//                ApiResult.Error(response.message())
-//            }
-//        } catch (e: Exception){
-//            ApiResult.Error(e.message ?: "unknown error")
-//        }
+        return try {
+            val response: Response<List<TaskGeoPositionModel>> = apiService.getStartTaskMarks()
 
-        return ApiResult.Success(
-            listOf(
-                TaskGeoPositionModel(
-                    id = 77, latitude = 55.8010271, longitude = 37.8057306, completed = false
-                ),
-                TaskGeoPositionModel(
-                    id = 50, latitude = 51.8010271, longitude = 31.8057306, completed = false
-                ),
-                TaskGeoPositionModel(
-                    id = 55, latitude = 50.8010271 , longitude = 30.8057306, completed = false
-                )
-            )
-        )
+            if(response.isSuccessful){
+                ApiResult.Success(response.body() ?: listOf())
+            } else{
+                ApiResult.Error(response.message())
+            }
+        } catch (e: Exception){
+            ApiResult.Error(e.message ?: "unknown error")
+        }
+
+//        return ApiResult.Success(
+//            listOf(
+//                TaskGeoPositionModel(
+//                    id = 11, latitude = 55.8010271, longitude = 37.8057306, completed = false
+//                ),
+//                TaskGeoPositionModel(
+//                    id = 12, latitude = 51.8010271, longitude = 31.8057306, completed = false
+//                ),
+//                TaskGeoPositionModel(
+//                    id = 13, latitude = 50.8010271 , longitude = 30.8057306, completed = false
+//                )
+//            )
+//        )
     }
 
     override suspend fun getUserIdByPlayerModel(playerModel: Player): ApiResult<Player> {
@@ -172,4 +175,23 @@ class MainRepositoryImpl(
     override fun getCurrentPlayer(): Player? {
         return sessionStorage.currentPlayer
     }
+
+    override fun toggleReadyPlayer() {
+        if(sessionStorage.currentPlayer != null) {
+            sessionStorage.currentPlayer!!.ready = !sessionStorage.currentPlayer?.ready!!
+        }
+    }
+
+    override fun updateIsImposter(newIsImposter: Boolean?) {
+        sessionStorage.currentPlayer?.isImposter = newIsImposter
+    }
+
+    override fun setCurrTaskId(id: Long) {
+        sessionStorage.currTaskId = id
+    }
+
+    override fun getCurrTaskId(): Long {
+        return sessionStorage.currTaskId ?: -1
+    }
+
 }
