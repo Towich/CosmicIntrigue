@@ -26,7 +26,7 @@ class LoginViewModel(
                 id = -1,
                 login = login,
                 ready = false,
-                imposter = false
+                isImposter = null
             ))) {
                 is ApiResult.Success -> {
                     currentPlayer.value = result.data

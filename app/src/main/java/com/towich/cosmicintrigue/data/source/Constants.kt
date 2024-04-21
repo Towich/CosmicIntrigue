@@ -13,12 +13,13 @@ object Constants {
 
     // указываем endpoint метода, на который будем слать сообщения
     const val CHAT_LINK_SOCKET = "/api/v1/chat/sock"
+    const val COORDINATES_LINK_SOCKET = "/api/v1/chat/coordinates"
+    const val USER_LINK_SOCKET = "/api/v1/chat/user"
+
     // время работы таймера голосования
     const val VOTE_TIMER_MILIS = 20000L
     // время работы таймера задания
     const val TASK_TIMER_MILIS = 5000L
-    const val COORDINATES_LINK_SOCKET = "/api/v1/chat/coordinates"
-    const val USER_LINK_SOCKET = "/api/v1/chat/user"
 
     const val DISTANCE_TO_COMPLETE_QUEST = 0.020 // 20 метров
 }

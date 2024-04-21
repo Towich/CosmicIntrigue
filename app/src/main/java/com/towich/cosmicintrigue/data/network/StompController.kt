@@ -1,11 +1,10 @@
 package com.towich.cosmicintrigue.data.network
 
-import android.content.ClipData.Item
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.towich.cosmicintrigue.data.model.GameState
 import com.towich.cosmicintrigue.data.model.GeoPositionModel
-import com.towich.cosmicintrigue.data.model.Player
 import com.towich.cosmicintrigue.data.model.TaskGeoPositionModel
 import com.towich.cosmicintrigue.data.source.Constants
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -129,7 +128,7 @@ class StompController(
     }
 
     fun subscribeUsersTopic(
-        onReceivedPlayersList: (players: List<Player>) -> Unit
+        onReceivedGameState: (gameState: GameState) -> Unit
     ): Disposable {
         // Настраиваем подписку на топик
         return mStompClient.topic(Constants.USER_TOPIC)
@@ -140,30 +139,25 @@ class StompController(
 
 
                 // десериализуем сообщение
-                val playersList: List<Player> =
-//                    Gson().fromJsonList<TaskGeoPositionModel>(topicMessage.payload)
-                    gson.fromJson(topicMessage.payload, Array<Player>::class.java).asList()
-//                gson.fr
-
-//                val typeToken = object : TypeToken<List<TaskGeoPositionModel>>() {}.type
-//                val list = gson.fromJson<List>(topicMessage., )
+                val gameState: GameState =
+                    gson.fromJson(topicMessage.payload, GameState::class.java)
 
 
                 Log.i(
                     "StompClient",
-                    "USER_TOPIC | RECEIVED PLAYERS: size = ${playersList.size}"
+                    "USER_TOPIC | RECEIVED GAMESTATE: user list size = ${gameState.users.size}"
                 )
 
-                for(player in playersList){
+                for(player in gameState.users){
                     Log.i(
                         "StompClient",
-                        "USER_TOPIC | RECEIVED TASK: id = ${player.id}, ready = ${player.ready}"
+                        "USER_TOPIC | RECEIVED GAMESTATE: id = ${player.id}, ready = ${player.ready}"
                     )
                 }
 
 
                 // вызываем коллбэк
-                onReceivedPlayersList(playersList)
+                onReceivedGameState(gameState)
             },
                 {
                     Log.e("StompClient", "Error!", it) // обработка ошибок

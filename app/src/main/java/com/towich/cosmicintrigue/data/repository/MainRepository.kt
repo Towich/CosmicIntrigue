@@ -1,5 +1,6 @@
 package com.towich.cosmicintrigue.data.repository
 
+import com.towich.cosmicintrigue.data.model.GameState
 import com.towich.cosmicintrigue.data.model.GeoPositionModel
 import com.towich.cosmicintrigue.data.model.Player
 import com.towich.cosmicintrigue.data.model.TaskGeoPositionModel
@@ -25,7 +26,7 @@ interface MainRepository {
     ): Disposable
 
     fun subscribeUsersTopic(
-        onReceivedPlayersList: (players: List<Player>) -> Unit
+        onReceivedGameState: (gameState: GameState) -> Unit
     ): Disposable
 
     suspend fun getStartTaskMarks(): ApiResult<List<TaskGeoPositionModel>>
@@ -34,4 +35,7 @@ interface MainRepository {
     fun saveCurrentPlayer(player: Player)
 
     fun getCurrentPlayer(): Player?
+
+    fun toggleReadyPlayer()
+    fun updateIsImposter(newIsImposter: Boolean?)
 }
