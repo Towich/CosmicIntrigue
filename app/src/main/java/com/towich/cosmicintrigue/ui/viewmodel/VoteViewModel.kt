@@ -1,6 +1,7 @@
 package com.towich.cosmicintrigue.ui.viewmodel
 
 import android.os.CountDownTimer
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.towich.cosmicintrigue.data.model.Player
@@ -10,14 +11,17 @@ class VoteViewModel(): ViewModel() {
     //TODO (список голосующих игроков)
     //TODO(Добавить проверку на смерть игрока)
     fun getPlayers():List<Player>{
-        //return Player
-        TODO("Список игроков ичаствующих в голосовании" +
-                "запрос get")
+        return arrayListOf(Player(1,"user",true,true),
+            Player(2,"player1",true,false),
+            Player(3,"player2",true,false))
     }
     fun sendVote(id: Long?){
+        Log.d("voted for ",id.toString())
+        /*
         TODO("Голосование за игрока по id, " +
                 "null = пропуск голосования" +
                 "запрос post")
+         */
     }
 
 
@@ -27,16 +31,20 @@ class VoteViewModel(): ViewModel() {
                 callbackTick.invoke(millisUntilFinished)
             }
             override fun onFinish() {
-                TODO("Получение резудьтатов голосования " +
+
+                callbackMain.invoke(
+                    arrayListOf(Pair(null,1), Pair(1,0),Pair(2,1),Pair(3,1))
+                /*TODO("Получение резудьтатов голосования " +
                         "первый - id" +
                         "второй - кол-во голосов" +
-                        "запрос topic")
-                //callbackMain.invoke()
+                        "запрос topic")*/
+                )
             }
         }.start()
     }
 
     fun getUserId():Long{
-        TODO("Возвращает id пользователя")
+        return 1
+        //TODO("Возвращает id пользователя")
     }
 }
