@@ -40,9 +40,6 @@ class WRoomFragment : Fragment() {
         wRoomViewModel.players.observe(viewLifecycleOwner, Observer {
             adapter.setReady(it)
         })
-        wRoomViewModel.status.observe(viewLifecycleOwner, Observer {
-            binding.statusText.text = it
-        })
         //var l = arrayListOf(ReadyPlayer(2,"user",false), ReadyPlayer(3,"123",true))
         binding.rec.adapter = adapter
         binding.rec.layoutManager = LinearLayoutManager(context)
