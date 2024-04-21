@@ -146,10 +146,14 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         binding.buttonmap.setOnClickListener {
             findNavController().navigate(R.id.action_Map_to_Task)
         }
+        binding.floatingActionButton2.setOnClickListener {
+            findNavController().navigate(R.id.action_Map_to_Vote)
+        }
 
         viewModel.getStartTaskMarks()
         getLocationUpdates()
         startLocationUpdates()
+
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -240,7 +244,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                         binding.buttonmap.text = "Выполнить задание #$taskIdToShow"
                     }
                     else{
-                        binding.buttonmap.visibility = View.GONE
+                        //binding.buttonmap.visibility = View.GONE
                     }
 
                     Log.i("MY_LOCATION", "${location?.latitude} ${location?.longitude}")
