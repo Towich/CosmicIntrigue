@@ -10,6 +10,7 @@ import com.towich.cosmicintrigue.data.model.TaskGeoPositionModel
 import com.towich.cosmicintrigue.data.network.ApiResult
 import com.towich.cosmicintrigue.data.repository.MainRepository
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
 
 class MapViewModel(
@@ -17,22 +18,11 @@ class MapViewModel(
 ): ViewModel() {
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
+    private var disposableGeoPosTopic: Disposable? = null
+    private var disposableCoordinatesTopic: Disposable? = null
+
     val currentTaskMarks: MutableLiveData<List<TaskGeoPositionModel>> by lazy {
         MutableLiveData<List<TaskGeoPositionModel>>()
-    }
-
-    fun initGeoPositionsStompClient(
-        onReceivedGeoPosition: (geoPosition: GeoPositionModel) -> Unit
-    ){
-        repository.initGeoPositionsStompClient(
-            compositeDisposable = compositeDisposable,
-            onReceivedGeoPosition = { geoPosition: GeoPositionModel ->
-                onReceivedGeoPosition(geoPosition)
-            }
-        )
-    }
-    fun sendGeoPosition(geoPosition: GeoPositionModel) {
-        repository.sendGeoPosition(compositeDisposable, geoPosition)
     }
 
     fun getStartTaskMarks() {
@@ -49,4 +39,40 @@ class MapViewModel(
         }
 
     }
+
+    fun subscribeGeoPosTopic(
+        onReceivedGeoPosition: (geoPosition: GeoPositionModel) -> Unit
+    ){
+        disposableGeoPosTopic = repository.subscribeGeoPosTopic(onReceivedGeoPosition)
+    }
+
+
+    fun sendGeoPosition(geoPosition: GeoPositionModel) {
+        repository.sendGeoPosition(compositeDisposable, geoPosition)
+    }
+
+    fun subscribeCoordinatesTopic(
+        onReceivedCoordinatesList: (listOfTasksGeoPositions: List<TaskGeoPositionModel>) -> Unit
+    ){
+        disposableCoordinatesTopic = repository.subscribeCoordinatesTopic(onReceivedCoordinatesList)
+    }
+
+
+    fun sendTaskGeoPositionModel(taskGeoPositionModel: TaskGeoPositionModel) {
+        repository.sendTaskGeoPositionModel(compositeDisposable, taskGeoPositionModel)
+    }
+
+    fun dispose(){
+        if(disposableGeoPosTopic != null)
+            compositeDisposable.delete(disposableGeoPosTopic!!)
+        if(disposableCoordinatesTopic != null)
+            compositeDisposable.delete(disposableCoordinatesTopic!!)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+
+        compositeDisposable.dispose()
+    }
+
 }
