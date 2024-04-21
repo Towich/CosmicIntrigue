@@ -18,8 +18,7 @@ class LoginViewModel(
     }
 
     fun sendLogin(login: String){
-//        TODO("Отправка логина на сервер" +
-//                "post запрос")
+//        TODO("Отправка логина на сервер - post запрос")
 
         viewModelScope.launch {
             when (val result = repository.getUserIdByPlayerModel(Player(
@@ -37,9 +36,6 @@ class LoginViewModel(
                 }
             }
         }
-    }
-    fun setIdReceived(callback: () -> Unit) {
-        TODO("навиагция при получении id")
     }
 
     fun saveCurrentPlayer(player: Player){

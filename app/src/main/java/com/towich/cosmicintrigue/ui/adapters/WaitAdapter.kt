@@ -12,8 +12,8 @@ import com.towich.cosmicintrigue.data.model.ReadyPlayer
 
 class WaitAdapter(val userId : Long) :RecyclerView.Adapter<WaitAdapter.WaitViewHolder>(){
     class WaitViewHolder(val binding: WroomViewBinding):RecyclerView.ViewHolder(binding.root)
-    var players : List<ReadyPlayer> = ArrayList()
-    fun setReady(player: List<ReadyPlayer>){
+    var players : List<Player> = ArrayList()
+    fun setReady(player: List<Player>){
         players = player
         notifyDataSetChanged()
     }
@@ -30,7 +30,7 @@ class WaitAdapter(val userId : Long) :RecyclerView.Adapter<WaitAdapter.WaitViewH
             var p = players.get(position)
             this.loginText.text = p.login
             this.readyText.text = if(p.ready) "Готов" else "Не готов"
-            if(p.id == userId.toInt())
+            if(p.id == userId)
                 this.back.setBackgroundColor(Color.parseColor("#F0F0F0"))
             this.readyText.setTextColor(if(p.ready) Color.parseColor("#FF0000") else Color.parseColor("#00FF00"))
         }

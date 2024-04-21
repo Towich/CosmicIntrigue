@@ -37,25 +37,33 @@ class WRoomFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val adapter = WaitAdapter(wRoomViewModel.getId())
-        wRoomViewModel.players.observe(viewLifecycleOwner, Observer {
+        wRoomViewModel.players.observe(viewLifecycleOwner) {
             adapter.setReady(it)
-        })
+            if (it.any { pl ->
+                pl.imposter == true
+            })
+            {
+                wRoomViewModel.saveRole(
+                    it.find {pl ->
+                        pl.id == wRoomViewModel.getId()
+                    }?.imposter?:false
+                )
+                findNavController().navigate(R.id.action_WRoom_to_game)
+            }
+        }
         //var l = arrayListOf(ReadyPlayer(2,"user",false), ReadyPlayer(3,"123",true))
         binding.rec.adapter = adapter
         binding.rec.layoutManager = LinearLayoutManager(context)
         binding.wroomButtonEnable.setOnClickListener {
             binding.wroomButtonEnable.visibility = View.GONE
             binding.wroomButtonDisable.visibility = View.VISIBLE
-            wRoomViewModel.ready.value = true
+            //wRoomViewModel.ready.value = true//TODO
         }
         binding.wroomButtonDisable.setOnClickListener {
             binding.wroomButtonEnable.visibility = View.VISIBLE
             binding.wroomButtonDisable.visibility = View.GONE
-            wRoomViewModel.ready.value = false
+            //wRoomViewModel.ready.value = false//TODO
         }
-//        wRoomViewModel.setStartCallback {
-//            findNavController().navigate(R.id.action_WRoom_to_game)
-//        }
     }
 
     override fun onDestroyView() {

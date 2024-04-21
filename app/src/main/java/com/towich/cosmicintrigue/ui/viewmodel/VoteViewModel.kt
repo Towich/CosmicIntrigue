@@ -7,15 +7,18 @@ import com.towich.cosmicintrigue.data.model.Player
 import com.towich.cosmicintrigue.data.source.Constants.VOTE_TIMER_MILIS
 
 class VoteViewModel(): ViewModel() {
+    //TODO (список голосующих игроков)
+    //TODO(Добавить проверку на смерть игрока)
     fun getPlayers():List<Player>{
         TODO("Список игроков ичаствующих в голосовании" +
                 "запрос get")
     }
-    fun setVote(id: Long?){
+    fun sendVote(id: Long?){
         TODO("Голосование за игрока по id, " +
                 "null = пропуск голосования" +
                 "запрос post")
     }
+    /*
     fun getVotes(callbackMain: (List<Pair<Long?,Int>>) -> Unit, callbackTick: (Long)->Unit){
         object : CountDownTimer(VOTE_TIMER_MILIS, 1000) {
             override fun onTick(millisUntilFinished: Long) {
@@ -30,11 +33,8 @@ class VoteViewModel(): ViewModel() {
             }
         }.start()
     }
+    */
     fun getUserId():Long{
         TODO("Возвращает id пользователя")
-    }
-    fun setDeathCallback(callback:()->Unit){
-        TODO("проброс навигации если был выбран " +
-                "без запроса")
     }
 }

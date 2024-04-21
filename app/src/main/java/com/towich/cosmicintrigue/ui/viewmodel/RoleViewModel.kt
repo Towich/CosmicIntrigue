@@ -8,7 +8,7 @@ class RoleViewModel(): ViewModel() {
         TODO("Получение роли игрока" +
                 "мирный - false" +
                 "импостер - true" +
-                "get запрос")
+                "без запроса")
     }
 
 }

@@ -46,7 +46,7 @@ class VoteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val players = voteViewModel.getPlayers()
-        val adap =  VoteAdapter({a: Long? -> voteViewModel.setVote(a)},players,voteViewModel.getUserId())
+        val adap =  VoteAdapter({a: Long? -> voteViewModel.sendVote(a)},players,voteViewModel.getUserId())
         binding.progressBar.max = 100
         binding.rec.adapter = adap
         binding.rec.layoutManager = LinearLayoutManager(context)
@@ -62,9 +62,11 @@ class VoteFragment : Fragment() {
         binding.VoteButton.setOnClickListener{
             findNavController().navigate(R.id.action_Vote_to_Map)
         }
+        /*
         voteViewModel.setDeathCallback {
             findNavController().navigate(R.id.action_Vote_to_Death)
         }
+         */
     }
 
     override fun onDestroyView() {
