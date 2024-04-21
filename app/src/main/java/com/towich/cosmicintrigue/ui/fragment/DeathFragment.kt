@@ -31,9 +31,11 @@ class DeathFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        /*
         deathViewModel.setFinalCallback {
             findNavController().navigate(R.id.action_Death_to_Final)
         }
+        */
     }
 
     override fun onDestroyView() {

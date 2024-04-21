@@ -3,19 +3,16 @@ package com.towich.cosmicintrigue.ui.viewmodel
 import android.os.CountDownTimer
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.towich.cosmicintrigue.data.model.Player
 import com.towich.cosmicintrigue.data.source.Constants.TASK_TIMER_MILIS
 
 class TaskViewModel(): ViewModel() {
-    fun interruptTask(){
-        TODO("Отправка данных о прерывании" +
-                "post запрос")
+    //TODO("Список игроков websocket")
+    val players : MutableLiveData<List<Player>> by lazy {
+        MutableLiveData<List<Player>>()
     }
-    fun finishTask(){
-        TODO("Отправка данных о завершении"+
-                "post запрос")
-    }
-    fun onDeathCallback(callback:()->Unit){
-        TODO("переход на экран смерти с заданий")
+    fun onCompleteTask(){
+        TODO("Отправка данных о завершении post запрос")
     }
     fun setOnCompleteCallback(callbackMain:()->Unit,callbackTick:(Long)->Unit){//изменение кнопки по завершению задачи
         object : CountDownTimer(TASK_TIMER_MILIS, 1000) {
