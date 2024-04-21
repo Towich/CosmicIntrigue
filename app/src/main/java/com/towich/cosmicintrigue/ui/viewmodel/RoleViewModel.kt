@@ -3,7 +3,7 @@ package com.towich.cosmicintrigue.ui.viewmodel
 import androidx.lifecycle.ViewModel
 
 class RoleViewModel(): ViewModel() {
-    public fun GetRole():Boolean
+    fun GetRole():Boolean
     {
         TODO("Получение роли игрока" +
                 "мирный - false" +

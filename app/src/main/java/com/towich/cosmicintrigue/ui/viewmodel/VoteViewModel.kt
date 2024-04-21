@@ -7,8 +7,6 @@ import com.towich.cosmicintrigue.data.model.Player
 import com.towich.cosmicintrigue.data.source.Constants.VOTE_TIMER_MILIS
 
 class VoteViewModel(): ViewModel() {
-    //val votes = MutableLiveData<List<Pair<Int?,Int>>>()
-    //val player = MutableLiveData<List<Pair<Int?,Int>>>()
     fun getPlayers():List<Player>{
         TODO("Список игроков ичаствующих в голосовании" +
                 "запрос get")
@@ -35,7 +33,7 @@ class VoteViewModel(): ViewModel() {
     fun getUserId():Long{
         TODO("Возвращает id пользователя")
     }
-    public fun setDeathCallback(callback:()->Unit){
+    fun setDeathCallback(callback:()->Unit){
         TODO("проброс навигации если был выбран " +
                 "без запроса")
     }

@@ -14,6 +14,9 @@ class TaskViewModel(): ViewModel() {
         TODO("Отправка данных о завершении"+
                 "post запрос")
     }
+    fun onDeathCallback(callback:()->Unit){
+        TODO("переход на экран смерти с заданий")
+    }
     fun setOnCompleteCallback(callbackMain:()->Unit,callbackTick:(Long)->Unit){//изменение кнопки по завершению задачи
         object : CountDownTimer(TASK_TIMER_MILIS, 1000) {
             override fun onTick(millisUntilFinished: Long) {
