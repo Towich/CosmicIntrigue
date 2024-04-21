@@ -42,7 +42,7 @@ class RoleFragment : Fragment() {
         binding.roleName.text = if(role) "Предатель" else "Мирный"
         binding.RoleText.text = if(role) "sus" else "amogus"
         binding.roleButton.setOnClickListener {
-            findNavController().navigate(R.id.action_RoleFragment_to_MapFragment6)
+            findNavController().navigate(R.id.action_Role_to_Map)
         }
 
     }

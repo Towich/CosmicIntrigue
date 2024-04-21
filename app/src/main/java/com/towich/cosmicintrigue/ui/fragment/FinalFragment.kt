@@ -31,7 +31,7 @@ class FinalFragment: Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.finalButton.setOnClickListener {
-            findNavController().navigate(R.id.action_FinalFragment_to_nav_graph)
+            findNavController().navigate(R.id.action_Final_to_menu)
         }
         binding.victoryText.text = if(finalViewModel.GetWinners()) "Предатели победили" else "Мирные победили"
     }

@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.towich.cosmicintrigue.R
 import com.towich.cosmicintrigue.data.model.Player
+import com.towich.cosmicintrigue.data.source.Constants.VOTE_TIMER_MILIS
 import com.towich.cosmicintrigue.databinding.FragmentVoteBinding
 import com.towich.cosmicintrigue.ui.adapters.VoteAdapter
 import com.towich.cosmicintrigue.ui.util.App
@@ -45,20 +46,24 @@ class VoteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val players = voteViewModel.getPlayers()
-        val adap =  VoteAdapter({a: Int? -> voteViewModel.setVote(a)},players,voteViewModel.getUserId())
+        val adap =  VoteAdapter({a: Long? -> voteViewModel.setVote(a)},players,voteViewModel.getUserId())
+        binding.progressBar.max = 100
         binding.rec.adapter = adap
         binding.rec.layoutManager = LinearLayoutManager(context)
         voteViewModel.getVotes ({
-            a: List<Pair<Int?,Int>> ->
+            a: List<Pair<Long?,Int>> ->
             adap.endVote(a)
             binding.VoteButton.visibility = View.VISIBLE
-
-            TODO("Закончить голосование")
-            //maxOf(listB)
         },
-            {})
+            {
+                a:Long ->
+                binding.progressBar.progress = (a * 100/ VOTE_TIMER_MILIS).toInt()
+            })
         binding.VoteButton.setOnClickListener{
-            findNavController().navigate(R.id.action_MapFragment_to_VoteFragment2)
+            findNavController().navigate(R.id.action_Vote_to_Map)
+        }
+        voteViewModel.setDeathCallback {
+            findNavController().navigate(R.id.action_Vote_to_Death)
         }
     }
 

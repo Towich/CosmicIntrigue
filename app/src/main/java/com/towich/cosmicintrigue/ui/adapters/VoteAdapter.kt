@@ -9,9 +9,9 @@ import com.towich.cosmicintrigue.R
 import com.towich.cosmicintrigue.databinding.VoteViewBinding
 import com.towich.cosmicintrigue.data.model.Player
 
-class VoteAdapter(var onVote:(Int?)->Unit, players: List<Player>, val userId : Int) :RecyclerView.Adapter<VoteAdapter.VoteViewHolder>(){
+class VoteAdapter(var onVote:(Long?)->Unit, players: List<Player>, val userId : Long) :RecyclerView.Adapter<VoteAdapter.VoteViewHolder>(){
     class VoteViewHolder(val binding: VoteViewBinding):RecyclerView.ViewHolder(binding.root)
-    class AdaptedPlayer(var id:Int?, var login:String, var isUser:Boolean, var isVoted:Boolean, var numVotes: Int)
+    class AdaptedPlayer(var id:Long?, var login:String, var isUser:Boolean, var isVoted:Boolean, var numVotes: Int)
 
 
     var votedId: Int = 0
@@ -23,18 +23,14 @@ class VoteAdapter(var onVote:(Int?)->Unit, players: List<Player>, val userId : I
         }
     }
 
-    public fun endVote(Votes: List<Pair<Int?,Int>>){
-        val (listA:List<Int?>, listB:List<Int>) =Votes.unzip()
-        listA
+    public fun endVote(Votes: List<Pair<Long?,Int>>){
+        val (listA:List<Long?>, listB:List<Int>) =Votes.unzip()
+        var y = listA.get(2)
         for(i in Users.indices)
         {
-            TODO("123")
-            /*
             val it = Users.get(i)
-            it.numVotes = Votes.get(Votes.indexOf(it.id))
+            it.numVotes = listB.get(listA.indexOf(it.id))
             notifyItemChanged(i)
-            */
-             
         }
     }
     fun SetVotedId(id: Int){
@@ -61,9 +57,9 @@ class VoteAdapter(var onVote:(Int?)->Unit, players: List<Player>, val userId : I
             this.Progressbar.max = Users.count()
             this.Name.text = p.login
             if(p.isUser)
-                this.background.setBackgroundColor(Color.GREEN)
+                this.background.setBackgroundColor(Color.parseColor("#00FF00"))
             if(p.isVoted)
-                this.background.setBackgroundColor(Color.MAGENTA)
+                this.background.setBackgroundColor(Color.parseColor("#0000FF"))
             if(p.numVotes < 0)
             {
                 this.Progressbar.visibility = View.GONE

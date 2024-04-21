@@ -77,11 +77,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.buttonmap.setOnClickListener {
-            findNavController().navigate(R.id.action_RoleFragment_to_MapFragment6)
-            //findNavController().navigate(R.id.action_MapFragment_to_VoteFragment2)
-
-        }
 
         viewModel.subscribeGeoPosTopic { geoPosition: GeoPositionModel ->
             if (geoPosition.latitude != null && geoPosition.longitude != null) {
@@ -149,7 +144,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
 
         binding.buttonmap.setOnClickListener {
-            findNavController().navigate(R.id.action_MapFragment_to_TaskFragment4)
+            findNavController().navigate(R.id.action_Map_to_Task)
         }
 
         viewModel.getStartTaskMarks()

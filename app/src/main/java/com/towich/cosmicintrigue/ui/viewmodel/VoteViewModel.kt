@@ -13,12 +13,12 @@ class VoteViewModel(): ViewModel() {
         TODO("Список игроков ичаствующих в голосовании" +
                 "запрос get")
     }
-    fun setVote(id: Int?){
+    fun setVote(id: Long?){
         TODO("Голосование за игрока по id, " +
                 "null = пропуск голосования" +
                 "запрос post")
     }
-    fun getVotes(callbackMain: (List<Pair<Int?,Int>>) -> Unit, callbackTick: (Long)->Unit){
+    fun getVotes(callbackMain: (List<Pair<Long?,Int>>) -> Unit, callbackTick: (Long)->Unit){
         object : CountDownTimer(VOTE_TIMER_MILIS, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 callbackTick.invoke(millisUntilFinished)
@@ -32,7 +32,11 @@ class VoteViewModel(): ViewModel() {
             }
         }.start()
     }
-    fun getUserId():Int{
+    fun getUserId():Long{
         TODO("Возвращает id пользователя")
+    }
+    public fun setDeathCallback(callback:()->Unit){
+        TODO("проброс навигации если был выбран " +
+                "без запроса")
     }
 }
