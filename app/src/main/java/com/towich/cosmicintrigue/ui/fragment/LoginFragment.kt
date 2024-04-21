@@ -33,7 +33,9 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.loginButton.setOnClickListener{
-//            loginViewModel.sendLogin(binding.loginEditText.text.toString())
+            loginViewModel.sendLogin(binding.loginEditText.text.toString())
+        }
+        loginViewModel.setIdRecieved {
             findNavController().navigate(R.id.action_Login_to_WRoom)
         }
     }

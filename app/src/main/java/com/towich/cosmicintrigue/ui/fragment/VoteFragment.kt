@@ -29,7 +29,7 @@ class VoteFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    val voteViewModel : VoteViewModel by viewModels{
+    private val voteViewModel : VoteViewModel by viewModels{
         (requireContext().applicationContext as App).viewModelFactory
     }
     override fun onCreateView(
@@ -45,18 +45,18 @@ class VoteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val players = voteViewModel.getPlayers()
-        val adap =  VoteAdapter({a: Int? -> voteViewModel.vote(a)},players,voteViewModel.getUserId())
+        val adap =  VoteAdapter({a: Int? -> voteViewModel.setVote(a)},players,voteViewModel.getUserId())
         binding.rec.adapter = adap
         binding.rec.layoutManager = LinearLayoutManager(context)
-        voteViewModel.getVotes {
+        voteViewModel.getVotes ({
             a: List<Pair<Int?,Int>> ->
-            val (listA, listB) =a.unzip()
-            adap.endVote(listA,listB)
+            adap.endVote(a)
             binding.VoteButton.visibility = View.VISIBLE
 
             TODO("Закончить голосование")
             //maxOf(listB)
-        }
+        },
+            {})
         binding.VoteButton.setOnClickListener{
             findNavController().navigate(R.id.action_MapFragment_to_VoteFragment2)
         }

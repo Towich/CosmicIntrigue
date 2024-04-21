@@ -15,17 +15,15 @@ import com.towich.cosmicintrigue.ui.viewmodel.DeathViewModel
 class DeathFragment : Fragment() {
 
     private var _binding: FragmentDeathBinding? = null
-
     private val binding get() = _binding!!
 
-    val DeathViewModel : DeathViewModel by viewModels{
+    private val deathViewModel : DeathViewModel by viewModels{
         (requireContext().applicationContext as App).viewModelFactory
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         _binding = FragmentDeathBinding.inflate(inflater, container, false)
         return binding.root
 
@@ -33,15 +31,9 @@ class DeathFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        /*
-        binding.death.visibility = View.GONE
-        DeathViewModel.SetWaitCallback {
-            binding.death.visibility = View.VISIBLE
-        }
-        binding.death.setOnClickListener {
+        deathViewModel.setFinalCallback {
             findNavController().navigate(R.id.action_DeathFragment_to_FinalFragment2)
         }
-         */
     }
 
     override fun onDestroyView() {

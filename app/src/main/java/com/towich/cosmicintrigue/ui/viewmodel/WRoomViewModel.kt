@@ -9,11 +9,11 @@ class WRoomViewModel(): ViewModel() {
     var ready = MutableLiveData<Boolean>() //TODO("отпраление на сервер того готов игрок или нет websocket/post запрос")
     var status = MutableLiveData<String>() //TODO("получение статусу комнаты websocket")
     fun setStartCallback(a:()->Unit){
-        TODO("навигации в начало игры" +
+        TODO("навигации в начало игры " +
                 "websocket")
     }
     fun getId():Int{
-        TODO("получение id" +
+        TODO("получение id " +
                 "без запроса")
     }
 
