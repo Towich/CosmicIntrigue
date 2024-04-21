@@ -46,12 +46,12 @@ class VoteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val players = voteViewModel.getPlayers()
-        val adap =  VoteAdapter({a: Int? -> voteViewModel.setVote(a)},players,voteViewModel.getUserId())
+        val adap =  VoteAdapter({a: Long? -> voteViewModel.setVote(a)},players,voteViewModel.getUserId())
         binding.progressBar.max = 100
         binding.rec.adapter = adap
         binding.rec.layoutManager = LinearLayoutManager(context)
         voteViewModel.getVotes ({
-            a: List<Pair<Int?,Int>> ->
+            a: List<Pair<Long?,Int>> ->
             adap.endVote(a)
             binding.VoteButton.visibility = View.VISIBLE
         },
