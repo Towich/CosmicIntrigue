@@ -37,7 +37,6 @@ import com.towich.cosmicintrigue.data.util.MyLocationListener
 import com.towich.cosmicintrigue.databinding.FragmentMapBinding
 import com.towich.cosmicintrigue.ui.util.App
 import com.towich.cosmicintrigue.ui.viewmodel.MapViewModel
-import io.reactivex.disposables.CompositeDisposable
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
