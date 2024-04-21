@@ -18,22 +18,23 @@ class VoteViewModel(): ViewModel() {
                 "null = пропуск голосования" +
                 "запрос post")
     }
-    /*
+
+
     fun getVotes(callbackMain: (List<Pair<Long?,Int>>) -> Unit, callbackTick: (Long)->Unit){
         object : CountDownTimer(VOTE_TIMER_MILIS, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 callbackTick.invoke(millisUntilFinished)
             }
             override fun onFinish() {
-                //callbackMain.invoke()
                 TODO("Получение резудьтатов голосования " +
                         "первый - id" +
                         "второй - кол-во голосов" +
                         "запрос topic")
+                //callbackMain.invoke()
             }
         }.start()
     }
-    */
+
     fun getUserId():Long{
         TODO("Возвращает id пользователя")
     }

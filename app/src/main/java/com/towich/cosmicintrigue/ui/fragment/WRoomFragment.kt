@@ -57,12 +57,12 @@ class WRoomFragment : Fragment() {
         binding.wroomButtonEnable.setOnClickListener {
             binding.wroomButtonEnable.visibility = View.GONE
             binding.wroomButtonDisable.visibility = View.VISIBLE
-            //wRoomViewModel.ready.value = true//TODO
+            wRoomViewModel.ready.value = true
         }
         binding.wroomButtonDisable.setOnClickListener {
             binding.wroomButtonEnable.visibility = View.VISIBLE
             binding.wroomButtonDisable.visibility = View.GONE
-            //wRoomViewModel.ready.value = false//TODO
+            wRoomViewModel.ready.value = false
         }
     }
 
