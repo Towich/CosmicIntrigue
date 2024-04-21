@@ -32,7 +32,7 @@ class VoteViewModel(): ViewModel() {
             }
         }.start()
     }
-    fun getUserId():Int{
+    fun getUserId():Long{
         TODO("Возвращает id пользователя")
     }
 }

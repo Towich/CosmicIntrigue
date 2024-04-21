@@ -9,7 +9,7 @@ import com.towich.cosmicintrigue.R
 import com.towich.cosmicintrigue.databinding.VoteViewBinding
 import com.towich.cosmicintrigue.data.model.Player
 
-class VoteAdapter(var onVote:(Int?)->Unit, players: List<Player>, val userId : Int) :RecyclerView.Adapter<VoteAdapter.VoteViewHolder>(){
+class VoteAdapter(var onVote:(Int?)->Unit, players: List<Player>, val userId : Long) :RecyclerView.Adapter<VoteAdapter.VoteViewHolder>(){
     class VoteViewHolder(val binding: VoteViewBinding):RecyclerView.ViewHolder(binding.root)
     class AdaptedPlayer(var id:Int?, var login:String, var isUser:Boolean, var isVoted:Boolean, var numVotes: Int)
 
@@ -19,7 +19,7 @@ class VoteAdapter(var onVote:(Int?)->Unit, players: List<Player>, val userId : I
     init{
         Users.add(AdaptedPlayer(null,"продолжить",false,true,-1))
         players.forEach{
-            Users.add(AdaptedPlayer(it.id,it.login,userId == it.id,false,-1))
+            Users.add(AdaptedPlayer(it.id?.toInt(),it.login,userId == it.id,false,-1))
         }
     }
 

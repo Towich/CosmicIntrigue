@@ -9,6 +9,7 @@ import com.towich.cosmicintrigue.data.network.StompController
 import com.towich.cosmicintrigue.data.repository.MainRepository
 import com.towich.cosmicintrigue.data.repository.MainRepositoryImpl
 import com.towich.cosmicintrigue.data.source.Constants
+import com.towich.cosmicintrigue.data.source.SessionStorage
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -59,12 +60,15 @@ class App : Application() {
         gson = gson
     )
 
+    private val sessionStorage: SessionStorage = SessionStorage()
+
     val repository: MainRepository =
         MainRepositoryImpl(
             stompController = stompController,
             apiService = apiService,
             gson = gson,
-            mStompClient = stompClient
+            mStompClient = stompClient,
+            sessionStorage = sessionStorage
         )
 
     val viewModelFactory: ViewModelFactory = ViewModelFactory(repository)

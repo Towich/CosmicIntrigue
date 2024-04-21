@@ -29,4 +29,9 @@ interface MainRepository {
     ): Disposable
 
     suspend fun getStartTaskMarks(): ApiResult<List<TaskGeoPositionModel>>
+    suspend fun getUserIdByPlayerModel(playerModel: Player): ApiResult<Player>
+
+    fun saveCurrentPlayer(player: Player)
+
+    fun getCurrentPlayer(): Player?
 }

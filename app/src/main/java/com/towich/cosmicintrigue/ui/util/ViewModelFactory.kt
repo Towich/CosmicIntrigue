@@ -26,7 +26,9 @@ class ViewModelFactory(
                 FinalViewModel() as T
             }
             modelClass.isAssignableFrom(LoginViewModel::class.java) -> {
-                LoginViewModel() as T
+                LoginViewModel(
+                    repository = repository
+                ) as T
             }
             modelClass.isAssignableFrom(MapViewModel::class.java) -> {
                 MapViewModel(
@@ -43,7 +45,9 @@ class ViewModelFactory(
                 VoteViewModel() as T
             }
             modelClass.isAssignableFrom(WRoomViewModel::class.java) -> {
-                WRoomViewModel() as T
+                WRoomViewModel(
+                    repository = repository
+                ) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }
