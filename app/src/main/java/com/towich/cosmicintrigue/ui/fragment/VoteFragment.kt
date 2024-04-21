@@ -60,10 +60,10 @@ class VoteFragment : Fragment() {
                 binding.progressBar.progress = (a * 100/ VOTE_TIMER_MILIS).toInt()
             })
         binding.VoteButton.setOnClickListener{
-            findNavController().navigate(R.id.action_VoteFragment_to_MapFragment2)
+            findNavController().navigate(R.id.action_Vote_to_Map)
         }
         voteViewModel.setDeathCallback {
-            findNavController().navigate(R.id.action_VoteFragment_to_DeathFragment2)
+            findNavController().navigate(R.id.action_Vote_to_Death)
         }
     }
 

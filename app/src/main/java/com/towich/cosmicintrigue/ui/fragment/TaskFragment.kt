@@ -36,11 +36,11 @@ class TaskFragment : Fragment() {
 
         binding.taskSuccessButton.setOnClickListener {
             taskViewModel.finishTask()
-            findNavController().navigate(R.id.action_TaskFragment_to_MapFragment2)
+            findNavController().navigate(R.id.action_Task_to_Map)
         }
         binding.taskCancelButton.setOnClickListener {
             taskViewModel.interruptTask()
-            findNavController().navigate(R.id.action_TaskFragment_to_MapFragment2)
+            findNavController().navigate(R.id.action_Task_to_Map)
         }
         taskViewModel.setOnCompleteCallback({
             binding.taskCancelButton.visibility = View.GONE
