@@ -25,16 +25,12 @@ class VoteAdapter(var onVote:(Int?)->Unit, players: List<Player>, val userId : I
 
     public fun endVote(Votes: List<Pair<Int?,Int>>){
         val (listA:List<Int?>, listB:List<Int>) =Votes.unzip()
-        listA
+        var y = listA.get(2)
         for(i in Users.indices)
         {
-            TODO("123")
-            /*
             val it = Users.get(i)
-            it.numVotes = Votes.get(Votes.indexOf(it.id))
+            it.numVotes = listB.get(listA.indexOf(it.id))
             notifyItemChanged(i)
-            */
-             
         }
     }
     fun SetVotedId(id: Int){
@@ -61,9 +57,9 @@ class VoteAdapter(var onVote:(Int?)->Unit, players: List<Player>, val userId : I
             this.Progressbar.max = Users.count()
             this.Name.text = p.login
             if(p.isUser)
-                this.background.setBackgroundColor(Color.GREEN)
+                this.background.setBackgroundColor(Color.parseColor("#00FF00"))
             if(p.isVoted)
-                this.background.setBackgroundColor(Color.MAGENTA)
+                this.background.setBackgroundColor(Color.parseColor("#0000FF"))
             if(p.numVotes < 0)
             {
                 this.Progressbar.visibility = View.GONE

@@ -35,4 +35,8 @@ class VoteViewModel(): ViewModel() {
     fun getUserId():Int{
         TODO("Возвращает id пользователя")
     }
+    public fun setDeathCallback(callback:()->Unit){
+        TODO("проброс навигации если был выбран " +
+                "без запроса")
+    }
 }
