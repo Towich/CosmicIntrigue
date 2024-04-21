@@ -37,6 +37,7 @@ import com.towich.cosmicintrigue.data.util.MyLocationListener
 import com.towich.cosmicintrigue.databinding.FragmentMapBinding
 import com.towich.cosmicintrigue.ui.util.App
 import com.towich.cosmicintrigue.ui.viewmodel.MapViewModel
+import io.reactivex.disposables.CompositeDisposable
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -147,6 +148,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             )
         }
 
+        binding.buttonmap.setOnClickListener {
+            findNavController().navigate(R.id.action_MapFragment_to_TaskFragment4)
+        }
+
         viewModel.getStartTaskMarks()
         getLocationUpdates()
         startLocationUpdates()
@@ -208,6 +213,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        viewModel.dispose()
+        fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
     private fun getLocationUpdates() {
@@ -230,13 +237,15 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                         )
                     )
 
-//                    Log.i("MapFragment")
 
                     val taskIdToShow = getTaskIdToCompleteIfNearby(currLocation = location)
                     if(taskIdToShow != null){
-                        Log.i("MapFragment", "Task ${taskIdToShow} is ready to start completing!")
-//                        binding.buttonmap.visibility =
-//                        binding.buttonmap.text = "Выполнить задание #$taskIdToShow"
+                        Log.i("MapFragment", "Task ${taskIdToShow} is ready for start completing!")
+                        binding.buttonmap.visibility = View.VISIBLE
+                        binding.buttonmap.text = "Выполнить задание #$taskIdToShow"
+                    }
+                    else{
+                        binding.buttonmap.visibility = View.GONE
                     }
 
                     Log.i("MY_LOCATION", "${location?.latitude} ${location?.longitude}")

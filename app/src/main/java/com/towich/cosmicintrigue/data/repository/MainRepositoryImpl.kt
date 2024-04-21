@@ -3,6 +3,7 @@ package com.towich.cosmicintrigue.data.repository
 import android.util.Log
 import com.google.gson.Gson
 import com.towich.cosmicintrigue.data.model.GeoPositionModel
+import com.towich.cosmicintrigue.data.model.Player
 import com.towich.cosmicintrigue.data.model.TaskGeoPositionModel
 import com.towich.cosmicintrigue.data.network.ApiResult
 import com.towich.cosmicintrigue.data.network.ApiService
@@ -68,6 +69,28 @@ class MainRepositoryImpl(
         )
     }
 
+    override fun sendPlayerModel(
+        compositeDisposable: CompositeDisposable,
+        playerModel: Player
+    ) {
+        val request = mStompClient.send(Constants.USER_LINK_SOCKET, gson.toJson(playerModel))
+        compositeDisposable.add(
+            request.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        Log.d(
+                            "StompClient",
+                            "SEND PLAYER: id = ${playerModel.id}$, ready = ${playerModel.ready}"
+                        )
+                    },
+                    {
+                        Log.e("StompClient", "Stomp error", it)
+                    }
+                )
+        )
+    }
+
     override fun initGeoPositionsStompClient(
         compositeDisposable: CompositeDisposable
     ) {
@@ -86,32 +109,36 @@ class MainRepositoryImpl(
         return stompController.subscribeCoordinatesTopic(onReceivedCoordinatesList)
     }
 
+    override fun subscribeUsersTopic(onReceivedPlayersList: (players: List<Player>) -> Unit): Disposable {
+        return stompController.subscribeUsersTopic(onReceivedPlayersList)
+    }
+
 
     override suspend fun getStartTaskMarks(): ApiResult<List<TaskGeoPositionModel>> {
-        return try {
-            val response: Response<List<TaskGeoPositionModel>> = apiService.getStartTaskMarks()
+//        return try {
+//            val response: Response<List<TaskGeoPositionModel>> = apiService.getStartTaskMarks()
+//
+//            if(response.isSuccessful){
+//                ApiResult.Success(response.body() ?: listOf())
+//            } else{
+//                ApiResult.Error(response.message())
+//            }
+//        } catch (e: Exception){
+//            ApiResult.Error(e.message ?: "unknown error")
+//        }
 
-            if(response.isSuccessful){
-                ApiResult.Success(response.body() ?: listOf())
-            } else{
-                ApiResult.Error(response.message())
-            }
-        } catch (e: Exception){
-            ApiResult.Error(e.message ?: "unknown error")
-        }
-
-//        return ApiResult.Success(
-//            listOf(
-//                TaskGeoPositionModel(
-//                    id = 77, latitude = 55.8010271, longitude = 37.8057306
-//                ),
-//                TaskGeoPositionModel(
-//                    id = 50, latitude = 51.8010271, longitude = 31.8057306
-//                ),
-//                TaskGeoPositionModel(
-//                    id = 55, latitude = 50.8010271 , longitude = 30.8057306
-//                )
-//            )
-//        )
+        return ApiResult.Success(
+            listOf(
+                TaskGeoPositionModel(
+                    id = 77, latitude = 55.8010271, longitude = 37.8057306, completed = false
+                ),
+                TaskGeoPositionModel(
+                    id = 50, latitude = 51.8010271, longitude = 31.8057306, completed = false
+                ),
+                TaskGeoPositionModel(
+                    id = 55, latitude = 50.8010271 , longitude = 30.8057306, completed = false
+                )
+            )
+        )
     }
 }

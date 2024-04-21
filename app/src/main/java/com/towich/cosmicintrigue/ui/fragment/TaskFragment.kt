@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.towich.cosmicintrigue.R
@@ -45,11 +46,15 @@ class TaskFragment : Fragment() {
         object : CountDownTimer(5000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 // Этот метод вызывается каждую секунду до истечения таймера
+                Toast.makeText(requireContext(), "$millisUntilFinished", Toast.LENGTH_SHORT).show()
             }
 
             override fun onFinish() {
                 // Этот метод вызывается по истечении таймера (через 5 секунд)
-                true.also { binding.taskSuccessButton.isEnabled = it } // Включаем кнопку после истечения таймера
+
+                // Включаем кнопку после истечения таймера
+                binding.taskCancelButton.visibility = View.GONE
+                binding.taskSuccessButton.visibility = View.VISIBLE
             }
         }.start()
 
