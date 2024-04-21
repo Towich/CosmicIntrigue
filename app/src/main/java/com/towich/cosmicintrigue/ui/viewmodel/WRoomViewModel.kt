@@ -10,6 +10,7 @@ import com.towich.cosmicintrigue.data.model.ReadyPlayer
 import com.towich.cosmicintrigue.data.repository.MainRepository
 import com.towich.cosmicintrigue.data.source.Constants
 
+
 class WRoomViewModel(
     private val repository: MainRepository
 ): ViewModel() {
@@ -22,7 +23,15 @@ class WRoomViewModel(
         MutableLiveData<Boolean>()
     }
     init{
-        object : CountDownTimer(Constants.TASK_TIMER_MILIS, 1000) {
+        object : CountDownTimer(100, 1000) {
+            override fun onTick(millisUntilFinished: Long) {}
+            override fun onFinish() {
+                players.value = arrayListOf(Player(1,"user",false,false),
+                    Player(2,"player1",false,false),
+                    Player(3,"player2",true,false))
+            }
+        }.start()
+        object : CountDownTimer(6000, 1000) {
             override fun onTick(millisUntilFinished: Long) {}
             override fun onFinish() {
                 players.value = arrayListOf(Player(1,"user",false,false),
@@ -30,7 +39,15 @@ class WRoomViewModel(
                     Player(3,"player2",true,false))
             }
         }.start()
-        //ready.observe(viewLifecycleOwner){}
+
+    }
+    fun getOwner(lf:LifecycleOwner){
+        ready.observe(lf){
+            a ->
+            players.value = arrayListOf(Player(1,"user",a,false),
+                Player(2,"player1",false,false),
+                Player(3,"player2",true,false))
+        }
     }
     fun getId(): Long {
         //TODO("получение id без запроса")
