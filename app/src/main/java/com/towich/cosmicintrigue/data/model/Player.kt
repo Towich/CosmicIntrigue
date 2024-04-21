@@ -4,5 +4,5 @@ data class Player(
     var id: Long? = null,
     var login: String,
     var ready: Boolean = false,
-    var isImposter: Boolean? = null
+    var imposter: Boolean? = null
 )

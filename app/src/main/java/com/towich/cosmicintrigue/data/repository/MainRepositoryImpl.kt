@@ -9,6 +9,7 @@ import com.towich.cosmicintrigue.data.network.ApiResult
 import com.towich.cosmicintrigue.data.network.ApiService
 import com.towich.cosmicintrigue.data.network.StompController
 import com.towich.cosmicintrigue.data.source.Constants
+import com.towich.cosmicintrigue.data.source.SessionStorage
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -17,12 +18,14 @@ import retrofit2.Response
 import ua.naiksoftware.stomp.StompClient
 import ua.naiksoftware.stomp.dto.LifecycleEvent
 import ua.naiksoftware.stomp.dto.StompMessage
+import kotlin.math.log
 
 class MainRepositoryImpl(
     private val stompController: StompController,
     private val apiService: ApiService,
     private val gson: Gson,
     private val mStompClient: StompClient,
+    private val sessionStorage: SessionStorage
 ) : MainRepository {
     override fun sendGeoPosition(
         compositeDisposable: CompositeDisposable,
@@ -140,5 +143,33 @@ class MainRepositoryImpl(
                 )
             )
         )
+    }
+
+    override suspend fun getUserIdByPlayerModel(playerModel: Player): ApiResult<Player> {
+        return try {
+            val response: Response<Player> = apiService.getUserIdByPlayerModel(
+//                id = playerModel.id,
+//                login = playerModel.login,
+//                ready = playerModel.ready,
+//                isImposter = playerModel.isImposter
+                playerModel
+            )
+
+            if(response.isSuccessful){
+                ApiResult.Success(response.body() ?: Player(id = null, login = "", ready = false))
+            } else{
+                ApiResult.Error(response.message())
+            }
+        } catch (e: Exception){
+            ApiResult.Error(e.message ?: "unknown error")
+        }
+    }
+
+    override fun saveCurrentPlayer(player: Player) {
+        sessionStorage.currentPlayer = player
+    }
+
+    override fun getCurrentPlayer(): Player? {
+        return sessionStorage.currentPlayer
     }
 }

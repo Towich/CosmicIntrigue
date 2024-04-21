@@ -56,9 +56,9 @@ class WRoomFragment : Fragment() {
             binding.wroomButtonDisable.visibility = View.GONE
             wRoomViewModel.ready.value = false
         }
-        wRoomViewModel.setStartCallback {
-            findNavController().navigate(R.id.action_WRoom_to_game)
-        }
+//        wRoomViewModel.setStartCallback {
+//            findNavController().navigate(R.id.action_WRoom_to_game)
+//        }
     }
 
     override fun onDestroyView() {
