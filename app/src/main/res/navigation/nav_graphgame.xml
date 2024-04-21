@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/MapFragment"
         android:name="com.towich.cosmicintrigue.ui.fragment.MapFragment"
-        android:label="@string/third_fragment_label"
+
         tools:layout="@layout/fragment_map">
         <action
             android:id="@+id/action_MapFragment_to_TaskFragment4"
@@ -22,7 +22,7 @@
     <fragment
         android:id="@+id/RoleFragment"
         android:name="com.towich.cosmicintrigue.ui.fragment.RoleFragment"
-        android:label="@string/forth_fragment_label"
+
         tools:layout="@layout/fragment_role">
         <action
             android:id="@+id/action_RoleFragment_to_MapFragment6"
@@ -31,7 +31,7 @@
     <fragment
         android:id="@+id/TaskFragment"
         android:name="com.towich.cosmicintrigue.ui.fragment.TaskFragment"
-        android:label="@string/fifth_fragment_label"
+
         tools:layout="@layout/fragment_task">
         <action
             android:id="@+id/action_TaskFragment_to_VoteFragment3"
@@ -46,7 +46,7 @@
     <fragment
         android:id="@+id/FinalFragment"
         android:name="com.towich.cosmicintrigue.ui.fragment.FinalFragment"
-        android:label="@string/sixth_fragment_label"
+
         tools:layout="@layout/fragment_final">
         <action
             android:id="@+id/action_FinalFragment_to_nav_graph"
@@ -55,7 +55,7 @@
     <fragment
         android:id="@+id/VoteFragment"
         android:name="com.towich.cosmicintrigue.ui.fragment.VoteFragment"
-        android:label="@string/seventh_fragment_label"
+
         tools:layout="@layout/fragment_vote">
         <action
             android:id="@+id/action_VoteFragment_to_DeathFragment2"
@@ -67,7 +67,7 @@
     <fragment
         android:id="@+id/DeathFragment"
         android:name="com.towich.cosmicintrigue.ui.fragment.DeathFragment"
-        android:label="@string/eighth_fragment_label"
+
         tools:layout="@layout/fragment_death">
         <action
             android:id="@+id/action_DeathFragment_to_FinalFragment2"

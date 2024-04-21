@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/WRoomFragment"
         android:name="com.towich.cosmicintrigue.ui.fragment.WRoomFragment"
-        android:label="@string/second_fragment_label"
+
         tools:layout="@layout/fragment_wroom">
         <action
             android:id="@+id/action_WRoom_to_game"
@@ -18,7 +18,7 @@
     <fragment
         android:id="@+id/LoginFragment"
         android:name="com.towich.cosmicintrigue.ui.fragment.LoginFragment"
-        android:label="@string/first_fragment_label"
+
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_Login_to_WRoom"

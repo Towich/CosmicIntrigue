@@ -10,12 +10,16 @@ import com.towich.cosmicintrigue.data.model.TaskGeoPositionModel
 import com.towich.cosmicintrigue.data.network.ApiResult
 import com.towich.cosmicintrigue.data.repository.MainRepository
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
 
 class MapViewModel(
     private val repository: MainRepository
 ): ViewModel() {
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
+
+    private var disposableGeoPosTopic: Disposable? = null
+    private var disposableCoordinatesTopic: Disposable? = null
 
     val currentTaskMarks: MutableLiveData<List<TaskGeoPositionModel>> by lazy {
         MutableLiveData<List<TaskGeoPositionModel>>()
@@ -39,7 +43,7 @@ class MapViewModel(
     fun subscribeGeoPosTopic(
         onReceivedGeoPosition: (geoPosition: GeoPositionModel) -> Unit
     ){
-        repository.subscribeGeoPosTopic(onReceivedGeoPosition)
+        disposableGeoPosTopic = repository.subscribeGeoPosTopic(onReceivedGeoPosition)
     }
 
 
@@ -50,7 +54,7 @@ class MapViewModel(
     fun subscribeCoordinatesTopic(
         onReceivedCoordinatesList: (listOfTasksGeoPositions: List<TaskGeoPositionModel>) -> Unit
     ){
-        repository.subscribeCoordinatesTopic(onReceivedCoordinatesList)
+        disposableCoordinatesTopic = repository.subscribeCoordinatesTopic(onReceivedCoordinatesList)
     }
 
 
@@ -58,5 +62,17 @@ class MapViewModel(
         repository.sendTaskGeoPositionModel(compositeDisposable, taskGeoPositionModel)
     }
 
+    fun dispose(){
+        if(disposableGeoPosTopic != null)
+            compositeDisposable.delete(disposableGeoPosTopic!!)
+        if(disposableCoordinatesTopic != null)
+            compositeDisposable.delete(disposableCoordinatesTopic!!)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+
+        compositeDisposable.dispose()
+    }
 
 }

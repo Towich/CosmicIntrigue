@@ -5,6 +5,7 @@ import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.towich.cosmicintrigue.data.model.GeoPositionModel
+import com.towich.cosmicintrigue.data.model.Player
 import com.towich.cosmicintrigue.data.model.TaskGeoPositionModel
 import com.towich.cosmicintrigue.data.source.Constants
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -120,6 +121,49 @@ class StompController(
 
                 // вызываем коллбэк
                 onReceivedCoordinatesList(listOfTaskGeoPositionModels)
+            },
+                {
+                    Log.e("StompClient", "Error!", it) // обработка ошибок
+                }
+            )
+    }
+
+    fun subscribeUsersTopic(
+        onReceivedPlayersList: (players: List<Player>) -> Unit
+    ): Disposable {
+        // Настраиваем подписку на топик
+        return mStompClient.topic(Constants.USER_TOPIC)
+            .subscribeOn(Schedulers.io(), false)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ topicMessage: StompMessage ->
+                Log.d("StompClient", "USER_TOPIC | " + topicMessage.payload)
+
+
+                // десериализуем сообщение
+                val playersList: List<Player> =
+//                    Gson().fromJsonList<TaskGeoPositionModel>(topicMessage.payload)
+                    gson.fromJson(topicMessage.payload, Array<Player>::class.java).asList()
+//                gson.fr
+
+//                val typeToken = object : TypeToken<List<TaskGeoPositionModel>>() {}.type
+//                val list = gson.fromJson<List>(topicMessage., )
+
+
+                Log.i(
+                    "StompClient",
+                    "USER_TOPIC | RECEIVED PLAYERS: size = ${playersList.size}"
+                )
+
+                for(player in playersList){
+                    Log.i(
+                        "StompClient",
+                        "USER_TOPIC | RECEIVED TASK: id = ${player.id}, ready = ${player.ready}"
+                    )
+                }
+
+
+                // вызываем коллбэк
+                onReceivedPlayersList(playersList)
             },
                 {
                     Log.e("StompClient", "Error!", it) // обработка ошибок
