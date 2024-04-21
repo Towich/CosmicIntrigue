@@ -69,6 +69,10 @@ class MapViewModel(
             compositeDisposable.delete(disposableCoordinatesTopic!!)
     }
 
+    fun getPlayerId(): Long? {
+        return repository.getCurrentPlayer()?.id
+    }
+
     override fun onCleared() {
         super.onCleared()
 

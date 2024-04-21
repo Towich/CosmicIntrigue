@@ -226,7 +226,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
                     viewModel.sendGeoPosition(
                         GeoPositionModel(
-                            id = 2,
+                            id = viewModel.getPlayerId() ?: -1,
                             latitude = location?.latitude,
                             longitude = location?.longitude
                         )

@@ -32,7 +32,9 @@ class WaitAdapter(val userId : Long) :RecyclerView.Adapter<WaitAdapter.WaitViewH
             this.readyText.text = if(p.ready) "Готов" else "Не готов"
             if(p.id == userId)
                 this.back.setBackgroundColor(Color.parseColor("#F0F0F0"))
-            this.readyText.setTextColor(if(p.ready) Color.parseColor("#FF0000") else Color.parseColor("#00FF00"))
+            else
+                this.back.setBackgroundColor(Color.parseColor("#00FFFFFF"))
+            this.readyText.setTextColor(if(p.ready) Color.parseColor("#00FF00") else Color.parseColor("#FF0000"))
         }
     }
 }
