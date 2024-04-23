@@ -28,4 +28,5 @@
     <string name="imposterWon">Предатели победили</string>
     <string name="peacefulWon">Мирные победили</string>
     <string name="taskName">Ваше задание</string>
+    <string name="login_button">Войти</string>
 </resources>
