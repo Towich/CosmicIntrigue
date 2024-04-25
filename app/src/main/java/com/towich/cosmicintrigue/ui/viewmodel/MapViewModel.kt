@@ -25,6 +25,9 @@ class MapViewModel(
         MutableLiveData<List<TaskGeoPositionModel>>()
     }
 
+    val countCurrTaskMarks: MutableLiveData<Int> = repository.getCountCurrTaskCount()
+    val totalTaskMarks: MutableLiveData<Int> = repository.getTotalTaskCount()
+
     fun getStartTaskMarks() {
         viewModelScope.launch {
             when (val result = repository.getStartTaskMarks()) {

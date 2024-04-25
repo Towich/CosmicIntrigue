@@ -128,6 +128,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     )
                 }
             }
+
+            viewModel.countCurrTaskMarks.value = listOfTasksGeoPositions.size
+//            if(_binding != null){
+//                binding.completedTasksTextView.text = (viewModel.totalTaskMarks.value?.minus(
+//                    listOfTasksGeoPositions.size
+//                )).toString()
+//            }
         }
 
 
@@ -148,6 +155,22 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         binding.buttonmap.setOnClickListener {
             findNavController().navigate(R.id.action_Map_to_Task)
         }
+
+        // Observer for getting count of current tasks
+        val countCurrTasksObserver = Observer<Int> { currCount ->
+            val completedTasks = viewModel.totalTaskMarks.value?.minus(currCount)
+            binding.completedTasksTextView.text = completedTasks.toString()
+            binding.progressBar2.progress = completedTasks ?: 0
+        }
+        viewModel.countCurrTaskMarks.observe(viewLifecycleOwner, countCurrTasksObserver)
+
+        // Observer for getting total count of tasks
+        val totalTasksObserver = Observer<Int> { totalTasks ->
+            binding.totalTasksTextView.text = totalTasks.toString()
+            binding.progressBar2.max = totalTasks
+        }
+        viewModel.totalTaskMarks.observe(viewLifecycleOwner, totalTasksObserver)
+
 
         viewModel.getStartTaskMarks()
         getLocationUpdates()

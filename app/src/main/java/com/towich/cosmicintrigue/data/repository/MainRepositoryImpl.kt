@@ -1,6 +1,7 @@
 package com.towich.cosmicintrigue.data.repository
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.towich.cosmicintrigue.data.model.GameState
 import com.towich.cosmicintrigue.data.model.GeoPositionModel
@@ -125,6 +126,7 @@ class MainRepositoryImpl(
             val response: Response<List<TaskGeoPositionModel>> = apiService.getStartTaskMarks()
 
             if(response.isSuccessful){
+                setTotalTaskCount(response.body()?.size ?: -1)
                 ApiResult.Success(response.body() ?: listOf())
             } else{
                 ApiResult.Error(response.message())
@@ -192,6 +194,22 @@ class MainRepositoryImpl(
 
     override fun getCurrTaskId(): Long {
         return sessionStorage.currTaskId ?: -1
+    }
+
+    override fun setTotalTaskCount(tasks: Int) {
+        sessionStorage.totalTaskCount.value = tasks
+    }
+
+    override fun getTotalTaskCount(): MutableLiveData<Int> {
+        return sessionStorage.totalTaskCount
+    }
+
+    override fun setCountCurrTaskCount(tasks: Int) {
+        sessionStorage.currCountTaskCount.value = tasks
+    }
+
+    override fun getCountCurrTaskCount(): MutableLiveData<Int> {
+        return sessionStorage.currCountTaskCount
     }
 
 }
