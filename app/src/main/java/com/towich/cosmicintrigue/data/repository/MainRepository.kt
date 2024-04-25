@@ -1,5 +1,6 @@
 package com.towich.cosmicintrigue.data.repository
 
+import androidx.lifecycle.MutableLiveData
 import com.towich.cosmicintrigue.data.model.GameState
 import com.towich.cosmicintrigue.data.model.GeoPositionModel
 import com.towich.cosmicintrigue.data.model.Player
@@ -41,4 +42,10 @@ interface MainRepository {
 
     fun setCurrTaskId(id: Long)
     fun getCurrTaskId(): Long
+
+    fun setTotalTaskCount(tasks: Int)
+    fun getTotalTaskCount(): MutableLiveData<Int>
+
+    fun setCountCurrTaskCount(tasks: Int)
+    fun getCountCurrTaskCount(): MutableLiveData<Int>
 }
