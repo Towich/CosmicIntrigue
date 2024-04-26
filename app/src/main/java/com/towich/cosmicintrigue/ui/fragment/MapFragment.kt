@@ -139,7 +139,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
 
 
-        binding.floatingActionButton2.setOnClickListener {
+        binding.VoteButton.setOnClickListener {
 //            viewModel.sendTaskGeoPositionModel(
 //                TaskGeoPositionModel(3, 10.0, 10.0)
 //            )
