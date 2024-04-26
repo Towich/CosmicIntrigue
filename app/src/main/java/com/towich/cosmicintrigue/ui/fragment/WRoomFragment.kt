@@ -75,20 +75,7 @@ class WRoomFragment : Fragment() {
             adapter.setReady(it.users)
         }
 
-
-        object : CountDownTimer(5000, 1000) {
-            override fun onFinish() {
-                // When timer is finished
-                // Execute your code here
-                wRoomViewModel.sendPlayerInUsersTopic()
-            }
-
-            override fun onTick(millisUntilFinished: Long) {
-                // millisUntilFinished    The amount of time until finished.
-            }
-        }.start()
-
-
+        wRoomViewModel.sendPlayerInUsersTopic()
     }
 
     override fun onDestroyView() {

@@ -35,10 +35,7 @@ class WRoomViewModel(
     }
 
     fun sendPlayerInUsersTopic(){
-        val player = repository.getCurrentPlayer()
-        if(player != null){
-            repository.sendPlayerModel(compositeDisposable, player)
-        }
+        repository.sendPlayerModel(compositeDisposable)
     }
 
     fun toggleReadyPlayer(){

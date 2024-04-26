@@ -3,6 +3,7 @@ package com.towich.cosmicintrigue.data.repository
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
+import com.towich.cosmicintrigue.data.model.GameState
 import com.towich.cosmicintrigue.data.model.GeoPositionModel
 import com.towich.cosmicintrigue.data.model.Player
 import com.towich.cosmicintrigue.data.model.TaskGeoPositionModel
@@ -32,9 +33,8 @@ class MainRepositoryImpl(
         compositeDisposable: CompositeDisposable,
         geoPositionModel: GeoPositionModel
     ) {
-        val request = mStompClient.send(Constants.CHAT_LINK_SOCKET, gson.toJson(geoPositionModel))
         compositeDisposable.add(
-            request.subscribeOn(Schedulers.io())
+            mStompClient.send(Constants.CHAT_LINK_SOCKET, gson.toJson(geoPositionModel)).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {
@@ -54,10 +54,8 @@ class MainRepositoryImpl(
         compositeDisposable: CompositeDisposable,
         taskGeoPositionModel: TaskGeoPositionModel
     ) {
-        val request =
-            mStompClient.send(Constants.COORDINATES_LINK_SOCKET, gson.toJson(taskGeoPositionModel))
         compositeDisposable.add(
-            request.subscribeOn(Schedulers.io())
+            mStompClient.send(Constants.COORDINATES_LINK_SOCKET, gson.toJson(taskGeoPositionModel)).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {
@@ -74,25 +72,11 @@ class MainRepositoryImpl(
     }
 
     override fun sendPlayerModel(
-        compositeDisposable: CompositeDisposable,
-        playerModel: Player
+        compositeDisposable: CompositeDisposable
     ) {
-        val request = mStompClient.send(Constants.USER_LINK_SOCKET, gson.toJson(playerModel))
-        compositeDisposable.add(
-            request.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    {
-                        Log.d(
-                            "StompClient",
-                            "SEND PLAYER: id = ${playerModel.id}$, ready = ${playerModel.ready}"
-                        )
-                    },
-                    {
-                        Log.e("StompClient", "Stomp error", it)
-                    }
-                )
-        )
+        val player = getCurrentPlayer()
+        if(player != null)
+            stompController.sendPlayerModel(compositeDisposable, player)
     }
 
     override fun initGeoPositionsStompClient(
