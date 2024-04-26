@@ -23,7 +23,6 @@
     <ProgressBar
         android:id="@+id/progressBar2"
         style="@android:style/Widget.ProgressBar.Horizontal"
-        android:progressBackgroundTint="#F0F0F0"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:indeterminate="false"
@@ -32,6 +31,7 @@
         android:minHeight="50dp"
         android:mirrorForRtl="true"
         android:progress="3"
+        android:progressBackgroundTint="#F0F0F0"
         android:progressTint="@color/primary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,58 +41,63 @@
     <Button
         android:id="@+id/buttonmap"
         style="@style/ButtonMainFilled"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="367dp"
+        android:layout_height="59dp"
         android:layout_marginStart="35dp"
         android:layout_marginEnd="35dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="24dp"
         android:text="Button"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/voteTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginBottom="180dp"
         android:elevation="10dp"
         android:text="Голос"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/voteFab"
+        app:layout_constraintEnd_toEndOf="@+id/voteFab"
+        app:layout_constraintStart_toStartOf="@+id/voteFab"
+        app:layout_constraintTop_toTopOf="@+id/voteFab" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/killTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="44dp"
-        android:layout_marginBottom="180dp"
         android:elevation="10dp"
         android:text="Убийство"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:textColor="@color/white"
+        android:visibility="gone"
+        android:enabled="true"
+        app:layout_constraintBottom_toBottomOf="@+id/killFab"
+        app:layout_constraintEnd_toEndOf="@+id/killFab"
+        app:layout_constraintStart_toStartOf="@+id/killFab"
+        app:layout_constraintTop_toTopOf="@+id/killFab" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton1"
+        android:id="@+id/killFab"
         android:layout_width="79dp"
         android:layout_height="69dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginBottom="150dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="24dp"
         android:clickable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton2"
-        android:layout_width="79dp"
-        android:layout_height="69dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginBottom="148dp"
-        android:clickable="true"
-        app:elevation="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:enabled="false"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/buttonmap"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/voteFab"
+        android:layout_width="79dp"
+        android:layout_height="69dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="24dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toTopOf="@+id/buttonmap"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/completedTasksTextView"
@@ -100,9 +105,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:textStyle="bold"
         android:text="TextView"
         android:textColor="#50C878"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -112,9 +117,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:textStyle="bold"
         android:text="TextView"
         android:textColor="#000000"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

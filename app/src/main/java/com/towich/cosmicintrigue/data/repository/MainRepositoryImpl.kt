@@ -55,7 +55,8 @@ class MainRepositoryImpl(
         taskGeoPositionModel: TaskGeoPositionModel
     ) {
         compositeDisposable.add(
-            mStompClient.send(Constants.COORDINATES_LINK_SOCKET, gson.toJson(taskGeoPositionModel)).subscribeOn(Schedulers.io())
+            mStompClient.send(Constants.COORDINATES_LINK_SOCKET, gson.toJson(taskGeoPositionModel))
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {
@@ -191,6 +192,14 @@ class MainRepositoryImpl(
 
     override fun getCountCurrTaskCount(): MutableLiveData<Int> {
         return sessionStorage.currCountTaskCount
+    }
+
+    override fun setCurrPlayerIdToKill(id: Long?) {
+        sessionStorage.currPlayerIdToKill = id
+    }
+
+    override fun getCurrPlayerIdToKill(): Long? {
+        return sessionStorage.currPlayerIdToKill
     }
 
 }

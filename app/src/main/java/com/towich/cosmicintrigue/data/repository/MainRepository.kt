@@ -48,4 +48,7 @@ interface MainRepository {
 
     fun setCountCurrTaskCount(tasks: Int)
     fun getCountCurrTaskCount(): MutableLiveData<Int>
+
+    fun setCurrPlayerIdToKill(id: Long?)
+    fun getCurrPlayerIdToKill(): Long?
 }

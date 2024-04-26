@@ -80,6 +80,17 @@ class MapViewModel(
         repository.setCurrTaskId(id)
     }
 
+    fun getIsImposter(): Boolean? {
+        return repository.getCurrentPlayer()?.isImposter
+    }
+
+    fun setCurrPlayerIdToKill(id: Long?){
+        repository.setCurrPlayerIdToKill(id)
+    }
+    fun getCurrPlayerIdToKill(): Long? {
+        return repository.getCurrPlayerIdToKill()
+    }
+
     override fun onCleared() {
         super.onCleared()
 
