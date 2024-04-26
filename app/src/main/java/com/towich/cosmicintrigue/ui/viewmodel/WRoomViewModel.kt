@@ -4,15 +4,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.towich.cosmicintrigue.data.model.GameState
 import com.towich.cosmicintrigue.data.model.Player
-import com.towich.cosmicintrigue.data.model.ReadyPlayer
 import com.towich.cosmicintrigue.data.repository.MainRepository
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 
 class WRoomViewModel(
     private val repository: MainRepository
 ): ViewModel() {
-    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
+    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
+    private var userTopicDisposable: Disposable? = null
 
 
     var players = MutableLiveData<List<Player>>() //TODO("Список ждущих игроков websocket")
@@ -31,7 +32,12 @@ class WRoomViewModel(
     fun subscribeUsersTopic(
         onReceivedGameState: (gameState: GameState) -> Unit
     ){
-        repository.subscribeUsersTopic(onReceivedGameState)
+        val disposable = repository.subscribeUsersTopic(onReceivedGameState)
+        userTopicDisposable = disposable
+    }
+
+    fun unsubscribeUsersTopic(){
+        userTopicDisposable?.dispose()
     }
 
     fun sendPlayerInUsersTopic(){

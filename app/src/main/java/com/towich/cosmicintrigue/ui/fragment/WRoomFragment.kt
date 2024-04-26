@@ -70,6 +70,7 @@ class WRoomFragment : Fragment() {
             }
 
             if(it.users.isNotEmpty() && it.users[0].isImposter != null){
+                wRoomViewModel.unsubscribeUsersTopic()
                 findNavController().navigate(R.id.action_WRoom_to_game)
             }
             adapter.setReady(it.users)
