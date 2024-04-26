@@ -58,6 +58,7 @@
         android:layout_height="wrap_content"
         android:elevation="10dp"
         android:text="Голос"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/voteFab"
         app:layout_constraintEnd_toEndOf="@+id/voteFab"
         app:layout_constraintStart_toStartOf="@+id/voteFab"
@@ -95,6 +96,7 @@
         android:layout_height="69dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="24dp"
+        android:backgroundTint="@color/primary"
         android:clickable="true"
         app:layout_constraintBottom_toTopOf="@+id/buttonmap"
         app:layout_constraintEnd_toEndOf="parent" />
