@@ -9,4 +9,5 @@ class SessionStorage {
 
     var currCountTaskCount: MutableLiveData<Int> = MutableLiveData<Int>(0)
     var totalTaskCount: MutableLiveData<Int> = MutableLiveData<Int>(0)
+    var currPlayerIdToKill: Long? = null
 }

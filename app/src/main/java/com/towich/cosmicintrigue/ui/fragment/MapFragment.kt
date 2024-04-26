@@ -3,13 +3,14 @@ package com.towich.cosmicintrigue.ui.fragment
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -33,15 +34,11 @@ import com.towich.cosmicintrigue.R
 import com.towich.cosmicintrigue.data.model.GeoPositionModel
 import com.towich.cosmicintrigue.data.model.TaskGeoPositionModel
 import com.towich.cosmicintrigue.data.source.Constants
+import com.towich.cosmicintrigue.data.source.CustomMath
 import com.towich.cosmicintrigue.data.util.MyLocationListener
 import com.towich.cosmicintrigue.databinding.FragmentMapBinding
 import com.towich.cosmicintrigue.ui.util.App
 import com.towich.cosmicintrigue.ui.viewmodel.MapViewModel
-import io.reactivex.disposables.CompositeDisposable
-import kotlin.math.atan2
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.math.sqrt
 
 class MapFragment : Fragment(), OnMapReadyCallback {
 
@@ -78,28 +75,104 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
 
 
+        initTopics()
+        initButtons()
+        initObservers()
+
+        viewModel.getStartTaskMarks()
+        getLocationUpdates()
+        startLocationUpdates()
+    }
+
+    private fun initTopics() {
         viewModel.subscribeGeoPosTopic { geoPosition: GeoPositionModel ->
             if (geoPosition.latitude != null && geoPosition.longitude != null) {
                 val latLngGeoPos = LatLng(geoPosition.latitude, geoPosition.longitude)
+                val ourPlayerId = viewModel.getPlayerId() ?: -1
 
-                for (mark in listOfUsersMarks) {
-                    if (mark.first == geoPosition.id) {
-                        mark.second?.remove()
+                for (i in 0 until listOfUsersMarks.size) {
+                    if (listOfUsersMarks[i].first == geoPosition.id) {
+                        listOfUsersMarks[i].second?.remove()
+                        Log.i("MapFragment", "Removed $i in listOfUsersMarks")
                     }
                 }
 
-                val marker = map.addMarker(
+                val newMarker = map.addMarker(
                     MarkerOptions()
                         .position(latLngGeoPos)
-                        .title("YAY")
+                        .title(getString(R.string.player) + " ${geoPosition.id}")
+                        .icon(
+                            BitmapDescriptorFactory.defaultMarker(
+                                if (ourPlayerId == geoPosition.id)
+                                    BitmapDescriptorFactory.HUE_RED
+                                else
+                                    BitmapDescriptorFactory.HUE_YELLOW
+                            )
+                        )
                 )
 
-                listOfUsersMarks.add(Pair(geoPosition.id, marker))
+                if(!listOfUsersMarks.map { it.first }.contains(geoPosition.id)){
+                    listOfUsersMarks.add(Pair(geoPosition.id, newMarker))
+                }
+                else{
+                    for(i in 0 until listOfUsersMarks.size){
+                        if(listOfUsersMarks[i].first == geoPosition.id){
+                            listOfUsersMarks[i] = Pair(geoPosition.id, newMarker)
+                        }
+                    }
+                }
 
+
+
+                // If we are Imposter --> check if we can kill player if he's near
+                if (viewModel.getIsImposter() == true) {
+
+                    // Getting our location
+                    var ourLocation: GeoPositionModel? = null
+                    for (mark in listOfUsersMarks) {
+                        if (mark.first == ourPlayerId) {
+                            ourLocation = GeoPositionModel(
+                                id = ourPlayerId,
+                                latitude = mark.second?.position?.latitude,
+                                longitude = mark.second?.position?.longitude,
+                            )
+                            break
+                        }
+                    }
+
+                    // Looking for any player which are nearly with us
+                    var foundedClosePlayerPairMark: Pair<Long, Marker?>? = null
+                    for (pairMark in listOfUsersMarks) {
+                        if (pairMark.first != ourLocation?.id && CustomMath.checkIfPlayerIsNear(
+                                ourGeoPos = ourLocation,
+                                otherPlayerGeoPos = pairMark.second
+                            )
+                        ) {
+                            foundedClosePlayerPairMark = pairMark
+                        }
+                    }
+
+                    // If we found one
+                    if (foundedClosePlayerPairMark != null) {
+                        binding.killTextView.text =
+                            getString(R.string.kill) + " #${foundedClosePlayerPairMark.first}"
+                        binding.killFab.isEnabled = true
+                        binding.killFab.backgroundTintList = ColorStateList.valueOf(Color.RED)
+                        viewModel.setCurrPlayerIdToKill(id = foundedClosePlayerPairMark.first)
+                        Log.i(
+                            "MapFragment",
+                            "We are ready to kill Player #${foundedClosePlayerPairMark.first}!"
+                        )
+                    } else {
+                        binding.killTextView.text = ""
+                        binding.killFab.isActivated = false
+                        binding.killFab.isEnabled = false
+                        binding.killFab.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+                        viewModel.setCurrPlayerIdToKill(id = null)
+                    }
+                }
             }
         }
-
-
         viewModel.subscribeCoordinatesTopic { listOfTasksGeoPositions ->
             map.clear()
             listOfTasksMarks.clear()
@@ -110,14 +183,14 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     "id = ${it.id}, latitude = ${it.latitude}, longitude = ${it.longitude}"
                 )
 
-                if(it.latitude != null && it.longitude != null) {
+                if (it.latitude != null && it.longitude != null) {
                     listOfTasksMarks.add(
                         Pair(
                             first = it.id,
                             second = map.addMarker(
                                 MarkerOptions()
                                     .position(LatLng(it.latitude, it.longitude))
-                                    .title("Task")
+                                    .title(getString(R.string.mapTask) + " ${it.id}")
                                     .icon(
                                         BitmapDescriptorFactory.defaultMarker(
                                             BitmapDescriptorFactory.HUE_AZURE
@@ -130,32 +203,32 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
 
             viewModel.countCurrTaskMarks.value = listOfTasksGeoPositions.size
-//            if(_binding != null){
-//                binding.completedTasksTextView.text = (viewModel.totalTaskMarks.value?.minus(
-//                    listOfTasksGeoPositions.size
-//                )).toString()
-//            }
+        }
+    }
+
+    private fun initButtons() {
+        binding.voteFab.setOnClickListener {
+            findNavController().navigate(R.id.action_Map_to_Vote)
         }
 
-
-
-        binding.VoteButton.setOnClickListener {
-//            viewModel.sendTaskGeoPositionModel(
-//                TaskGeoPositionModel(3, 10.0, 10.0)
-//            )
-
-            findNavController().navigate(R.id.action_Map_to_Vote)
-
-//            Log.i(
-//                "MapFragment",
-//                "distance = ${distanceInKm(55.801017, 37.805728, 55.670091, 37.480906)}"
-//            )
+        if (viewModel.getIsImposter() == true) {
+            binding.killFab.visibility = View.VISIBLE
+            binding.killTextView.visibility = View.VISIBLE
+            binding.killFab.setOnClickListener {
+                // TODO: Send dead player to topic
+                val playerToKill = viewModel.getCurrPlayerIdToKill()
+                if(playerToKill != null){
+//                    viewModel.sendGeoPosition()
+                }
+            }
         }
 
         binding.buttonmap.setOnClickListener {
             findNavController().navigate(R.id.action_Map_to_Task)
         }
+    }
 
+    private fun initObservers() {
         // Observer for getting count of current tasks
         val countCurrTasksObserver = Observer<Int> { currCount ->
             val completedTasks = viewModel.totalTaskMarks.value?.minus(currCount)
@@ -170,20 +243,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             binding.progressBar2.max = totalTasks
         }
         viewModel.totalTaskMarks.observe(viewLifecycleOwner, totalTasksObserver)
-
-
-        viewModel.getStartTaskMarks()
-        getLocationUpdates()
-        startLocationUpdates()
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        map = googleMap
-        // Add a marker in Moscow and move the camera
-        val park50years = LatLng(55.684132, 37.502607)
-//        googleMap.addMarker(MarkerOptions().position(park50years).title("Marker in Park 50 years"))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(park50years, 14.5f))
-
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -201,6 +263,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 0
             )
         }
+
+        map = googleMap
+        // Add a marker in Moscow and move the camera
+        val park50years = LatLng(55.684132, 37.502607)
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(park50years, 14.5f))
+
         googleMap.isMyLocationEnabled = true
 
         // Create the observer which updates the UI.
@@ -214,7 +282,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                             map.addMarker(
                                 MarkerOptions()
                                     .position(LatLng(taskGeo.latitude, taskGeo.longitude))
-                                    .title("Task ${taskGeo.id}")
+                                    .title(getString(R.string.mapTask) + " ${taskGeo.id}")
                                     .icon(
                                         BitmapDescriptorFactory.defaultMarker(
                                             BitmapDescriptorFactory.HUE_AZURE
@@ -228,13 +296,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
 
         viewModel.currentTaskMarks.observe(viewLifecycleOwner, nameObserver)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-        viewModel.dispose()
-        fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
     private fun getLocationUpdates() {
@@ -259,13 +320,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
 
                     val taskIdToShow = getTaskIdToCompleteIfNearby(currLocation = location)
-                    if(taskIdToShow != null){
+                    if (taskIdToShow != null) {
                         viewModel.setCurrTaskId(taskIdToShow)
                         Log.i("MapFragment", "Task ${taskIdToShow} is ready for start completing!")
                         binding.buttonmap.visibility = View.VISIBLE
                         binding.buttonmap.text = "Выполнить задание #$taskIdToShow"
-                    }
-                    else{
+                    } else {
                         viewModel.setCurrTaskId(-1)
                         binding.buttonmap.visibility = View.GONE
                     }
@@ -285,26 +345,15 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         )
     }
 
-    private fun distanceInKm(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
-        val radius = 6371 // Радиус Земли в километрах
-        val latDistance = Math.toRadians(lat2 - lat1)
-        val lonDistance = Math.toRadians(lon2 - lon1)
-        val a = sin(latDistance / 2) * sin(latDistance / 2) +
-                cos(Math.toRadians(lat1)) * cos(Math.toRadians(lat2)) *
-                sin(lonDistance / 2) * sin(lonDistance / 2)
-        val c = 2 * atan2(sqrt(a), sqrt(1 - a))
-        return radius * c
-    }
-
     private fun getTaskIdToCompleteIfNearby(currLocation: Location?): Long? {
-        if(currLocation == null){
+        if (currLocation == null) {
             return null
         }
 
         var foundedTaskId: Long? = null
-        for(taskGeoPos in listOfTasksMarks){
-            if(taskGeoPos.second != null){
-                val distance = distanceInKm(
+        for (taskGeoPos in listOfTasksMarks) {
+            if (taskGeoPos.second != null) {
+                val distance = CustomMath.distanceInKm(
                     lat1 = currLocation.latitude,
                     lon1 = currLocation.longitude,
                     lat2 = taskGeoPos.second?.position?.latitude ?: 0.0,
@@ -315,13 +364,19 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 //                Log.i("MapFragment", "CHECK DISTANCE | id = ${taskGeoPos.first}, latitude = ${taskGeoPos.second?.position?.latitude}")
 //                Log.i("MapFragment", "CHECK DISTANCE | id = ${taskGeoPos.first}, longitude = ${taskGeoPos.second?.position?.longitude}")
 //                Log.i("MapFragment", "-------------------------------------------------------------------------------------------------")
-                if(distance < Constants.DISTANCE_TO_COMPLETE_QUEST){
-//                    return taskGeoPos.first
+                if (distance < Constants.ACTION_DISTANCE) {
                     foundedTaskId = taskGeoPos.first
                 }
             }
         }
 //        return null
         return foundedTaskId
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+        viewModel.dispose()
+        fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 }

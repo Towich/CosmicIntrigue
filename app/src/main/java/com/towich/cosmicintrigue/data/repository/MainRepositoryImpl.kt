@@ -18,6 +18,9 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Response
 import ua.naiksoftware.stomp.StompClient
+import ua.naiksoftware.stomp.dto.LifecycleEvent
+import ua.naiksoftware.stomp.dto.StompMessage
+import kotlin.math.log
 
 class MainRepositoryImpl(
     private val stompController: StompController,
@@ -26,18 +29,12 @@ class MainRepositoryImpl(
     private val mStompClient: StompClient,
     private val sessionStorage: SessionStorage
 ) : MainRepository {
-
-    var onReceivedGameStateUpdateUI: (gameState: GameState) -> Unit = {
-
-    }
-
     override fun sendGeoPosition(
         compositeDisposable: CompositeDisposable,
         geoPositionModel: GeoPositionModel
     ) {
-        val request = mStompClient.send(Constants.CHAT_LINK_SOCKET, gson.toJson(geoPositionModel))
         compositeDisposable.add(
-            request.subscribeOn(Schedulers.io())
+            mStompClient.send(Constants.CHAT_LINK_SOCKET, gson.toJson(geoPositionModel)).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {
@@ -57,10 +54,9 @@ class MainRepositoryImpl(
         compositeDisposable: CompositeDisposable,
         taskGeoPositionModel: TaskGeoPositionModel
     ) {
-        val request =
-            mStompClient.send(Constants.COORDINATES_LINK_SOCKET, gson.toJson(taskGeoPositionModel))
         compositeDisposable.add(
-            request.subscribeOn(Schedulers.io())
+            mStompClient.send(Constants.COORDINATES_LINK_SOCKET, gson.toJson(taskGeoPositionModel))
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {
@@ -77,25 +73,11 @@ class MainRepositoryImpl(
     }
 
     override fun sendPlayerModel(
-        compositeDisposable: CompositeDisposable,
-        playerModel: Player
+        compositeDisposable: CompositeDisposable
     ) {
-        val request = mStompClient.send(Constants.USER_LINK_SOCKET, gson.toJson(playerModel))
-        compositeDisposable.add(
-            request.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    {
-                        Log.d(
-                            "StompClient",
-                            "SEND PLAYER: id = ${playerModel.id}$, ready = ${playerModel.ready}"
-                        )
-                    },
-                    {
-                        Log.e("StompClient", "Stomp error", it)
-                    }
-                )
-        )
+        val player = getCurrentPlayer()
+        if(player != null)
+            stompController.sendPlayerModel(compositeDisposable, player)
     }
 
     override fun initGeoPositionsStompClient(
@@ -210,6 +192,14 @@ class MainRepositoryImpl(
 
     override fun getCountCurrTaskCount(): MutableLiveData<Int> {
         return sessionStorage.currCountTaskCount
+    }
+
+    override fun setCurrPlayerIdToKill(id: Long?) {
+        sessionStorage.currPlayerIdToKill = id
+    }
+
+    override fun getCurrPlayerIdToKill(): Long? {
+        return sessionStorage.currPlayerIdToKill
     }
 
 }

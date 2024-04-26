@@ -13,7 +13,7 @@ import ua.naiksoftware.stomp.StompClient
 interface MainRepository {
     fun sendGeoPosition(compositeDisposable: CompositeDisposable, geoPositionModel: GeoPositionModel)
     fun sendTaskGeoPositionModel(compositeDisposable: CompositeDisposable, taskGeoPositionModel: TaskGeoPositionModel)
-    fun sendPlayerModel(compositeDisposable: CompositeDisposable, playerModel: Player)
+    fun sendPlayerModel(compositeDisposable: CompositeDisposable)
 
     fun initGeoPositionsStompClient(
         compositeDisposable: CompositeDisposable
@@ -48,4 +48,7 @@ interface MainRepository {
 
     fun setCountCurrTaskCount(tasks: Int)
     fun getCountCurrTaskCount(): MutableLiveData<Int>
+
+    fun setCurrPlayerIdToKill(id: Long?)
+    fun getCurrPlayerIdToKill(): Long?
 }

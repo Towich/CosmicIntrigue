@@ -29,7 +29,7 @@
     <string name="peacefulWon">Мирные победили</string>
     <string name="taskName">Ваше задание</string>
     <string name="login_button">Войти</string>
-    <string name="kill">Убийство</string>
-    <string name="_vote">Голос</string>
-    <string name="map_vote">Выполнить задание</string>
+    <string name="player">Игрок</string>
+    <string name="mapTask">Задание</string>
+    <string name="kill">Убить</string>
 </resources>

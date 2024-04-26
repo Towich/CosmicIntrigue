@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.towich.cosmicintrigue.data.model.GameState
 import com.towich.cosmicintrigue.data.model.GeoPositionModel
+import com.towich.cosmicintrigue.data.model.Player
 import com.towich.cosmicintrigue.data.model.TaskGeoPositionModel
 import com.towich.cosmicintrigue.data.source.Constants
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -163,6 +164,28 @@ class StompController(
                     Log.e("StompClient", "Error!", it) // обработка ошибок
                 }
             )
+    }
+
+
+    fun sendPlayerModel(
+        compositeDisposable: CompositeDisposable,
+        playerModel: Player
+    ) {
+        compositeDisposable.add(
+            mStompClient.send(Constants.USER_LINK_SOCKET, gson.toJson(playerModel)).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        Log.d(
+                            "StompClient",
+                            "SEND PLAYER: id = ${playerModel.id}$, ready = ${playerModel.ready}"
+                        )
+                    },
+                    {
+                        Log.e("StompClient", "Stomp error", it)
+                    }
+                )
+        )
     }
 }
 

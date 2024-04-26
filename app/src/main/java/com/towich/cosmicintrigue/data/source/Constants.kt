@@ -21,5 +21,5 @@ object Constants {
     // время работы таймера задания
     const val TASK_TIMER_MILIS = 5000L
 
-    const val DISTANCE_TO_COMPLETE_QUEST = 0.020 // 20 метров
+    const val ACTION_DISTANCE = 0.020 // 20 метров
 }
