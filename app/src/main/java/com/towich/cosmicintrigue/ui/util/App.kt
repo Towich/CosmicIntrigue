@@ -31,7 +31,6 @@ class App : Application() {
 
     private val okHttpClient: OkHttpClient =
         OkHttpClient.Builder()
-
             .addInterceptor(httpLoggingInterceptor)
             .addInterceptor { chain ->
                 try {

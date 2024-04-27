@@ -85,6 +85,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun initTopics() {
+
+        // Topic for getting players geo positions
         viewModel.subscribeGeoPosTopic { geoPosition: GeoPositionModel ->
             if (geoPosition.latitude != null && geoPosition.longitude != null) {
                 val latLngGeoPos = LatLng(geoPosition.latitude, geoPosition.longitude)
@@ -93,8 +95,20 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 for (i in 0 until listOfUsersMarks.size) {
                     if (listOfUsersMarks[i].first == geoPosition.id) {
                         listOfUsersMarks[i].second?.remove()
-                        Log.i("MapFragment", "Removed $i in listOfUsersMarks")
+                        Log.i("MapFragment", "Removed player $i in listOfUsersMarks")
                     }
+                }
+
+                // If we got dead player from topic
+                if(geoPosition.isDead){
+                    if(geoPosition.id == ourPlayerId){
+                        viewModel.dispose()
+                        stopLocationUpdates()
+                    }
+
+                    listOfUsersMarks.removeIf { it.first == geoPosition.id }
+
+                    return@subscribeGeoPosTopic
                 }
 
                 val newMarker = map.addMarker(
@@ -135,6 +149,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                                 id = ourPlayerId,
                                 latitude = mark.second?.position?.latitude,
                                 longitude = mark.second?.position?.longitude,
+                                isDead = false
                             )
                             break
                         }
@@ -154,25 +169,19 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
                     // If we found one
                     if (foundedClosePlayerPairMark != null) {
-                        binding.killTextView.text =
-                            getString(R.string.kill) + " #${foundedClosePlayerPairMark.first}"
-                        binding.killFab.isEnabled = true
-                        binding.killFab.backgroundTintList = ColorStateList.valueOf(Color.RED)
-                        viewModel.setCurrPlayerIdToKill(id = foundedClosePlayerPairMark.first)
+                        changeKillFABStatus(true, foundedClosePlayerPairMark)
                         Log.i(
                             "MapFragment",
                             "We are ready to kill Player #${foundedClosePlayerPairMark.first}!"
                         )
                     } else {
-                        binding.killTextView.text = ""
-                        binding.killFab.isActivated = false
-                        binding.killFab.isEnabled = false
-                        binding.killFab.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
-                        viewModel.setCurrPlayerIdToKill(id = null)
+                        changeKillFABStatus(false, null)
                     }
                 }
             }
         }
+
+        // Topic for getting tasks geo positions
         viewModel.subscribeCoordinatesTopic { listOfTasksGeoPositions ->
             map.clear()
             listOfTasksMarks.clear()
@@ -214,11 +223,22 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         if (viewModel.getIsImposter() == true) {
             binding.killFab.visibility = View.VISIBLE
             binding.killTextView.visibility = View.VISIBLE
+            binding.killFab.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
             binding.killFab.setOnClickListener {
-                // TODO: Send dead player to topic
+
+                // Send dead player to topic
                 val playerToKill = viewModel.getCurrPlayerIdToKill()
                 if(playerToKill != null){
-//                    viewModel.sendGeoPosition()
+                    viewModel.sendGeoPosition(
+                        geoPosition = GeoPositionModel(
+                            id = playerToKill,
+                            latitude = 0.0,
+                            longitude = 0.0,
+                            isDead = true
+                        )
+                    )
+
+                    changeKillFABStatus(false, null)
                 }
             }
         }
@@ -314,7 +334,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                         GeoPositionModel(
                             id = viewModel.getPlayerId() ?: -1,
                             latitude = location?.latitude,
-                            longitude = location?.longitude
+                            longitude = location?.longitude,
+                            isDead = false
                         )
                     )
 
@@ -345,6 +366,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         )
     }
 
+    private fun stopLocationUpdates(){
+        fusedLocationClient.removeLocationUpdates(locationCallback)
+    }
+
     private fun getTaskIdToCompleteIfNearby(currLocation: Location?): Long? {
         if (currLocation == null) {
             return null
@@ -371,6 +396,22 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
 //        return null
         return foundedTaskId
+    }
+
+    private fun changeKillFABStatus(isActive: Boolean, foundedClosePlayerPairMark: Pair<Long, Marker?>?){
+        if(isActive){
+            binding.killTextView.text =
+                getString(R.string.kill) + " #${foundedClosePlayerPairMark?.first}"
+            binding.killFab.isEnabled = true
+            binding.killFab.backgroundTintList = ColorStateList.valueOf(Color.RED)
+            viewModel.setCurrPlayerIdToKill(id = foundedClosePlayerPairMark?.first)
+        }
+        else{
+            binding.killTextView.text = ""
+            binding.killFab.isEnabled = false
+            binding.killFab.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+            viewModel.setCurrPlayerIdToKill(id = null)
+        }
     }
 
     override fun onDestroyView() {
