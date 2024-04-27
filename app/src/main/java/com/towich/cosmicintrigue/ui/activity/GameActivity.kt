@@ -25,7 +25,21 @@ class GameActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Initialize websocket connection
-        (application as App).repository.initGeoPositionsStompClient(compositeDisposable)
+        (application as App).repository.initGeoPositionsStompClient(
+            compositeDisposable = compositeDisposable,
+            onOpened = {
+
+            },
+            onError = {
+                Toast.makeText(applicationContext, "${it.message}", Toast.LENGTH_LONG).show()
+            },
+            onFailedServerHeartbeat = {
+
+            },
+            onClosed = {
+                Toast.makeText(applicationContext, getString(R.string.connection_closed), Toast.LENGTH_LONG).show()
+            }
+        )
 
         val navController = findNavController(R.id.nav_host_activity_maps)
     }

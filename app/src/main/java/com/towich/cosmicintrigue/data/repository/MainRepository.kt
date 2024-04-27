@@ -16,7 +16,11 @@ interface MainRepository {
     fun sendPlayerModel(compositeDisposable: CompositeDisposable)
 
     fun initGeoPositionsStompClient(
-        compositeDisposable: CompositeDisposable
+        compositeDisposable: CompositeDisposable,
+        onOpened: () -> Unit,
+        onError: (exception: Exception) -> Unit,
+        onFailedServerHeartbeat: () -> Unit,
+        onClosed: () -> Unit
     )
     fun subscribeGeoPosTopic(
         onReceivedGeoPosition: (geoPosition: GeoPositionModel) -> Unit
@@ -51,4 +55,6 @@ interface MainRepository {
 
     fun setCurrPlayerIdToKill(id: Long?)
     fun getCurrPlayerIdToKill(): Long?
+
+    fun reconnectToServer()
 }

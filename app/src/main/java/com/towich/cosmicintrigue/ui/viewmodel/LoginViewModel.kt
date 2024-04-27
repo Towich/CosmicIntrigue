@@ -7,26 +7,29 @@ import androidx.lifecycle.viewModelScope
 import com.towich.cosmicintrigue.data.model.Player
 import com.towich.cosmicintrigue.data.network.ApiResult
 import com.towich.cosmicintrigue.data.repository.MainRepository
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val repository: MainRepository
-): ViewModel() {
+) : ViewModel() {
 
     val currentPlayer: MutableLiveData<Player> by lazy {
         MutableLiveData<Player>()
     }
 
-    fun sendLogin(login: String){
+    fun sendLogin(login: String) {
 //        TODO("Отправка логина на сервер - post запрос")
 
         viewModelScope.launch {
-            when (val result = repository.getUserIdByPlayerModel(Player(
-                id = -1,
-                login = login,
-                ready = false,
-                isImposter = null
-            ))) {
+            when (val result = repository.getUserIdByPlayerModel(
+                Player(
+                    id = -1,
+                    login = login,
+                    ready = false,
+                    isImposter = null
+                )
+            )) {
                 is ApiResult.Success -> {
                     currentPlayer.value = result.data
                 }
@@ -38,7 +41,27 @@ class LoginViewModel(
         }
     }
 
-    fun saveCurrentPlayer(player: Player){
+    fun saveCurrentPlayer(player: Player) {
         repository.saveCurrentPlayer(player)
+    }
+
+    fun initGeoPositionsStompClient(
+        compositeDisposable: CompositeDisposable,
+        onOpened: () -> Unit,
+        onError: (exception: Exception) -> Unit,
+        onFailedServerHeartbeat: () -> Unit,
+        onClosed: () -> Unit
+    ) {
+        repository.initGeoPositionsStompClient(
+            compositeDisposable,
+            onOpened,
+            onError,
+            onFailedServerHeartbeat,
+            onClosed
+        )
+    }
+
+    fun reconnectToServer(){
+        repository.reconnectToServer()
     }
 }

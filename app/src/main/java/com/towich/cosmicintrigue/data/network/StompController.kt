@@ -23,6 +23,10 @@ class StompController(
 
     fun initGeoPositionsStompClient(
         compositeDisposable: CompositeDisposable,
+        onOpened: () -> Unit,
+        onError: (exception: Exception) -> Unit,
+        onFailedServerHeartbeat: () -> Unit,
+        onClosed: () -> Unit
     ) {
 
         //подписываемся на состояние WebSocket'a
@@ -31,19 +35,22 @@ class StompController(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { lifecycleEvent: LifecycleEvent ->
                 when (lifecycleEvent.type!!) {
-                    LifecycleEvent.Type.OPENED -> Log.d(
-                        "StompClient",
-                        "Stomp connection opened"
-                    )
+                    LifecycleEvent.Type.OPENED -> {
+                        onOpened()
+                        Log.d("StompClient", "Stomp connection opened")
+                    }
 
-                    LifecycleEvent.Type.ERROR -> Log.e(
-                        "StompClient",
-                        "Error",
-                        lifecycleEvent.exception
-                    )
+                    LifecycleEvent.Type.ERROR -> {
+                        onError(lifecycleEvent.exception)
+                        Log.e("StompClient", "Error", lifecycleEvent.exception)
+                    }
 
-                    LifecycleEvent.Type.FAILED_SERVER_HEARTBEAT,
+                    LifecycleEvent.Type.FAILED_SERVER_HEARTBEAT -> {
+                        onFailedServerHeartbeat()
+                    }
+
                     LifecycleEvent.Type.CLOSED -> {
+                        onClosed()
                         Log.d("StompClient", "Stomp connection closed")
                     }
                 }
@@ -55,6 +62,11 @@ class StompController(
         if (!mStompClient.isConnected) {
             mStompClient.connect()
         }
+    }
+
+    fun reconnect(){
+        if(!mStompClient.isConnected)
+            mStompClient.reconnect()
     }
 
     fun subscribeGeoPosTopic(
@@ -99,7 +111,8 @@ class StompController(
                 // десериализуем сообщение
                 val listOfTaskGeoPositionModels: List<TaskGeoPositionModel> =
 //                    Gson().fromJsonList<TaskGeoPositionModel>(topicMessage.payload)
-                    gson.fromJson(topicMessage.payload, Array<TaskGeoPositionModel>::class.java).asList()
+                    gson.fromJson(topicMessage.payload, Array<TaskGeoPositionModel>::class.java)
+                        .asList()
 //                gson.fr
 
 //                val typeToken = object : TypeToken<List<TaskGeoPositionModel>>() {}.type
@@ -111,7 +124,7 @@ class StompController(
                     "COORDINATES_TOPIC | RECEIVED TASKS: size = ${listOfTaskGeoPositionModels.size}"
                 )
 
-                for(task in listOfTaskGeoPositionModels){
+                for (task in listOfTaskGeoPositionModels) {
                     Log.i(
                         "StompClient",
                         "COORDINATES_TOPIC | RECEIVED TASK: longitude = ${task.longitude}, latitude = ${task.latitude}"
@@ -149,7 +162,7 @@ class StompController(
                     "USER_TOPIC | RECEIVED GAMESTATE: user list size = ${gameState.users.size}"
                 )
 
-                for(player in gameState.users){
+                for (player in gameState.users) {
                     Log.i(
                         "StompClient",
                         "USER_TOPIC | RECEIVED GAMESTATE: id = ${player.id}, ready = ${player.ready}"
@@ -172,7 +185,8 @@ class StompController(
         playerModel: Player
     ) {
         compositeDisposable.add(
-            mStompClient.send(Constants.USER_LINK_SOCKET, gson.toJson(playerModel)).subscribeOn(Schedulers.io())
+            mStompClient.send(Constants.USER_LINK_SOCKET, gson.toJson(playerModel))
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {
@@ -190,4 +204,4 @@ class StompController(
 }
 
 fun <T> Gson.fromJsonList(jsonString: String): List<T> =
-    this.fromJson(jsonString, object: TypeToken<ArrayList<T>>() { }.type)
+    this.fromJson(jsonString, object : TypeToken<ArrayList<T>>() {}.type)

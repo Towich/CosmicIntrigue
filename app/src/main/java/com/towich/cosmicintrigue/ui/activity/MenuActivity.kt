@@ -26,7 +26,8 @@ class MenuActivity : AppCompatActivity() {
 
         // Initialize websocket connection
         val repository = (application as App).repository
-        repository.initGeoPositionsStompClient(compositeDisposable)
+
+
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
     }

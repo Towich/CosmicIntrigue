@@ -81,9 +81,19 @@ class MainRepositoryImpl(
     }
 
     override fun initGeoPositionsStompClient(
-        compositeDisposable: CompositeDisposable
+        compositeDisposable: CompositeDisposable,
+        onOpened: () -> Unit,
+        onError: (exception: Exception) -> Unit,
+        onFailedServerHeartbeat: () -> Unit,
+        onClosed: () -> Unit
     ) {
-        stompController.initGeoPositionsStompClient(compositeDisposable)
+        stompController.initGeoPositionsStompClient(
+            compositeDisposable,
+            onOpened,
+            onError,
+            onFailedServerHeartbeat,
+            onClosed
+        )
     }
 
     override fun subscribeGeoPosTopic(
@@ -200,6 +210,10 @@ class MainRepositoryImpl(
 
     override fun getCurrPlayerIdToKill(): Long? {
         return sessionStorage.currPlayerIdToKill
+    }
+
+    override fun reconnectToServer() {
+        stompController.reconnect()
     }
 
 }
