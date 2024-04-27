@@ -32,4 +32,5 @@
     <string name="player">Игрок</string>
     <string name="mapTask">Задание</string>
     <string name="kill">Убить</string>
+    <string name="tap_one_more_time_to_exit">Нажмите \"Назад\" ещё раз для выхода</string>
 </resources>

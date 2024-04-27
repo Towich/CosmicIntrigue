@@ -104,6 +104,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     if(geoPosition.id == ourPlayerId){
                         viewModel.dispose()
                         stopLocationUpdates()
+                        findNavController().navigate(R.id.action_Map_to_Death)
                     }
 
                     listOfUsersMarks.removeIf { it.first == geoPosition.id }
