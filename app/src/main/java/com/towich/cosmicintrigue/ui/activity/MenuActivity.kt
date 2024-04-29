@@ -5,9 +5,9 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
 import com.towich.cosmicintrigue.R
 import com.towich.cosmicintrigue.databinding.ActivityMenuBinding
+import com.towich.cosmicintrigue.di.component.MenuComponent
 import com.towich.cosmicintrigue.ui.util.App
 import io.reactivex.disposables.CompositeDisposable
 
@@ -23,13 +23,6 @@ class MenuActivity : AppCompatActivity() {
 
         binding = ActivityMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        // Initialize websocket connection
-        val repository = (application as App).repository
-
-
-
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
     }
 
     override fun onBackPressed() {

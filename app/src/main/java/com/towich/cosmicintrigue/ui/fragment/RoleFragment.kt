@@ -24,7 +24,7 @@ class RoleFragment : Fragment() {
     private val binding get() = _binding!!
 
     val roleViewModel : RoleViewModel by viewModels{
-        (requireContext().applicationContext as App).viewModelFactory
+        (requireContext().applicationContext as App).appComponent.viewModelsFactory()
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

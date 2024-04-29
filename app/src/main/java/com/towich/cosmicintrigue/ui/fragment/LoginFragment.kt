@@ -15,8 +15,10 @@ import com.towich.cosmicintrigue.data.model.Player
 import com.towich.cosmicintrigue.data.model.TaskGeoPositionModel
 import com.towich.cosmicintrigue.databinding.FragmentLoginBinding
 import com.towich.cosmicintrigue.ui.util.App
+import com.towich.cosmicintrigue.ui.util.ViewModelFactory
 import com.towich.cosmicintrigue.ui.viewmodel.LoginViewModel
 import io.reactivex.disposables.CompositeDisposable
+import javax.inject.Inject
 
 class LoginFragment : Fragment() {
 
@@ -24,7 +26,7 @@ class LoginFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val loginViewModel: LoginViewModel by viewModels {
-        (requireContext().applicationContext as App).viewModelFactory
+        (requireActivity().applicationContext as App).appComponent.viewModelsFactory()
     }
 
     private var compositeDisposable: CompositeDisposable = CompositeDisposable()
@@ -40,6 +42,12 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initButtons()
+        connectToServerViaWebSocket()
+        initObservers()
+    }
+
+    private fun initButtons(){
         binding.loginButton.setOnClickListener {
             loginViewModel.sendLogin(binding.loginEditText.text.toString())
         }
@@ -47,9 +55,9 @@ class LoginFragment : Fragment() {
         binding.statusRefreshButton.setOnClickListener {
             connectToServerViaWebSocket()
         }
+    }
 
-        connectToServerViaWebSocket()
-
+    private fun initObservers(){
         val userObserver = Observer<Player> { player ->
             if (player.id != null) {
                 loginViewModel.saveCurrentPlayer(player = player)

@@ -7,14 +7,20 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.towich.cosmicintrigue.R
+import com.towich.cosmicintrigue.data.repository.MainRepository
 import com.towich.cosmicintrigue.databinding.ActivityMapsBinding
 import com.towich.cosmicintrigue.ui.util.App
 import io.reactivex.disposables.CompositeDisposable
+import javax.inject.Inject
 
 
 class GameActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMapsBinding
+
+    @Inject
+    lateinit var mainRepository: MainRepository
+
     private val compositeDisposable = CompositeDisposable()
     private var doubleBackToExitPressedOnce = false
 
@@ -24,8 +30,10 @@ class GameActivity : AppCompatActivity() {
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        (applicationContext as App).appComponent.inject(this)
+
         // Initialize websocket connection
-        (application as App).repository.initGeoPositionsStompClient(
+        mainRepository.initGeoPositionsStompClient(
             compositeDisposable = compositeDisposable,
             onOpened = {
 

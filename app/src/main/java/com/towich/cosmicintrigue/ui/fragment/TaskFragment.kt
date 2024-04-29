@@ -21,7 +21,7 @@ class TaskFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val taskViewModel : TaskViewModel by viewModels{
-        (requireContext().applicationContext as App).viewModelFactory
+        (requireContext().applicationContext as App).appComponent.viewModelsFactory()
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

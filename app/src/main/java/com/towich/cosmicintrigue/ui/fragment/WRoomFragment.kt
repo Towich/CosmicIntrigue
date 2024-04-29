@@ -23,7 +23,7 @@ class WRoomFragment : Fragment() {
 
     private val binding get() = _binding!!
     private val wRoomViewModel : WRoomViewModel by viewModels{
-        (requireContext().applicationContext as App).viewModelFactory
+        (requireContext().applicationContext as App).appComponent.viewModelsFactory()
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

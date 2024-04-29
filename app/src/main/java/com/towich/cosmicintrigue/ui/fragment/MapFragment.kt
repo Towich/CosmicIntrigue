@@ -44,7 +44,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private var _binding: FragmentMapBinding? = null
     private val viewModel: MapViewModel by viewModels {
-        (requireContext().applicationContext as App).viewModelFactory
+        (requireContext().applicationContext as App).appComponent.viewModelsFactory()
     }
 
     private lateinit var map: GoogleMap
