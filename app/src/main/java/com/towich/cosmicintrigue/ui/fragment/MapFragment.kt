@@ -100,7 +100,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 }
 
                 // If we got dead player from topic
-                if(geoPosition.isDead){
+                if(geoPosition.dead){
                     if(geoPosition.id == ourPlayerId){
                         viewModel.dispose()
                         stopLocationUpdates()
@@ -150,7 +150,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                                 id = ourPlayerId,
                                 latitude = mark.second?.position?.latitude,
                                 longitude = mark.second?.position?.longitude,
-                                isDead = false
+                                dead = false
                             )
                             break
                         }
@@ -235,7 +235,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                             id = playerToKill,
                             latitude = 0.0,
                             longitude = 0.0,
-                            isDead = true
+                            dead = true
                         )
                     )
 
@@ -336,7 +336,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                             id = viewModel.getPlayerId() ?: -1,
                             latitude = location?.latitude,
                             longitude = location?.longitude,
-                            isDead = false
+                            dead = false
                         )
                     )
 

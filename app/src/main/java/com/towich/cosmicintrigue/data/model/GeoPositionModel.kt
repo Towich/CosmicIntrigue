@@ -4,5 +4,5 @@ data class GeoPositionModel(
     val id: Long,
     val latitude: Double?,
     val longitude: Double?,
-    val isDead: Boolean
+    val dead: Boolean
 )

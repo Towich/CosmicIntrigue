@@ -61,19 +61,19 @@ class WRoomFragment : Fragment() {
 //            findNavController().navigate(R.id.action_WRoom_to_game)
 //        }
 
-        wRoomViewModel.subscribeUsersTopic {
+        wRoomViewModel.subscribeUsersTopic { players ->
             val currId = wRoomViewModel.getId()
-            for(player in it.users){
+            for(player in players){
                 if(currId == player.id){
                     wRoomViewModel.updateIsImposter(player.isImposter)
                 }
             }
 
-            if(it.users.isNotEmpty() && it.users[0].isImposter != null){
+            if(players.isNotEmpty() && players[0].isImposter != null){
                 wRoomViewModel.unsubscribeUsersTopic()
                 findNavController().navigate(R.id.action_WRoom_to_game)
             }
-            adapter.setReady(it.users)
+            adapter.setReady(players.asList())
         }
 
         wRoomViewModel.sendPlayerInUsersTopic()

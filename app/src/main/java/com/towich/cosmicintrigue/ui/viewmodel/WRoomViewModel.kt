@@ -2,7 +2,6 @@ package com.towich.cosmicintrigue.ui.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.towich.cosmicintrigue.data.model.GameState
 import com.towich.cosmicintrigue.data.model.Player
 import com.towich.cosmicintrigue.data.repository.MainRepository
 import io.reactivex.disposables.CompositeDisposable
@@ -30,9 +29,9 @@ class WRoomViewModel(
     }
 
     fun subscribeUsersTopic(
-        onReceivedGameState: (gameState: GameState) -> Unit
+        onReceivedPlayers: (players: Array<Player>) -> Unit
     ){
-        val disposable = repository.subscribeUsersTopic(onReceivedGameState)
+        val disposable = repository.subscribeUsersTopic(onReceivedPlayers)
         userTopicDisposable = disposable
     }
 

@@ -3,7 +3,6 @@ package com.towich.cosmicintrigue.data.network
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.towich.cosmicintrigue.data.model.GameState
 import com.towich.cosmicintrigue.data.model.GeoPositionModel
 import com.towich.cosmicintrigue.data.model.Player
 import com.towich.cosmicintrigue.data.model.TaskGeoPositionModel
@@ -142,7 +141,7 @@ class StompController(
     }
 
     fun subscribeUsersTopic(
-        onReceivedGameState: (gameState: GameState) -> Unit
+        onReceivedPlayers: (players: Array<Player>) -> Unit
     ): Disposable {
         // Настраиваем подписку на топик
         return mStompClient.topic(Constants.USER_TOPIC)
@@ -153,25 +152,25 @@ class StompController(
 
 
                 // десериализуем сообщение
-                val gameState: GameState =
-                    gson.fromJson(topicMessage.payload, GameState::class.java)
+                val players: Array<Player> =
+                    gson.fromJson(topicMessage.payload, Array<Player>::class.java)
 
 
                 Log.i(
                     "StompClient",
-                    "USER_TOPIC | RECEIVED GAMESTATE: user list size = ${gameState.users.size}"
+                    "USER_TOPIC | RECEIVED USERS: user list size = ${players.size}"
                 )
 
-                for (player in gameState.users) {
+                for (player in players) {
                     Log.i(
                         "StompClient",
-                        "USER_TOPIC | RECEIVED GAMESTATE: id = ${player.id}, ready = ${player.ready}"
+                        "USER_TOPIC | RECEIVED USERS: id = ${player.id}, ready = ${player.ready}"
                     )
                 }
 
 
                 // вызываем коллбэк
-                onReceivedGameState(gameState)
+                onReceivedPlayers(players)
             },
                 {
                     Log.e("StompClient", "Error!", it) // обработка ошибок
@@ -193,6 +192,55 @@ class StompController(
                         Log.d(
                             "StompClient",
                             "SEND PLAYER: id = ${playerModel.id}$, ready = ${playerModel.ready}"
+                        )
+                    },
+                    {
+                        Log.e("StompClient", "Stomp error", it)
+                    }
+                )
+        )
+    }
+
+    // Topic VOTE
+    fun subscribeVoteTopic(
+        onReceivedPlayerToKick: (playerToKick: Player) -> Unit
+    ): Disposable {
+        // Настраиваем подписку на топик
+        return mStompClient.topic(Constants.USER_TOPIC)
+            .subscribeOn(Schedulers.io(), false)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ topicMessage: StompMessage ->
+                Log.d("StompClient", "VOTE_TOPIC | " + topicMessage.payload)
+
+                // десериализуем сообщение
+                val player: Player =
+                    gson.fromJson(topicMessage.payload, Player::class.java)
+
+                Log.i(
+                    "StompClient",
+                    "VOTE_TOPIC | RECEIVED PLAYER TO KICK: name = '${player.login}'")
+
+                // вызываем коллбэк
+                onReceivedPlayerToKick(player)
+            },
+                {
+                    Log.e("StompClient", "VOTE_TOPIC | Error!", it) // обработка ошибок
+                }
+            )
+    }
+    fun sendPlayerModelToKick(
+        compositeDisposable: CompositeDisposable,
+        playerModel: Player
+    ) {
+        compositeDisposable.add(
+            mStompClient.send(Constants.VOTE_LINK_SOCKET, gson.toJson(playerModel))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        Log.d(
+                            "StompClient",
+                            "SEND PLAYER TO KICK: id = ${playerModel.id}$, login = ${playerModel.login}"
                         )
                     },
                     {

@@ -11,8 +11,16 @@ import io.reactivex.disposables.Disposable
 import ua.naiksoftware.stomp.StompClient
 
 interface MainRepository {
-    fun sendGeoPosition(compositeDisposable: CompositeDisposable, geoPositionModel: GeoPositionModel)
-    fun sendTaskGeoPositionModel(compositeDisposable: CompositeDisposable, taskGeoPositionModel: TaskGeoPositionModel)
+    fun sendGeoPosition(
+        compositeDisposable: CompositeDisposable,
+        geoPositionModel: GeoPositionModel
+    )
+
+    fun sendTaskGeoPositionModel(
+        compositeDisposable: CompositeDisposable,
+        taskGeoPositionModel: TaskGeoPositionModel
+    )
+
     fun sendPlayerModel(compositeDisposable: CompositeDisposable)
 
     fun initGeoPositionsStompClient(
@@ -22,6 +30,7 @@ interface MainRepository {
         onFailedServerHeartbeat: () -> Unit,
         onClosed: () -> Unit
     )
+
     fun subscribeGeoPosTopic(
         onReceivedGeoPosition: (geoPosition: GeoPositionModel) -> Unit
     ): Disposable
@@ -31,7 +40,7 @@ interface MainRepository {
     ): Disposable
 
     fun subscribeUsersTopic(
-        onReceivedGameState: (gameState: GameState) -> Unit
+        onReceivedGameState: (players: Array<Player>) -> Unit
     ): Disposable
 
     suspend fun getStartTaskMarks(): ApiResult<List<TaskGeoPositionModel>>
@@ -57,4 +66,13 @@ interface MainRepository {
     fun getCurrPlayerIdToKill(): Long?
 
     fun reconnectToServer()
+
+    // Vote topic
+    fun subscribeVoteTopic(
+        onReceivedPlayerToKick: (playerToKick: Player) -> Unit
+    ): Disposable
+    fun sendPlayerModelToKick(
+        compositeDisposable: CompositeDisposable,
+        playerModel: Player
+    )
 }

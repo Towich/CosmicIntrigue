@@ -3,7 +3,6 @@ package com.towich.cosmicintrigue.data.repository
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
-import com.towich.cosmicintrigue.data.model.GameState
 import com.towich.cosmicintrigue.data.model.GeoPositionModel
 import com.towich.cosmicintrigue.data.model.Player
 import com.towich.cosmicintrigue.data.model.TaskGeoPositionModel
@@ -18,9 +17,6 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Response
 import ua.naiksoftware.stomp.StompClient
-import ua.naiksoftware.stomp.dto.LifecycleEvent
-import ua.naiksoftware.stomp.dto.StompMessage
-import kotlin.math.log
 
 class MainRepositoryImpl(
     private val stompController: StompController,
@@ -108,8 +104,8 @@ class MainRepositoryImpl(
         return stompController.subscribeCoordinatesTopic(onReceivedCoordinatesList)
     }
 
-    override fun subscribeUsersTopic(onReceivedGameState: (gameState: GameState) -> Unit): Disposable {
-        return stompController.subscribeUsersTopic(onReceivedGameState)
+    override fun subscribeUsersTopic(onReceivedPlayers: (players: Array<Player>) -> Unit): Disposable {
+        return stompController.subscribeUsersTopic(onReceivedPlayers)
     }
 
 
@@ -214,6 +210,20 @@ class MainRepositoryImpl(
 
     override fun reconnectToServer() {
         stompController.reconnect()
+    }
+
+    // Vote topic
+    override fun subscribeVoteTopic(
+        onReceivedPlayerToKick: (playerToKick: Player) -> Unit
+    ): Disposable {
+        return stompController.subscribeVoteTopic(onReceivedPlayerToKick)
+    }
+
+    override fun sendPlayerModelToKick(
+        compositeDisposable: CompositeDisposable,
+        playerModel: Player
+    ) {
+        stompController.sendPlayerModelToKick(compositeDisposable, playerModel)
     }
 
 }
