@@ -5,26 +5,25 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.towich.cosmicintrigue.R
 import com.towich.cosmicintrigue.databinding.FragmentDeathBinding
+import com.towich.cosmicintrigue.ui.util.App
+import com.towich.cosmicintrigue.ui.viewmodel.DeathViewModel
 
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
 class DeathFragment : Fragment() {
 
     private var _binding: FragmentDeathBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
+    private val deathViewModel : DeathViewModel by viewModels{
+        (requireContext().applicationContext as App).appComponent.viewModelsFactory()
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         _binding = FragmentDeathBinding.inflate(inflater, container, false)
         return binding.root
 
@@ -32,9 +31,11 @@ class DeathFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.death.setOnClickListener {
-            findNavController().navigate(R.id.action_DeathFragment_to_FinalFragment2)
+        /*
+        deathViewModel.setFinalCallback {
+            findNavController().navigate(R.id.action_Death_to_Final)
         }
+        */
     }
 
     override fun onDestroyView() {

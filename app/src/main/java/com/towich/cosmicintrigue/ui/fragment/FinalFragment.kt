@@ -5,34 +5,35 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.towich.cosmicintrigue.R
 import com.towich.cosmicintrigue.databinding.FragmentFinalBinding
+import com.towich.cosmicintrigue.ui.util.App
+import com.towich.cosmicintrigue.ui.viewmodel.FinalViewModel
 
 class FinalFragment: Fragment(){
 
     private var _binding: FragmentFinalBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
+    private val finalViewModel : FinalViewModel by viewModels{
+        (requireContext().applicationContext as App).appComponent.viewModelsFactory()
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         _binding = FragmentFinalBinding.inflate(inflater, container, false)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.finall.setOnClickListener {
-            findNavController().navigate(R.id.action_FinalFragment_to_nav_graph)
+        binding.finalButton.setOnClickListener {
+            findNavController().navigate(R.id.action_Final_to_menu)
         }
-
+        binding.victoryText.text = if(finalViewModel.GetWinners()) "Предатели победили" else "Мирные победили"
     }
 
     override fun onDestroyView() {

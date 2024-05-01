@@ -10,10 +10,10 @@ import com.towich.cosmicintrigue.databinding.WroomViewBinding
 import com.towich.cosmicintrigue.data.model.Player
 import com.towich.cosmicintrigue.data.model.ReadyPlayer
 
-class WaitAdapter(val userId : Int) :RecyclerView.Adapter<WaitAdapter.WaitViewHolder>(){
+class WaitAdapter(val userId : Long) :RecyclerView.Adapter<WaitAdapter.WaitViewHolder>(){
     class WaitViewHolder(val binding: WroomViewBinding):RecyclerView.ViewHolder(binding.root)
-    var players : List<ReadyPlayer> = ArrayList()
-    public fun setReady(player: List<ReadyPlayer>){
+    var players : List<Player> = ArrayList()
+    fun setReady(player: List<Player>){
         players = player
         notifyDataSetChanged()
     }
@@ -28,11 +28,13 @@ class WaitAdapter(val userId : Int) :RecyclerView.Adapter<WaitAdapter.WaitViewHo
         with(holder.binding)
         {
             var p = players.get(position)
-            this.login.text = p.login
-            this.ready.text = if(p.ready) "Готов" else "Не Готов"
+            this.loginText.text = p.login
+            this.readyText.text = if(p.ready) "Готов" else "Не готов"
             if(p.id == userId)
-                this.back.setBackgroundColor(Color.RED)
-            this.ready.setTextColor(if(p.ready) Color.RED else Color.GREEN)
+                this.back.setBackgroundColor(Color.parseColor("#E8EBFD"))
+            else
+                this.back.setBackgroundColor(Color.parseColor("#00FFFFFF"))
+            this.readyText.setTextColor(if(p.ready) Color.parseColor("#00FF00") else Color.parseColor("#FF0000"))
         }
     }
 }

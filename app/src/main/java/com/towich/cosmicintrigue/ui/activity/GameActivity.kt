@@ -1,39 +1,28 @@
 package com.towich.cosmicintrigue.ui.activity
 
-import android.Manifest
-import android.annotation.SuppressLint
-import android.content.pm.PackageManager
-import android.location.Location
 import android.os.Bundle
-import android.util.Log
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.Priority
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import com.towich.cosmicintrigue.data.util.MyLocationListener
+import androidx.navigation.findNavController
 import com.towich.cosmicintrigue.R
 import com.towich.cosmicintrigue.data.repository.MainRepository
 import com.towich.cosmicintrigue.databinding.ActivityMapsBinding
 import com.towich.cosmicintrigue.ui.util.App
-import com.towich.cosmicintrigue.ui.util.ViewModelFactory
-import com.towich.cosmicintrigue.ui.viewmodel.MapViewModel
+import io.reactivex.disposables.CompositeDisposable
+import javax.inject.Inject
 
 
 class GameActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMapsBinding
 
+    @Inject
+    lateinit var mainRepository: MainRepository
+
+    private val compositeDisposable = CompositeDisposable()
+    private var doubleBackToExitPressedOnce = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,34 +30,40 @@ class GameActivity : AppCompatActivity() {
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        (applicationContext as App).appComponent.inject(this)
 
+        // Initialize websocket connection
+        mainRepository.initGeoPositionsStompClient(
+            compositeDisposable = compositeDisposable,
+            onOpened = {
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-//        val mapFragment = supportFragmentManager
-//            .findFragmentById(R.id.map) as SupportMapFragment
-//        mapFragment.getMapAsync(this)
+            },
+            onError = {
+                Toast.makeText(applicationContext, "${it.message}", Toast.LENGTH_LONG).show()
+            },
+            onFailedServerHeartbeat = {
 
-//        myLocationListener = MyLocationListener { newLocation: Location ->
-//            Toast.makeText(
-//                applicationContext,
-//                "${newLocation.latitude} ${newLocation.longitude}",
-//                Toast.LENGTH_SHORT
-//            ).show()
-//        }
+            },
+            onClosed = {
+                Toast.makeText(applicationContext, getString(R.string.connection_closed), Toast.LENGTH_LONG).show()
+            }
+        )
 
-//        getLocationUpdates()
-//        startLocationUpdates()
+        val navController = findNavController(R.id.nav_host_activity_maps)
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
+    override fun onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed()
+            finish()
+        }
 
+        this.doubleBackToExitPressedOnce = true
+        Toast.makeText(this, getString(R.string.tap_one_more_time_to_exit), Toast.LENGTH_SHORT).show()
 
+        Handler(Looper.getMainLooper()).postDelayed(
+            { doubleBackToExitPressedOnce = false },
+            2000
+        )
+    }
 }

@@ -6,11 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingBottom="60dp"
     tools:context=".ui.fragment.RoleFragment">
 
     <TextView
-        android:id="@+id/textView5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/role_label"
@@ -18,20 +16,18 @@
         android:textAppearance="@style/Text24" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/roleName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:text="@string/error"
         android:textAlignment="center"
         android:textAppearance="@style/Text40" />
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
+        android:layout_height="20dp" />
 
     <TextView
-        android:id="@+id/textView6"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/role_tasks"
@@ -39,22 +35,21 @@
         android:textAppearance="@style/Text32" />
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/RoleText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:text="@string/error"
         android:textAppearance="@style/Text24" />
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1" />
 
     <Button
-        android:id="@+id/role"
+        android:id="@+id/roleButton"
         style="@style/ButtonMainFilled"
         android:layout_width="match_parent"
-
         android:layout_height="wrap_content"
         android:text="@string/next" />
 </LinearLayout>

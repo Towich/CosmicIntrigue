@@ -1,50 +1,82 @@
 package com.towich.cosmicintrigue.ui.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.towich.cosmicintrigue.data.model.Player
-import com.towich.cosmicintrigue.data.model.ReadyPlayer
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.towich.cosmicintrigue.R
 import com.towich.cosmicintrigue.databinding.FragmentWroomBinding
-import com.towich.cosmicintrigue.ui.adapters.VoteAdapter
 import com.towich.cosmicintrigue.ui.adapters.WaitAdapter
+import com.towich.cosmicintrigue.ui.util.App
+import com.towich.cosmicintrigue.ui.viewmodel.WRoomViewModel
 
-/**
- * A simple [Fragment] subclass as the second destination in the navigation.
- */
+
 class WRoomFragment : Fragment() {
 
     private var _binding: FragmentWroomBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
-
+    private val wRoomViewModel : WRoomViewModel by viewModels{
+        (requireContext().applicationContext as App).appComponent.viewModelsFactory()
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         _binding = FragmentWroomBinding.inflate(inflater, container, false)
         return binding.root
-
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var l = arrayListOf(ReadyPlayer(2,"user",false), ReadyPlayer(3,"123",true))
-        val adap = WaitAdapter(2)
-        binding.rec.adapter = adap//TODO
+        val adapter = WaitAdapter(wRoomViewModel.getId())
+        wRoomViewModel.players.observe(viewLifecycleOwner, Observer {
+            adapter.setReady(it)
+        })
+        //var l = arrayListOf(ReadyPlayer(2,"user",false), ReadyPlayer(3,"123",true))
+        binding.rec.adapter = adapter
         binding.rec.layoutManager = LinearLayoutManager(context)
-        binding.wroom.setOnClickListener {
-            findNavController().navigate(R.id.action_WRoomFragment_to_gameActivity)
-            //wromViewModel.SendWrom(binding.wrom.text.toString())
+        binding.wroomButtonEnable.setOnClickListener {
+            binding.wroomButtonEnable.visibility = View.GONE
+            binding.wroomButtonDisable.visibility = View.VISIBLE
+            wRoomViewModel.ready.value = true
+
+            wRoomViewModel.toggleReadyPlayer()
+            wRoomViewModel.sendPlayerInUsersTopic()
         }
+        binding.wroomButtonDisable.setOnClickListener {
+            binding.wroomButtonEnable.visibility = View.VISIBLE
+            binding.wroomButtonDisable.visibility = View.GONE
+            wRoomViewModel.ready.value = false
+
+            wRoomViewModel.toggleReadyPlayer()
+            wRoomViewModel.sendPlayerInUsersTopic()
+        }
+//        wRoomViewModel.setStartCallback {
+//            findNavController().navigate(R.id.action_WRoom_to_game)
+//        }
+
+        wRoomViewModel.subscribeUsersTopic { players ->
+            val currId = wRoomViewModel.getId()
+            for(player in players){
+                if(currId == player.id){
+                    wRoomViewModel.updateIsImposter(player.isImposter)
+                }
+            }
+
+            if(players.isNotEmpty() && players[0].isImposter != null){
+                wRoomViewModel.unsubscribeUsersTopic()
+                findNavController().navigate(R.id.action_WRoom_to_game)
+            }
+            adapter.setReady(players.asList())
+        }
+
+        wRoomViewModel.sendPlayerInUsersTopic()
     }
 
     override fun onDestroyView() {
