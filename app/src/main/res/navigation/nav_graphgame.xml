@@ -5,6 +5,14 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/RoleFragment">
     <fragment
+        android:id="@+id/clikerFragment"
+        android:name="com.towich.cosmicintrigue.ui.fragment.tasks.ClikerFragment"
+        android:label="ClikerFragment" >
+        <action
+            android:id="@+id/action_clikerFragment_to_MapFragment"
+            app:destination="@id/MapFragment" />
+    </fragment>
+    <fragment
         android:id="@+id/RoleFragment"
         android:name="com.towich.cosmicintrigue.ui.fragment.RoleFragment"
 
@@ -27,6 +35,9 @@
         <action
             android:id="@+id/action_Map_to_Death"
             app:destination="@id/DeathFragment" />
+        <action
+            android:id="@+id/action_MapFragment_to_clikerFragment"
+            app:destination="@id/clikerFragment" />
     </fragment>
     <fragment
         android:id="@+id/TaskFragment"
