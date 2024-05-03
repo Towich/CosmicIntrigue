@@ -194,4 +194,12 @@ class MainRepositoryImpl(
         stompController.sendPlayerModelToKick(playerModel)
     }
 
+    override suspend fun restartServer() {
+        try {
+            apiService.restartServer()
+        } catch (e: Exception) {
+            Log.e("restartServer()", e.message.toString())
+        }
+    }
+
 }

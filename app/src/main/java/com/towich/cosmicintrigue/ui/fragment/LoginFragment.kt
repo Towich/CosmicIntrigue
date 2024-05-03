@@ -55,6 +55,10 @@ class LoginFragment : Fragment() {
         binding.statusRefreshButton.setOnClickListener {
             connectToServerViaWebSocket()
         }
+
+        binding.restartServerButton.setOnClickListener {
+            loginViewModel.restartServer()
+        }
     }
 
     private fun initObservers(){

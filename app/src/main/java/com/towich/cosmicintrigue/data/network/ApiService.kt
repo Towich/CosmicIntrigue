@@ -17,4 +17,7 @@ interface ApiService {
     suspend fun getUserIdByPlayerModel(
         @Body user: Player,
     ): Response<Player>
+
+    @GET(ApiRoutes.RESTART)
+    suspend fun restartServer()
 }

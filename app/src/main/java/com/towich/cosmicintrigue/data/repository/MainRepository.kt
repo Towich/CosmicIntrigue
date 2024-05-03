@@ -74,4 +74,7 @@ interface MainRepository {
     fun sendPlayerModelToKick(
         playerModel: Player
     )
+
+    // Restart server
+    suspend fun restartServer()
 }

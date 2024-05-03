@@ -38,4 +38,5 @@
     <string name="not_connected">не подключен</string>
     <string name="connection_closed">Соединение закрыто</string>
     <string name="connection_opened">Подключено к серверу</string>
+    <string name="restart_server">Перезапустить сервер</string>
 </resources>

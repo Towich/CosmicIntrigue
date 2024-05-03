@@ -61,7 +61,9 @@ class LoginViewModel(
         )
     }
 
-    fun reconnectToServer(){
-        repository.reconnectToServer()
+    fun restartServer(){
+        viewModelScope.launch {
+            repository.restartServer()
+        }
     }
 }
