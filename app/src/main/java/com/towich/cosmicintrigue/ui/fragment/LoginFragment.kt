@@ -81,10 +81,14 @@ class LoginFragment : Fragment() {
                     binding.statusBox.setBackgroundColor(Color.GREEN)
                     binding.statusTextView.text =
                         getString(R.string.status) + " " + getString(R.string.connected)
+
+                    binding.loginButton.isEnabled = true
+                    binding.loginButton.setBackgroundColor(resources.getColor(R.color.primary))
+
                     Toast.makeText(
                         requireContext().applicationContext,
                         getString(R.string.connection_opened),
-                        Toast.LENGTH_LONG
+                        Toast.LENGTH_SHORT
                     ).show()
                 }
 
@@ -94,6 +98,10 @@ class LoginFragment : Fragment() {
                     binding.statusBox.setBackgroundColor(Color.RED)
                     binding.statusTextView.text =
                         getString(R.string.status) + " " + getString(R.string.error)
+
+                    binding.loginButton.isEnabled = false
+                    binding.loginButton.setBackgroundColor(resources.getColor(R.color.gray))
+
                     Toast.makeText(
                         requireContext().applicationContext,
                         "${it.message}",
@@ -107,6 +115,9 @@ class LoginFragment : Fragment() {
                     binding.statusBox.setBackgroundColor(Color.RED)
                     binding.statusTextView.text =
                         getString(R.string.status) + " " + getString(R.string.error)
+
+                    binding.loginButton.isEnabled = false
+                    binding.loginButton.setBackgroundColor(resources.getColor(R.color.gray))
                 }
             },
             onClosed = {
@@ -114,6 +125,10 @@ class LoginFragment : Fragment() {
                     binding.statusBox.setBackgroundColor(Color.GRAY)
                     binding.statusTextView.text =
                         getString(R.string.status) + " " + getString(R.string.not_connected)
+
+                    binding.loginButton.isEnabled = false
+                    binding.loginButton.setBackgroundColor(resources.getColor(R.color.gray))
+
                     Toast.makeText(
                         requireContext().applicationContext,
                         getString(R.string.connection_closed),

@@ -25,59 +25,9 @@ class MainRepositoryImpl(
     private val mStompClient: StompClient,
     private val sessionStorage: SessionStorage
 ) : MainRepository {
-    override fun sendGeoPosition(
-        compositeDisposable: CompositeDisposable,
-        geoPositionModel: GeoPositionModel
-    ) {
-        compositeDisposable.add(
-            mStompClient.send(Constants.CHAT_LINK_SOCKET, gson.toJson(geoPositionModel)).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    {
-                        Log.d(
-                            "StompClient",
-                            "SEND GEOPOSITION: latitude = ${geoPositionModel.latitude}$, longitude = ${geoPositionModel.longitude}"
-                        )
-                    },
-                    {
-                        Log.e("StompClient", "Stomp error", it)
-                    }
-                )
-        )
-    }
-
-    override fun sendTaskGeoPositionModel(
-        compositeDisposable: CompositeDisposable,
-        taskGeoPositionModel: TaskGeoPositionModel
-    ) {
-        compositeDisposable.add(
-            mStompClient.send(Constants.COORDINATES_LINK_SOCKET, gson.toJson(taskGeoPositionModel))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    {
-                        Log.d(
-                            "StompClient",
-                            "SEND TASK GEOPOSITION: latitude = ${taskGeoPositionModel.latitude}$, longitude = ${taskGeoPositionModel.longitude}"
-                        )
-                    },
-                    {
-                        Log.e("StompClient", "Stomp error", it)
-                    }
-                )
-        )
-    }
-
-    override fun sendPlayerModel(
-        compositeDisposable: CompositeDisposable
-    ) {
-        val player = getCurrentPlayer()
-        if(player != null)
-            stompController.sendPlayerModel(compositeDisposable, player)
-    }
 
     override fun initGeoPositionsStompClient(
-        compositeDisposable: CompositeDisposable,
+        compositeDisposable: CompositeDisposable?,
         onOpened: () -> Unit,
         onError: (exception: Exception) -> Unit,
         onFailedServerHeartbeat: () -> Unit,
@@ -92,20 +42,39 @@ class MainRepositoryImpl(
         )
     }
 
+    override fun sendGeoPosition(
+        geoPositionModel: GeoPositionModel
+    ) {
+        stompController.sendGeoPosition(geoPositionModel)
+    }
+
+    override fun sendTaskGeoPositionModel(
+        taskGeoPositionModel: TaskGeoPositionModel
+    ) {
+        stompController.sendTaskGeoPositionModel(taskGeoPositionModel)
+    }
+
+    override fun sendPlayerModel() {
+        val player = getCurrentPlayer()
+        if (player != null)
+            stompController.sendPlayerModel(player)
+    }
+
+
     override fun subscribeGeoPosTopic(
         onReceivedGeoPosition: (geoPosition: GeoPositionModel) -> Unit
-    ): Disposable {
-        return stompController.subscribeGeoPosTopic(onReceivedGeoPosition)
+    ) {
+        stompController.subscribeGeoPosTopic(onReceivedGeoPosition)
     }
 
     override fun subscribeCoordinatesTopic(
         onReceivedCoordinatesList: (listOfTasksGeoPositions: List<TaskGeoPositionModel>) -> Unit
-    ): Disposable {
-        return stompController.subscribeCoordinatesTopic(onReceivedCoordinatesList)
+    ) {
+        stompController.subscribeCoordinatesTopic(onReceivedCoordinatesList)
     }
 
-    override fun subscribeUsersTopic(onReceivedPlayers: (players: Array<Player>) -> Unit): Disposable {
-        return stompController.subscribeUsersTopic(onReceivedPlayers)
+    override fun subscribeUsersTopic(onReceivedPlayers: (players: Array<Player>) -> Unit) {
+        stompController.subscribeUsersTopic(onReceivedPlayers)
     }
 
 
@@ -113,13 +82,13 @@ class MainRepositoryImpl(
         return try {
             val response: Response<List<TaskGeoPositionModel>> = apiService.getStartTaskMarks()
 
-            if(response.isSuccessful){
+            if (response.isSuccessful) {
                 setTotalTaskCount(response.body()?.size ?: -1)
                 ApiResult.Success(response.body() ?: listOf())
-            } else{
+            } else {
                 ApiResult.Error(response.message())
             }
-        } catch (e: Exception){
+        } catch (e: Exception) {
             ApiResult.Error(e.message ?: "unknown error")
         }
 
@@ -148,12 +117,12 @@ class MainRepositoryImpl(
                 playerModel
             )
 
-            if(response.isSuccessful){
+            if (response.isSuccessful) {
                 ApiResult.Success(response.body() ?: Player(id = null, login = "", ready = false))
-            } else{
+            } else {
                 ApiResult.Error(response.message())
             }
-        } catch (e: Exception){
+        } catch (e: Exception) {
             ApiResult.Error(e.message ?: "unknown error")
         }
     }
@@ -167,7 +136,7 @@ class MainRepositoryImpl(
     }
 
     override fun toggleReadyPlayer() {
-        if(sessionStorage.currentPlayer != null) {
+        if (sessionStorage.currentPlayer != null) {
             sessionStorage.currentPlayer!!.ready = !sessionStorage.currentPlayer?.ready!!
         }
     }
@@ -215,15 +184,14 @@ class MainRepositoryImpl(
     // Vote topic
     override fun subscribeVoteTopic(
         onReceivedPlayerToKick: (playerToKick: Player) -> Unit
-    ): Disposable {
+    ) {
         return stompController.subscribeVoteTopic(onReceivedPlayerToKick)
     }
 
     override fun sendPlayerModelToKick(
-        compositeDisposable: CompositeDisposable,
         playerModel: Player
     ) {
-        stompController.sendPlayerModelToKick(compositeDisposable, playerModel)
+        stompController.sendPlayerModelToKick(playerModel)
     }
 
 }

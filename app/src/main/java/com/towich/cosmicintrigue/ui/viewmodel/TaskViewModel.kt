@@ -8,37 +8,44 @@ import com.towich.cosmicintrigue.data.model.Player
 import com.towich.cosmicintrigue.data.model.TaskGeoPositionModel
 import com.towich.cosmicintrigue.data.repository.MainRepository
 import com.towich.cosmicintrigue.data.source.Constants.TASK_TIMER_MILIS
-import io.reactivex.disposables.CompositeDisposable
 
 class TaskViewModel(
     private val repository: MainRepository
-): ViewModel() {
+) : ViewModel() {
 
-    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
+    private lateinit var timer: CountDownTimer
 
-    lateinit var t:CountDownTimer
     //TODO("Список игроков websocket")
-    val players : MutableLiveData<List<Player>> by lazy {
+    val players: MutableLiveData<List<Player>> by lazy {
         MutableLiveData<List<Player>>()
     }
-    fun onCompleteTask(){
-        Log.d("task","completed")
+
+    fun onCompleteTask() {
+        Log.d("task", "completed")
         //TODO("Отправка данных о завершении post запрос")
-        repository.sendTaskGeoPositionModel(compositeDisposable, TaskGeoPositionModel(
-            id = repository.getCurrTaskId(), //
-            latitude = 10.0,
-            longitude = 10.0,
-            completed = true
-        ))
+        repository.sendTaskGeoPositionModel(
+            TaskGeoPositionModel(
+                id = repository.getCurrTaskId(), //
+                latitude = 10.0,
+                longitude = 10.0,
+                completed = true
+            )
+        )
     }
-    fun onDestroy(){
-        t.cancel()
+
+    fun onDestroy() {
+        timer.cancel()
     }
-    fun setOnCompleteCallback(callbackMain:()->Unit,callbackTick:(Long)->Unit){//изменение кнопки по завершению задачи
-         t = object : CountDownTimer(TASK_TIMER_MILIS, 1000) {
+
+    fun setOnCompleteCallback(
+        callbackMain: () -> Unit,
+        callbackTick: (Long) -> Unit
+    ) {//изменение кнопки по завершению задачи
+        timer = object : CountDownTimer(TASK_TIMER_MILIS, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 callbackTick.invoke(millisUntilFinished)
             }
+
             override fun onFinish() {
                 callbackMain.invoke()
             }

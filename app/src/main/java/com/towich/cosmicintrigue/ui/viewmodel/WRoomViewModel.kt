@@ -10,8 +10,6 @@ import io.reactivex.disposables.Disposable
 class WRoomViewModel(
     private val repository: MainRepository
 ): ViewModel() {
-
-    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
     private var userTopicDisposable: Disposable? = null
 
 
@@ -31,8 +29,7 @@ class WRoomViewModel(
     fun subscribeUsersTopic(
         onReceivedPlayers: (players: Array<Player>) -> Unit
     ){
-        val disposable = repository.subscribeUsersTopic(onReceivedPlayers)
-        userTopicDisposable = disposable
+        repository.subscribeUsersTopic(onReceivedPlayers)
     }
 
     fun unsubscribeUsersTopic(){
@@ -40,7 +37,7 @@ class WRoomViewModel(
     }
 
     fun sendPlayerInUsersTopic(){
-        repository.sendPlayerModel(compositeDisposable)
+        repository.sendPlayerModel()
     }
 
     fun toggleReadyPlayer(){

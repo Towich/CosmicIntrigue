@@ -17,16 +17,26 @@ import ua.naiksoftware.stomp.dto.StompMessage
 
 class StompController(
     private val mStompClient: StompClient,
-    private val gson: Gson,
+    private val gson: Gson
 ) {
 
+    private var compositeDisposable: CompositeDisposable? = null
+    private var geoPosTopicDisposable: Disposable? = null
+    private var coordinatesTopicDisposable: Disposable? = null
+    private var usersTopicDisposable: Disposable? = null
+
     fun initGeoPositionsStompClient(
-        compositeDisposable: CompositeDisposable,
+        compositeDisposable: CompositeDisposable?,
         onOpened: () -> Unit,
         onError: (exception: Exception) -> Unit,
         onFailedServerHeartbeat: () -> Unit,
         onClosed: () -> Unit
     ) {
+
+        if(compositeDisposable != null) {
+            this.compositeDisposable?.dispose()
+            this.compositeDisposable = compositeDisposable
+        }
 
         //подписываемся на состояние WebSocket'a
         val lifecycleSubscribe = mStompClient.lifecycle()
@@ -55,12 +65,13 @@ class StompController(
                 }
             }
 
-        compositeDisposable.add(lifecycleSubscribe)
+        this.compositeDisposable?.add(lifecycleSubscribe)
 
         // открываем соединение
         if (!mStompClient.isConnected) {
             mStompClient.connect()
         }
+
     }
 
     fun reconnect(){
@@ -70,9 +81,14 @@ class StompController(
 
     fun subscribeGeoPosTopic(
         onReceivedGeoPosition: (geoPosition: GeoPositionModel) -> Unit
-    ): Disposable {
+    ) {
+        if(geoPosTopicDisposable != null){
+            geoPosTopicDisposable?.dispose()
+            compositeDisposable?.delete(geoPosTopicDisposable!!)
+        }
+
         // Настраиваем подписку на топик
-        return mStompClient.topic(Constants.GEO_POS)
+        val disp = mStompClient.topic(Constants.GEO_POS)
             .subscribeOn(Schedulers.io(), false)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage: StompMessage ->
@@ -94,13 +110,23 @@ class StompController(
                     Log.e("StompClient", "GEO_POS | Error!", it) // обработка ошибок
                 }
             )
+
+        geoPosTopicDisposable = disp
+        compositeDisposable?.add(disp)
+
+        Log.i("StompController", "compositeDisposable GeoPosTopic | isDisposed = ${compositeDisposable?.isDisposed}")
+        Log.i("StompController", "compositeDisposable GeoPosTopic | size = ${compositeDisposable?.size()} disposables")
     }
 
     fun subscribeCoordinatesTopic(
         onReceivedCoordinatesList: (listOfTasksGeoPositions: List<TaskGeoPositionModel>) -> Unit
-    ): Disposable {
+    ) {
+        if(coordinatesTopicDisposable != null){
+            compositeDisposable?.delete(coordinatesTopicDisposable!!)
+        }
+
         // Настраиваем подписку на топик
-        return mStompClient.topic(Constants.COORDINATES_TOPIC)
+        val disp = mStompClient.topic(Constants.COORDINATES_TOPIC)
             .subscribeOn(Schedulers.io(), false)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage: StompMessage ->
@@ -138,13 +164,21 @@ class StompController(
                     Log.e("StompClient", "Error!", it) // обработка ошибок
                 }
             )
+
+        coordinatesTopicDisposable = disp
+
+        compositeDisposable?.add(disp)
     }
 
     fun subscribeUsersTopic(
         onReceivedPlayers: (players: Array<Player>) -> Unit
-    ): Disposable {
+    ) {
+        if(usersTopicDisposable != null){
+            compositeDisposable?.delete(usersTopicDisposable!!)
+        }
+
         // Настраиваем подписку на топик
-        return mStompClient.topic(Constants.USER_TOPIC)
+        val disp = mStompClient.topic(Constants.USER_TOPIC)
             .subscribeOn(Schedulers.io(), false)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage: StompMessage ->
@@ -176,14 +210,17 @@ class StompController(
                     Log.e("StompClient", "Error!", it) // обработка ошибок
                 }
             )
+
+        usersTopicDisposable = disp
+
+        compositeDisposable?.add(disp)
     }
 
 
     fun sendPlayerModel(
-        compositeDisposable: CompositeDisposable,
         playerModel: Player
     ) {
-        compositeDisposable.add(
+        compositeDisposable?.add(
             mStompClient.send(Constants.USER_LINK_SOCKET, gson.toJson(playerModel))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -201,12 +238,53 @@ class StompController(
         )
     }
 
+    fun sendGeoPosition(
+        geoPositionModel: GeoPositionModel
+    ) {
+        compositeDisposable?.add(
+            mStompClient.send(Constants.CHAT_LINK_SOCKET, gson.toJson(geoPositionModel)).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        Log.d(
+                            "StompClient",
+                            "SEND GEOPOSITION: latitude = ${geoPositionModel.latitude}$, longitude = ${geoPositionModel.longitude}"
+                        )
+                    },
+                    {
+                        Log.e("StompClient", "Stomp error", it)
+                    }
+                )
+        )
+    }
+
+    fun sendTaskGeoPositionModel(
+        taskGeoPositionModel: TaskGeoPositionModel
+    ) {
+        compositeDisposable?.add(
+            mStompClient.send(Constants.COORDINATES_LINK_SOCKET, gson.toJson(taskGeoPositionModel))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        Log.d(
+                            "StompClient",
+                            "SEND TASK GEOPOSITION: latitude = ${taskGeoPositionModel.latitude}$, longitude = ${taskGeoPositionModel.longitude}"
+                        )
+                    },
+                    {
+                        Log.e("StompClient", "Stomp error", it)
+                    }
+                )
+        )
+    }
+
     // Topic VOTE
     fun subscribeVoteTopic(
         onReceivedPlayerToKick: (playerToKick: Player) -> Unit
-    ): Disposable {
+    ) {
         // Настраиваем подписку на топик
-        return mStompClient.topic(Constants.USER_TOPIC)
+        val disp = mStompClient.topic(Constants.USER_TOPIC)
             .subscribeOn(Schedulers.io(), false)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage: StompMessage ->
@@ -227,12 +305,13 @@ class StompController(
                     Log.e("StompClient", "VOTE_TOPIC | Error!", it) // обработка ошибок
                 }
             )
+
+        compositeDisposable?.add(disp)
     }
     fun sendPlayerModelToKick(
-        compositeDisposable: CompositeDisposable,
         playerModel: Player
     ) {
-        compositeDisposable.add(
+        compositeDisposable?.add(
             mStompClient.send(Constants.VOTE_LINK_SOCKET, gson.toJson(playerModel))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

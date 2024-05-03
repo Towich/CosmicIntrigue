@@ -11,10 +11,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -39,6 +41,11 @@ import com.towich.cosmicintrigue.data.util.MyLocationListener
 import com.towich.cosmicintrigue.databinding.FragmentMapBinding
 import com.towich.cosmicintrigue.ui.util.App
 import com.towich.cosmicintrigue.ui.viewmodel.MapViewModel
+import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 
 class MapFragment : Fragment(), OnMapReadyCallback {
 
@@ -46,6 +53,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private val viewModel: MapViewModel by viewModels {
         (requireContext().applicationContext as App).appComponent.viewModelsFactory()
     }
+
+    private val compositeDisposable = CompositeDisposable()
 
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -56,6 +65,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private val listOfUsersMarks = mutableListOf<Pair<Long, Marker?>>()
     private val listOfTasksMarks = mutableListOf<Pair<Long, Marker?>>()
+
+    private var reconnectJob: Job? = null
 
     private val binding get() = _binding!!
 
@@ -75,13 +86,72 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
 
 
-        initTopics()
+        viewModel.subscribeToServerStatus(
+            compositeDisposable = compositeDisposable,
+            onOpened = {
+                if(reconnectJob != null){
+                    reconnectJob?.cancel()
+                    reconnectJob = null
+                }
+
+                Toast.makeText(
+                    requireActivity().applicationContext,
+                    "Подключен!",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                initTopics()
+
+                binding.statusBox.setBackgroundColor(Color.GREEN)
+            },
+            onError = {
+                binding.statusBox.setBackgroundColor(Color.RED)
+            },
+            onFailedServerHeartbeat = {
+                binding.statusBox.setBackgroundColor(Color.RED)
+            },
+            onClosed = {
+                binding.statusBox.setBackgroundColor(Color.RED)
+                if(reconnectJob == null) {
+                    reconnectJob = requireActivity().lifecycleScope.launch {
+                        while (isActive) {
+                            Log.i("GameActivity", "RECONNECT JOB | Trying reconnect...")
+                            Toast.makeText(
+                                requireActivity().applicationContext,
+                                "Переподключение...",
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                            viewModel.subscribeToServerStatus(
+                                compositeDisposable = null,
+                                onOpened = {
+
+                                },
+                                onError = {
+
+                                },
+                                onFailedServerHeartbeat = {
+
+                                },
+                                onClosed = {
+
+                                }
+                            )
+                            delay(3000L)
+                        }
+                    }
+                }
+            }
+        )
+
         initButtons()
         initObservers()
+        initTopics()
 
         viewModel.getStartTaskMarks()
         getLocationUpdates()
         startLocationUpdates()
+        viewModel.sendTask()
     }
 
     private fun initTopics() {
@@ -102,7 +172,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 // If we got dead player from topic
                 if(geoPosition.dead){
                     if(geoPosition.id == ourPlayerId){
-                        viewModel.dispose()
+//                        viewModel.dispose() TODO
                         stopLocationUpdates()
                         findNavController().navigate(R.id.action_Map_to_Death)
                     }
@@ -418,7 +488,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        viewModel.dispose()
-        fusedLocationClient.removeLocationUpdates(locationCallback)
+//        viewModel.dispose() TODO
+        stopLocationUpdates()
     }
 }

@@ -15,7 +15,6 @@ import io.reactivex.disposables.CompositeDisposable
 class MenuActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMenuBinding
-    private val compositeDisposable = CompositeDisposable()
     private var doubleBackToExitPressedOnce = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
