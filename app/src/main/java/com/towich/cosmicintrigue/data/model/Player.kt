@@ -6,3 +6,4 @@ data class Player(
     var ready: Boolean = false,
     var isImposter: Boolean? = null
 )
+

@@ -5,3 +5,4 @@ data class GameState(
     val gameStart: Boolean,
     val gamePause: Boolean
 )
+
