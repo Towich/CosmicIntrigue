@@ -36,7 +36,27 @@ class CustomMath {
                 lon2 = otherPlayerGeoPos.position.longitude
             )
 
-            Log.i("CustomMath", "distance = ${distance * 1000} m.")
+//            Log.i("CustomMath", "distance = ${distance * 1000} m.")
+
+            return distance < Constants.ACTION_DISTANCE
+        }
+
+        fun checkIfPlayerIsNear(
+            ourGeoPos: GeoPositionModel?,
+            otherPlayerGeoPos: GeoPositionModel?
+        ): Boolean {
+            if (ourGeoPos == null || otherPlayerGeoPos == null) {
+                return false
+            }
+
+            val distance = distanceInKm(
+                lat1 = ourGeoPos.latitude ?: 0.0,
+                lon1 = ourGeoPos.longitude ?: 0.0,
+                lat2 = otherPlayerGeoPos.latitude ?: 0.0,
+                lon2 = otherPlayerGeoPos.longitude ?: 0.0
+            )
+
+//            Log.i("CustomMath", "distance = ${distance * 1000} m.")
 
             return distance < Constants.ACTION_DISTANCE
         }
