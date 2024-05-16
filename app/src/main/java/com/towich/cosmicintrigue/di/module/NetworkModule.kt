@@ -7,6 +7,7 @@ import com.towich.cosmicintrigue.data.network.ApiService
 import com.towich.cosmicintrigue.data.network.StompController
 import com.towich.cosmicintrigue.data.repository.MainRepository
 import com.towich.cosmicintrigue.data.source.Constants
+import com.towich.cosmicintrigue.data.source.SessionStorage
 import com.towich.cosmicintrigue.di.scope.AppScope
 import com.towich.cosmicintrigue.ui.util.ViewModelFactory
 import dagger.Module
@@ -56,9 +57,10 @@ object NetworkModule {
     @Provides
     @AppScope
     fun provideRetrofit(
-        okHttpClient: OkHttpClient
+        okHttpClient: OkHttpClient,
+        sessionStorage: SessionStorage
     ): Retrofit =
-        Retrofit.Builder().baseUrl(ApiRoutes.BASE_URL)
+        Retrofit.Builder().baseUrl(sessionStorage.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()
@@ -75,8 +77,10 @@ object NetworkModule {
 
     @Provides
     @AppScope
-    fun provideStompClient(): StompClient =
-        Stomp.over(Stomp.ConnectionProvider.OKHTTP, Constants.SOCKET_URL)
+    fun provideStompClient(
+        sessionStorage: SessionStorage
+    ): StompClient =
+        Stomp.over(Stomp.ConnectionProvider.OKHTTP, sessionStorage.BASE_URL + Constants.SOCKET_URL)
             .withServerHeartbeat(30000)
 
     @Provides

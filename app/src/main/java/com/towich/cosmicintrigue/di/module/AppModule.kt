@@ -1,5 +1,6 @@
 package com.towich.cosmicintrigue.di.module
 
+import android.content.Context
 import com.google.gson.Gson
 import com.towich.cosmicintrigue.data.network.ApiService
 import com.towich.cosmicintrigue.data.network.StompController
@@ -16,8 +17,10 @@ object AppModule {
 
     @Provides
     @AppScope
-    fun provideSessionStorage(): SessionStorage =
-        SessionStorage()
+    fun provideSessionStorage(
+        context: Context
+    ): SessionStorage =
+        SessionStorage(context = context)
 
     @Provides
     @AppScope
@@ -27,7 +30,6 @@ object AppModule {
         gson: Gson,
         mStompClient: StompClient,
         sessionStorage: SessionStorage
-
     ): MainRepository = MainRepositoryImpl(
         stompController = stompController,
         apiService = apiService,

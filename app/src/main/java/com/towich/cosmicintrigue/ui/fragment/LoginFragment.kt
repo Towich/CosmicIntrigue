@@ -1,24 +1,28 @@
 package com.towich.cosmicintrigue.ui.fragment
 
+import android.content.Context
+import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.towich.cosmicintrigue.R
 import com.towich.cosmicintrigue.data.model.Player
-import com.towich.cosmicintrigue.data.model.TaskGeoPositionModel
+import com.towich.cosmicintrigue.data.network.ApiRoutes
+import com.towich.cosmicintrigue.data.source.Constants
 import com.towich.cosmicintrigue.databinding.FragmentLoginBinding
 import com.towich.cosmicintrigue.ui.util.App
-import com.towich.cosmicintrigue.ui.util.ViewModelFactory
 import com.towich.cosmicintrigue.ui.viewmodel.LoginViewModel
 import io.reactivex.disposables.CompositeDisposable
-import javax.inject.Inject
+
 
 class LoginFragment : Fragment() {
 
@@ -47,7 +51,7 @@ class LoginFragment : Fragment() {
         initObservers()
     }
 
-    private fun initButtons(){
+    private fun initButtons() {
         binding.loginButton.setOnClickListener {
             loginViewModel.sendLogin(binding.loginEditText.text.toString())
         }
@@ -59,9 +63,44 @@ class LoginFragment : Fragment() {
         binding.restartServerButton.setOnClickListener {
             loginViewModel.restartServer()
         }
+
+        binding.configureServerRouteButton.setOnClickListener {
+
+            val sharedPreferences = requireActivity().getSharedPreferences(
+                Constants.APP_PREFERENCES,
+                Context.MODE_PRIVATE
+            )
+
+            val txtUrl = EditText(requireContext())
+            txtUrl.hint = "https://9a21-185-122-29-131.ngrok-free.app"
+            txtUrl.setText(sharedPreferences.getString(Constants.BASE_URL_APP_PREFERENCES, ""))
+
+            AlertDialog.Builder(requireContext())
+                .setTitle("URL сервера")
+                .setMessage("Вставьте адрес сервера:")
+                .setView(txtUrl)
+                .setPositiveButton(
+                    "OK"
+                ) { dialog, whichButton ->
+                    val url = txtUrl.text.toString()
+                    sharedPreferences.edit()
+                        .putString(Constants.BASE_URL_APP_PREFERENCES, url)
+                        .apply()
+
+                    Toast.makeText(requireContext(), "Перезапустите приложение!", Toast.LENGTH_LONG).show()
+                }
+                .setNegativeButton(
+                    "Отмена"
+                ) { dialog, whichButton ->
+
+                }
+                .show()
+
+
+        }
     }
 
-    private fun initObservers(){
+    private fun initObservers() {
         val userObserver = Observer<Player> { player ->
             if (player.id != null) {
                 loginViewModel.saveCurrentPlayer(player = player)
