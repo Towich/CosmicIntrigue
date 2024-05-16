@@ -27,6 +27,7 @@ class MapViewModel(
             when (val result = repository.getStartTaskMarks()) {
                 is ApiResult.Success -> {
                     currentTaskMarks.value = result.data
+                    countCurrTaskMarks.value = currentTaskMarks.value?.count { it.completed == false }
                 }
 
                 is ApiResult.Error -> {
