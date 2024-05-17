@@ -1,6 +1,7 @@
 package com.towich.cosmicintrigue.data.repository
 
 import androidx.lifecycle.MutableLiveData
+import com.towich.cosmicintrigue.data.model.GameState
 import com.towich.cosmicintrigue.data.model.GeoPositionModel
 import com.towich.cosmicintrigue.data.model.Player
 import com.towich.cosmicintrigue.data.model.TaskGeoPositionModel
@@ -72,6 +73,19 @@ interface MainRepository {
         playerModel: Player
     )
 
+    suspend fun getAlivePlayers(): ApiResult<List<Player>>
+
+    // GameState topic
+    fun subscribeGameStateTopic(
+        onReceivedGameState: (gameState: GameState) -> Unit
+    )
+    fun sendEmptyToGameStateTopic()
+
+
     // Restart server
     suspend fun restartServer()
+
+    // Winners
+    fun getWinners(): Boolean?
+    fun setWinners(innocentsWins: Boolean)
 }
