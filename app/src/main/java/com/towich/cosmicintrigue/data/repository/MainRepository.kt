@@ -1,14 +1,11 @@
 package com.towich.cosmicintrigue.data.repository
 
 import androidx.lifecycle.MutableLiveData
-import com.towich.cosmicintrigue.data.model.GameState
 import com.towich.cosmicintrigue.data.model.GeoPositionModel
 import com.towich.cosmicintrigue.data.model.Player
 import com.towich.cosmicintrigue.data.model.TaskGeoPositionModel
 import com.towich.cosmicintrigue.data.network.ApiResult
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import ua.naiksoftware.stomp.StompClient
 
 interface MainRepository {
     fun initGeoPositionsStompClient(

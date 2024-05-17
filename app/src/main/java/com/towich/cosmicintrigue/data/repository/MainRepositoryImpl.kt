@@ -9,12 +9,8 @@ import com.towich.cosmicintrigue.data.model.TaskGeoPositionModel
 import com.towich.cosmicintrigue.data.network.ApiResult
 import com.towich.cosmicintrigue.data.network.ApiService
 import com.towich.cosmicintrigue.data.network.StompController
-import com.towich.cosmicintrigue.data.source.Constants
 import com.towich.cosmicintrigue.data.source.SessionStorage
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import retrofit2.Response
 import ua.naiksoftware.stomp.StompClient
 

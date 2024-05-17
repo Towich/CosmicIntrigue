@@ -1,6 +1,5 @@
 package com.towich.cosmicintrigue.data.source
 
-import android.util.Log
 import com.google.android.gms.maps.model.Marker
 import com.towich.cosmicintrigue.data.model.GeoPositionModel
 import kotlin.math.atan2

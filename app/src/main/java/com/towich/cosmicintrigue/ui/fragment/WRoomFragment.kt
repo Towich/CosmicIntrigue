@@ -1,13 +1,11 @@
 package com.towich.cosmicintrigue.ui.fragment
 
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.towich.cosmicintrigue.R
@@ -35,9 +33,9 @@ class WRoomFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val adapter = WaitAdapter(wRoomViewModel.getId())
-        wRoomViewModel.players.observe(viewLifecycleOwner, Observer {
+        wRoomViewModel.players.observe(viewLifecycleOwner) {
             adapter.setReady(it)
-        })
+        }
         //var l = arrayListOf(ReadyPlayer(2,"user",false), ReadyPlayer(3,"123",true))
         binding.rec.adapter = adapter
         binding.rec.layoutManager = LinearLayoutManager(context)

@@ -1,26 +1,16 @@
 package com.towich.cosmicintrigue.ui.activity
 
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ReportFragment.Companion.reportFragment
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
 import com.towich.cosmicintrigue.R
 import com.towich.cosmicintrigue.data.repository.MainRepository
 import com.towich.cosmicintrigue.databinding.ActivityMapsBinding
-import com.towich.cosmicintrigue.ui.fragment.MapFragment
 import com.towich.cosmicintrigue.ui.util.App
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 

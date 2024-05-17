@@ -414,7 +414,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     val taskIdToShow = getTaskIdToCompleteIfNearby(currLocation = location)
                     if (taskIdToShow != null) {
                         viewModel.setCurrTaskId(taskIdToShow)
-                        Log.i("MapFragment", "Task ${taskIdToShow} is ready for start completing!")
+                        Log.i("MapFragment", "Task $taskIdToShow is ready for start completing!")
                         binding.buttonmap.visibility = View.VISIBLE
                         binding.buttonmap.text = "Выполнить задание #$taskIdToShow"
                     } else {

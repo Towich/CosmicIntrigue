@@ -5,9 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.towich.cosmicintrigue.R
-import com.towich.cosmicintrigue.databinding.VoteViewBinding
 import com.towich.cosmicintrigue.data.model.Player
+import com.towich.cosmicintrigue.databinding.VoteViewBinding
 
 class VoteAdapter(var onVote:(Long?)->Unit, players: List<Player>, val userId : Long) :RecyclerView.Adapter<VoteAdapter.VoteViewHolder>(){
     class VoteViewHolder(val binding: VoteViewBinding):RecyclerView.ViewHolder(binding.root)
@@ -23,7 +22,7 @@ class VoteAdapter(var onVote:(Long?)->Unit, players: List<Player>, val userId : 
         }
     }
 
-    public fun endVote(Votes: List<Pair<Long?,Int>>){
+    fun endVote(Votes: List<Pair<Long?,Int>>){
         val (listA:List<Long?>, listB:List<Int>) =Votes.unzip()
         for(i in Users.indices)
         {

@@ -5,10 +5,8 @@ import com.google.gson.GsonBuilder
 import com.towich.cosmicintrigue.data.network.ApiRoutes
 import com.towich.cosmicintrigue.data.network.ApiService
 import com.towich.cosmicintrigue.data.network.StompController
-import com.towich.cosmicintrigue.data.repository.MainRepository
 import com.towich.cosmicintrigue.data.source.Constants
 import com.towich.cosmicintrigue.di.scope.AppScope
-import com.towich.cosmicintrigue.ui.util.ViewModelFactory
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient

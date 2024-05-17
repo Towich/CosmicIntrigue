@@ -1,22 +1,18 @@
 package com.towich.cosmicintrigue.ui.fragment
 
 import android.os.Bundle
-import android.os.PersistableBundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.towich.cosmicintrigue.R
-import com.towich.cosmicintrigue.data.model.Player
 import com.towich.cosmicintrigue.data.source.Constants.VOTE_TIMER_MILIS
 import com.towich.cosmicintrigue.databinding.FragmentVoteBinding
 import com.towich.cosmicintrigue.ui.adapters.VoteAdapter
 import com.towich.cosmicintrigue.ui.util.App
-import com.towich.cosmicintrigue.ui.util.ViewModelFactory
-import com.towich.cosmicintrigue.ui.viewmodel.TaskViewModel
 import com.towich.cosmicintrigue.ui.viewmodel.VoteViewModel
 
 /**

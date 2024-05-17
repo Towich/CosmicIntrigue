@@ -2,7 +2,6 @@ package com.towich.cosmicintrigue.ui.viewmodel
 
 import android.os.CountDownTimer
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.towich.cosmicintrigue.data.model.Player
 import com.towich.cosmicintrigue.data.source.Constants.VOTE_TIMER_MILIS

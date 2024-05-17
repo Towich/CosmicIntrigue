@@ -21,3 +21,4 @@ interface ApiService {
     @GET(ApiRoutes.RESTART)
     suspend fun restartServer()
 }
+
