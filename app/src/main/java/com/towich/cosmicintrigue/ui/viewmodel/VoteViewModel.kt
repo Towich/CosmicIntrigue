@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.towich.cosmicintrigue.data.model.GameState
 import com.towich.cosmicintrigue.data.model.Player
 import com.towich.cosmicintrigue.data.network.ApiResult
 import com.towich.cosmicintrigue.data.repository.MainRepository
@@ -45,6 +46,8 @@ class VoteViewModel(
                 is ApiResult.Error -> {
                     Log.e("VoteViewModel", result.error)
                 }
+
+                else -> {}
             }
         }
 
@@ -72,5 +75,15 @@ class VoteViewModel(
 
     fun getUserId(): Long {
         return repository.getCurrentPlayer()?.id ?: -1
+    }
+
+    fun subscribeGameStateTopic(
+        onReceivedGameState: (gameState: GameState) -> Unit
+    ){
+        repository.subscribeGameStateTopic(onReceivedGameState)
+    }
+
+    fun setWinners(innocentsWins: Boolean){
+        repository.setWinners(innocentsWins = innocentsWins)
     }
 }

@@ -21,12 +21,12 @@ class VoteAdapter(
     )
 
 
-    var votedId: Int = 0
+    private var votedId: Int = 0
     var users: ArrayList<AdaptedPlayer> = ArrayList()
-
-    init {
-        users.add(AdaptedPlayer(null, "пропустить", false, true, -1))
-    }
+//
+//    init {
+//        users.add(AdaptedPlayer(null, "пропустить", false, true, -1))
+//    }
 
     fun endVote(votes: List<Pair<Long?, Int>>) {
         val (listA: List<Long?>, listB: List<Int>) = votes.unzip()
@@ -39,7 +39,13 @@ class VoteAdapter(
 
     private fun setVotedIdPlayer(id: Int) {
         users[votedId].isVoted = false
-        users[id].isVoted = true
+
+        for(user in users){
+            user.isVoted = true
+            notifyItemChanged(user.id?.toInt() ?: 0)
+        }
+
+//        users[id].isVoted = true
         notifyItemChanged(votedId)
         notifyItemChanged(id)
         votedId = id
@@ -58,7 +64,7 @@ class VoteAdapter(
 
         with(holder.binding)
         {
-            val p: AdaptedPlayer = users.get(position)
+            val p: AdaptedPlayer = users[position]
             this.Progressbar.max = users.count()
             this.Name.text = p.login
             this.background.setBackgroundColor(Color.parseColor("#00FFFFFF"))

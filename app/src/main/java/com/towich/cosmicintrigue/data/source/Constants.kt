@@ -19,7 +19,7 @@ object Constants {
     const val VOTE_LINK_SOCKET = "/api/v1/chat/vote"
 
     // время работы таймера голосования
-    const val VOTE_TIMER_MILIS = 20000L
+    const val VOTE_TIMER_MILIS = 60000L
 
     // время работы таймера задания
     const val TASK_TIMER_MILIS = 5000L

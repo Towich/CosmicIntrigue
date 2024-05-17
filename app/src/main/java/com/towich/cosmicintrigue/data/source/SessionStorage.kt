@@ -19,8 +19,8 @@ class SessionStorage(
     var currentPlayer: Player? = null
     var currTaskId: Long? = null
 
-    var currCountTaskCount: MutableLiveData<Int> = MutableLiveData<Int>(0)
-    var totalTaskCount: MutableLiveData<Int> = MutableLiveData<Int>(0)
+    var currCountTaskCount: MutableLiveData<Int> = MutableLiveData<Int>(-1)
+    var totalTaskCount: MutableLiveData<Int> = MutableLiveData<Int>(-1)
     var currPlayerIdToKill: Long? = null
 
     var winners: Boolean? = null

@@ -20,7 +20,9 @@ class ViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
             modelClass.isAssignableFrom(DeathViewModel::class.java) -> {
-                DeathViewModel() as T
+                DeathViewModel(
+                    repository = repository
+                ) as T
             }
             modelClass.isAssignableFrom(FinalViewModel::class.java) -> {
                 FinalViewModel(

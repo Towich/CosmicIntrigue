@@ -82,15 +82,35 @@ class VoteFragment : Fragment() {
             Log.i("VoteFragment", "VoteFragment player ${kickedPlayer.login}")
             val currPlayerId = voteViewModel.getUserId()
 
-            if(currPlayerId == kickedPlayer.id){
+            if (currPlayerId == kickedPlayer.id) {
                 findNavController().navigate(R.id.action_Vote_to_Death)
-            }
-            else{
+            } else if (_binding != null) {
                 binding.rec.visibility = View.GONE
                 binding.progressBar.visibility = View.GONE
                 binding.VoteButton.visibility = View.VISIBLE
                 binding.kickedPlayerTextView.visibility = View.VISIBLE
-                binding.kickedPlayerTextView.text = "Выгнали: ${kickedPlayer.login}"
+                binding.kickedPlayerTextView.text =
+                    if (kickedPlayer.id != -1L)
+                        "Выгнали: ${kickedPlayer.login}"
+                    else
+                        "Никого не выгнали"
+            }
+        }
+
+        voteViewModel.subscribeGameStateTopic { state ->
+            Log.i("MapFragment", "Game Topic | Game state = ${state.gameState}")
+            when (state.gameState) {
+                // Innocents wins
+                3 -> {
+                    voteViewModel.setWinners(innocentsWins = true)
+                    findNavController().navigate(R.id.action_VoteFragment_to_FinalFragment)
+                }
+
+                // Imposters wins
+                4 -> {
+                    voteViewModel.setWinners(innocentsWins = false)
+                    findNavController().navigate(R.id.action_VoteFragment_to_FinalFragment)
+                }
             }
         }
 

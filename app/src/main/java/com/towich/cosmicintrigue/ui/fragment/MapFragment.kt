@@ -349,6 +349,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private fun initObservers() {
         // Observer for getting count of current tasks
         val countCurrTasksObserver = Observer<Int> { currCount ->
+            if(currCount == 0){
+                viewModel.setWinners(innocentsWins = true)
+                findNavController().navigate(R.id.action_MapFragment_to_FinalFragment)
+            }
+
             val completedTasks = viewModel.totalTaskMarks.value?.minus(currCount)
             binding.completedTasksTextView.text = completedTasks.toString()
             binding.progressBar2.progress = completedTasks ?: 0
@@ -436,8 +441,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                             dead = false
                         )
                     )
-
-                    viewModel.sendEmptyToGameStateTopic()
 
                     val taskIdToShow = getTaskIdToCompleteIfNearby(currLocation = location)
 

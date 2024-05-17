@@ -60,6 +60,9 @@
         <action
             android:id="@+id/action_VoteFragment_to_DeathFragment"
             app:destination="@id/DeathFragment" />
+        <action
+            android:id="@+id/action_VoteFragment_to_FinalFragment"
+            app:destination="@id/FinalFragment" />
     </fragment>
     <fragment
         android:id="@+id/DeathFragment"
