@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.towich.cosmicintrigue.data.model.GameState
 import com.towich.cosmicintrigue.data.model.GeoPositionModel
 import com.towich.cosmicintrigue.data.model.TaskGeoPositionModel
 import com.towich.cosmicintrigue.data.network.ApiResult
@@ -33,6 +34,8 @@ class MapViewModel(
                 is ApiResult.Error -> {
                     Log.e("MapViewModel", result.error)
                 }
+
+                else -> {}
             }
         }
 
@@ -97,6 +100,20 @@ class MapViewModel(
 
     fun sendTask(){
         repository.sendTaskGeoPositionModel(TaskGeoPositionModel(id = -1, latitude = 0.0, longitude = 0.0, completed = false))
+    }
+
+    fun subscribeGameStateTopic(
+        onReceivedGameState: (gameState: GameState) -> Unit
+    ){
+        repository.subscribeGameStateTopic(onReceivedGameState)
+    }
+
+    fun sendEmptyToGameStateTopic(){
+        repository.sendEmptyToGameStateTopic()
+    }
+
+    fun setWinners(innocentsWins: Boolean){
+        repository.setWinners(innocentsWins = innocentsWins)
     }
 
     override fun onCleared() {

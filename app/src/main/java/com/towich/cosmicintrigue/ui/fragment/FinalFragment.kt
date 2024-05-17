@@ -33,7 +33,19 @@ class FinalFragment: Fragment(){
         binding.finalButton.setOnClickListener {
             findNavController().navigate(R.id.action_Final_to_menu)
         }
-        binding.victoryText.text = if(finalViewModel.GetWinners()) "Предатели победили" else "Мирные победили"
+
+        val isInnocentsWinners = finalViewModel.getWinners()
+        binding.victoryText.text = when(isInnocentsWinners){
+            true -> {
+                "Мирные победили"
+            }
+            false -> {
+                "Предатели победили"
+            }
+            else -> {
+                "Ошибка"
+            }
+        }
     }
 
     override fun onDestroyView() {

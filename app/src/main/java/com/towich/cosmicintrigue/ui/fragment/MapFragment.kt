@@ -284,6 +284,33 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
             viewModel.countCurrTaskMarks.value = listOfTasksGeoPositions.size
         }
+
+        // Topic for getting game state
+        viewModel.subscribeGameStateTopic { state ->
+            Log.i("MapFragment", "Game Topic | Game state = ${state.gameState}")
+            when(state.gameState){
+
+                // Vote started
+                2 -> {
+                    stopLocationUpdates()
+                    findNavController().navigate(R.id.action_Map_to_Vote)
+                }
+
+                // Innocents wins
+                3 -> {
+                    viewModel.setWinners(innocentsWins = true)
+                    stopLocationUpdates()
+                    findNavController().navigate(R.id.action_MapFragment_to_FinalFragment)
+                }
+
+                // Imposters wins
+                4 -> {
+                    viewModel.setWinners(innocentsWins = false)
+                    stopLocationUpdates()
+                    findNavController().navigate(R.id.action_MapFragment_to_FinalFragment)
+                }
+            }
+        }
     }
 
     private fun initButtons() {
@@ -410,16 +437,23 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                         )
                     )
 
+                    viewModel.sendEmptyToGameStateTopic()
 
                     val taskIdToShow = getTaskIdToCompleteIfNearby(currLocation = location)
-                    if (taskIdToShow != null) {
-                        viewModel.setCurrTaskId(taskIdToShow)
-                        Log.i("MapFragment", "Task ${taskIdToShow} is ready for start completing!")
-                        binding.buttonmap.visibility = View.VISIBLE
-                        binding.buttonmap.text = "Выполнить задание #$taskIdToShow"
-                    } else {
-                        viewModel.setCurrTaskId(-1)
-                        binding.buttonmap.visibility = View.GONE
+
+                    if(_binding != null) {
+                        if (taskIdToShow != null) {
+                            viewModel.setCurrTaskId(taskIdToShow)
+                            Log.i(
+                                "MapFragment",
+                                "Task ${taskIdToShow} is ready for start completing!"
+                            )
+                            binding.buttonmap.visibility = View.VISIBLE
+                            binding.buttonmap.text = "Выполнить задание #$taskIdToShow"
+                        } else {
+                            viewModel.setCurrTaskId(-1)
+                            binding.buttonmap.visibility = View.GONE
+                        }
                     }
 
                     Log.i("MY_LOCATION", "${location?.latitude} ${location?.longitude}")
@@ -470,18 +504,19 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun changeKillFABStatus(isActive: Boolean, foundedClosePlayerPairMark: Pair<Long, Marker?>?){
-        if(isActive){
-            binding.killTextView.text =
-                getString(R.string.kill) + " #${foundedClosePlayerPairMark?.first}"
-            binding.killFab.isEnabled = true
-            binding.killFab.backgroundTintList = ColorStateList.valueOf(Color.RED)
-            viewModel.setCurrPlayerIdToKill(id = foundedClosePlayerPairMark?.first)
-        }
-        else{
-            binding.killTextView.text = ""
-            binding.killFab.isEnabled = false
-            binding.killFab.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
-            viewModel.setCurrPlayerIdToKill(id = null)
+        if(_binding != null) {
+            if (isActive) {
+                binding.killTextView.text =
+                    getString(R.string.kill) + " #${foundedClosePlayerPairMark?.first}"
+                binding.killFab.isEnabled = true
+                binding.killFab.backgroundTintList = ColorStateList.valueOf(Color.RED)
+                viewModel.setCurrPlayerIdToKill(id = foundedClosePlayerPairMark?.first)
+            } else {
+                binding.killTextView.text = ""
+                binding.killFab.isEnabled = false
+                binding.killFab.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+                viewModel.setCurrPlayerIdToKill(id = null)
+            }
         }
     }
 

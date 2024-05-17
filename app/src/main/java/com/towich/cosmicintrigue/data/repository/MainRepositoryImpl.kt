@@ -3,6 +3,7 @@ package com.towich.cosmicintrigue.data.repository
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
+import com.towich.cosmicintrigue.data.model.GameState
 import com.towich.cosmicintrigue.data.model.GeoPositionModel
 import com.towich.cosmicintrigue.data.model.Player
 import com.towich.cosmicintrigue.data.model.TaskGeoPositionModel
@@ -21,8 +22,6 @@ import ua.naiksoftware.stomp.StompClient
 class MainRepositoryImpl(
     private val stompController: StompController,
     private val apiService: ApiService,
-    private val gson: Gson,
-    private val mStompClient: StompClient,
     private val sessionStorage: SessionStorage
 ) : MainRepository {
 
@@ -194,12 +193,43 @@ class MainRepositoryImpl(
         stompController.sendPlayerModelToKick(playerModel)
     }
 
+    override suspend fun getAlivePlayers(): ApiResult<List<Player>> {
+        return try {
+            val response: Response<List<Player>> = apiService.getAliveUsers()
+
+
+            if (response.isSuccessful) {
+                ApiResult.Success(response.body() ?: listOf())
+            } else {
+                ApiResult.Error(response.message())
+            }
+        } catch (e: Exception) {
+            ApiResult.Error(e.message ?: "unknown error")
+        }
+    }
+
+    override fun subscribeGameStateTopic(onReceivedGameState: (gameState: GameState) -> Unit) {
+        stompController.subscribeGameStateTopic(onReceivedGameState)
+    }
+
+    override fun sendEmptyToGameStateTopic() {
+        stompController.sendEmptyToGameStateTopic()
+    }
+
     override suspend fun restartServer() {
         try {
             apiService.restartServer()
         } catch (e: Exception) {
             Log.e("restartServer()", e.message.toString())
         }
+    }
+
+    override fun getWinners(): Boolean? {
+        return sessionStorage.winners
+    }
+
+    override fun setWinners(innocentsWins: Boolean) {
+        sessionStorage.winners = innocentsWins
     }
 
 }

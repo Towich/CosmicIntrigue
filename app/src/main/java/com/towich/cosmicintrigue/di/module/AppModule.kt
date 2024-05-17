@@ -27,14 +27,10 @@ object AppModule {
     fun provideMainRepositoryImpl(
         stompController: StompController,
         apiService: ApiService,
-        gson: Gson,
-        mStompClient: StompClient,
         sessionStorage: SessionStorage
     ): MainRepository = MainRepositoryImpl(
         stompController = stompController,
         apiService = apiService,
-        gson = gson,
-        mStompClient = mStompClient,
         sessionStorage = sessionStorage
     )
 }

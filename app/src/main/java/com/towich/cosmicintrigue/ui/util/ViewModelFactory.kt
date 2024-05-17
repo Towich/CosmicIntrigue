@@ -23,7 +23,9 @@ class ViewModelFactory(
                 DeathViewModel() as T
             }
             modelClass.isAssignableFrom(FinalViewModel::class.java) -> {
-                FinalViewModel() as T
+                FinalViewModel(
+                    repository = repository
+                ) as T
             }
             modelClass.isAssignableFrom(LoginViewModel::class.java) -> {
                 LoginViewModel(
@@ -46,7 +48,9 @@ class ViewModelFactory(
                 ) as T
             }
             modelClass.isAssignableFrom(VoteViewModel::class.java) -> {
-                VoteViewModel() as T
+                VoteViewModel(
+                    repository = repository
+                ) as T
             }
             modelClass.isAssignableFrom(WRoomViewModel::class.java) -> {
                 WRoomViewModel(

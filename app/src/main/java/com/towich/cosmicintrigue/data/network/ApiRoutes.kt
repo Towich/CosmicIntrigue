@@ -4,4 +4,5 @@ object ApiRoutes {
     const val START_COORDINATES = "/startCoordinates"
     const val USER = "/user"
     const val RESTART = "/restart"
+    const val ALIVE_USERS = "/user"
 }
