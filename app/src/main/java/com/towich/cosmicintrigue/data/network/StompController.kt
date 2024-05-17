@@ -3,6 +3,7 @@ package com.towich.cosmicintrigue.data.network
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.towich.cosmicintrigue.data.model.GameState
 import com.towich.cosmicintrigue.data.model.GeoPositionModel
 import com.towich.cosmicintrigue.data.model.Player
 import com.towich.cosmicintrigue.data.model.TaskGeoPositionModel
@@ -24,6 +25,7 @@ class StompController(
     private var geoPosTopicDisposable: Disposable? = null
     private var coordinatesTopicDisposable: Disposable? = null
     private var usersTopicDisposable: Disposable? = null
+    private var gameStateTopicDisposable: Disposable? = null
 
     fun initGeoPositionsStompClient(
         compositeDisposable: CompositeDisposable?,
@@ -212,7 +214,6 @@ class StompController(
             )
 
         usersTopicDisposable = disp
-
         compositeDisposable?.add(disp)
     }
 
@@ -284,7 +285,7 @@ class StompController(
         onReceivedPlayerToKick: (playerToKick: Player) -> Unit
     ) {
         // Настраиваем подписку на топик
-        val disp = mStompClient.topic(Constants.USER_TOPIC)
+        val disp = mStompClient.topic(Constants.VOTE_TOPIC)
             .subscribeOn(Schedulers.io(), false)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage: StompMessage ->
@@ -320,6 +321,63 @@ class StompController(
                         Log.d(
                             "StompClient",
                             "SEND PLAYER TO KICK: id = ${playerModel.id}$, login = ${playerModel.login}"
+                        )
+                    },
+                    {
+                        Log.e("StompClient", "Stomp error", it)
+                    }
+                )
+        )
+    }
+
+    // Topic GameState
+    fun subscribeGameStateTopic(
+        onReceivedGameState: (gameState: GameState) -> Unit
+    ){
+        if(gameStateTopicDisposable != null){
+            compositeDisposable?.delete(gameStateTopicDisposable!!)
+        }
+
+        // Настраиваем подписку на топик
+        val disp = mStompClient.topic(Constants.GAME_TOPIC)
+            .subscribeOn(Schedulers.io(), false)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ topicMessage: StompMessage ->
+                Log.d("StompClient", "GAME_TOPIC | " + topicMessage.payload)
+
+
+                // десериализуем сообщение
+                val gameState: GameState =
+                    gson.fromJson(topicMessage.payload, GameState::class.java)
+
+
+                Log.i(
+                    "StompClient",
+                    "GAME_TOPIC | RECEIVED STATE: gameState = ${gameState.gameState}"
+                )
+
+                // вызываем коллбэк
+                onReceivedGameState(gameState)
+            },
+                {
+                    Log.e("StompClient", "Error!", it) // обработка ошибок
+                }
+            )
+
+        gameStateTopicDisposable = disp
+        compositeDisposable?.add(disp)
+    }
+
+    fun sendEmptyToGameStateTopic(){
+        compositeDisposable?.add(
+            mStompClient.send(Constants.GAME_LINK_SOCKET)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        Log.d(
+                            "StompClient",
+                            "SEND EMPTY TO GAME STATE: id = 0, gameState = 0"
                         )
                     },
                     {

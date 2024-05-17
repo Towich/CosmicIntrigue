@@ -20,5 +20,7 @@ interface ApiService {
 
     @GET(ApiRoutes.RESTART)
     suspend fun restartServer()
-}
 
+    @GET(ApiRoutes.ALIVE_USERS)
+    suspend fun getAliveUsers(): Response<List<Player>>
+}

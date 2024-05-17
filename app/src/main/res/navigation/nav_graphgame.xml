@@ -27,6 +27,9 @@
         <action
             android:id="@+id/action_Map_to_Death"
             app:destination="@id/DeathFragment" />
+        <action
+            android:id="@+id/action_MapFragment_to_FinalFragment"
+            app:destination="@id/FinalFragment" />
     </fragment>
     <fragment
         android:id="@+id/TaskFragment"
@@ -54,6 +57,9 @@
         <action
             android:id="@+id/action_Vote_to_Map"
             app:destination="@id/MapFragment" />
+        <action
+            android:id="@+id/action_VoteFragment_to_DeathFragment"
+            app:destination="@id/DeathFragment" />
     </fragment>
     <fragment
         android:id="@+id/DeathFragment"

@@ -1,10 +1,8 @@
 package com.towich.cosmicintrigue.data.source
 
-import com.towich.cosmicintrigue.data.network.ApiRoutes
-
 object Constants {
     // указываем endpoint, на который регистрировали сокет, не забываем добавить /websocket
-    const val SOCKET_URL = "${ApiRoutes.BASE_URL}/api/v1/chat/websocket"
+    const val SOCKET_URL = "/api/v1/chat/websocket"
 
     // заводим название топиков
     const val GEO_POS = "/topic/chat"
@@ -22,8 +20,12 @@ object Constants {
 
     // время работы таймера голосования
     const val VOTE_TIMER_MILIS = 20000L
+
     // время работы таймера задания
     const val TASK_TIMER_MILIS = 5000L
 
     const val ACTION_DISTANCE = 0.020 // 20 метров
+
+    const val APP_PREFERENCES = "APP_PREFERENCES"
+    const val BASE_URL_APP_PREFERENCES = "BASE_URL_APP_PREFERENCES"
 }
