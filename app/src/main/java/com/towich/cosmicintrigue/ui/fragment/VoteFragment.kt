@@ -59,10 +59,12 @@ class VoteFragment : Fragment() {
         voteViewModel.getVotes(
             onFinished = { a: List<Pair<Long?, Int>> ->
                 adapter?.endVote(a)
-                binding.VoteButton.visibility = View.VISIBLE
+                if(_binding != null)
+                    binding.VoteButton.visibility = View.VISIBLE
             },
             onTick = { a: Long ->
-                binding.progressBar.progress = (a * 100 / VOTE_TIMER_MILIS).toInt()
+                if(_binding != null)
+                    binding.progressBar.progress = (a * 100 / VOTE_TIMER_MILIS).toInt()
             }
         )
 
@@ -82,7 +84,7 @@ class VoteFragment : Fragment() {
             Log.i("VoteFragment", "VoteFragment player ${kickedPlayer.login}")
             val currPlayerId = voteViewModel.getUserId()
 
-            if (currPlayerId == kickedPlayer.id) {
+            if (currPlayerId == kickedPlayer.id && _binding != null) {
                 findNavController().navigate(R.id.action_Vote_to_Death)
             } else if (_binding != null) {
                 binding.rec.visibility = View.GONE

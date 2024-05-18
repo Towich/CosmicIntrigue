@@ -293,21 +293,24 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 // Vote started
                 2 -> {
                     stopLocationUpdates()
-                    findNavController().navigate(R.id.action_Map_to_Vote)
+                    if(_binding != null)
+                        findNavController().navigate(R.id.action_Map_to_Vote)
                 }
 
                 // Innocents wins
                 3 -> {
                     viewModel.setWinners(innocentsWins = true)
                     stopLocationUpdates()
-                    findNavController().navigate(R.id.action_MapFragment_to_FinalFragment)
+                    if(_binding != null)
+                        findNavController().navigate(R.id.action_MapFragment_to_FinalFragment)
                 }
 
                 // Imposters wins
                 4 -> {
                     viewModel.setWinners(innocentsWins = false)
                     stopLocationUpdates()
-                    findNavController().navigate(R.id.action_MapFragment_to_FinalFragment)
+                    if(_binding != null)
+                        findNavController().navigate(R.id.action_MapFragment_to_FinalFragment)
                 }
             }
         }
