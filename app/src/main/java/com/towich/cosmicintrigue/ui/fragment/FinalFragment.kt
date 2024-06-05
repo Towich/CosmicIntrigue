@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.towich.cosmicintrigue.R
+import com.towich.cosmicintrigue.application.App
 import com.towich.cosmicintrigue.databinding.FragmentFinalBinding
-import com.towich.cosmicintrigue.ui.util.App
 import com.towich.cosmicintrigue.ui.viewmodel.FinalViewModel
 
 class FinalFragment: Fragment(){

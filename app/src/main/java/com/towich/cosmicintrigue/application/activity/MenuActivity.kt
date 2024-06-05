@@ -1,19 +1,12 @@
-package com.towich.cosmicintrigue.ui.activity
+package com.towich.cosmicintrigue.application.activity
 
-import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.towich.cosmicintrigue.R
-import com.towich.cosmicintrigue.data.network.ApiRoutes
-import com.towich.cosmicintrigue.data.source.Constants
 import com.towich.cosmicintrigue.databinding.ActivityMenuBinding
-import com.towich.cosmicintrigue.di.component.MenuComponent
-import com.towich.cosmicintrigue.ui.util.App
-import io.reactivex.disposables.CompositeDisposable
 
 
 class MenuActivity : AppCompatActivity() {

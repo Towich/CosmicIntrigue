@@ -1,15 +1,15 @@
 package com.towich.cosmicintrigue.ui.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.towich.cosmicintrigue.R
+import com.towich.cosmicintrigue.application.App
 import com.towich.cosmicintrigue.databinding.FragmentRoleBinding
-import com.towich.cosmicintrigue.ui.util.App
 import com.towich.cosmicintrigue.ui.viewmodel.RoleViewModel
 
 /**

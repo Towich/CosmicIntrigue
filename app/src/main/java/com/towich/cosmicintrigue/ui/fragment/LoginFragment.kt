@@ -1,7 +1,6 @@
 package com.towich.cosmicintrigue.ui.fragment
 
 import android.content.Context
-import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,11 +14,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.towich.cosmicintrigue.R
+import com.towich.cosmicintrigue.application.App
 import com.towich.cosmicintrigue.data.model.Player
-import com.towich.cosmicintrigue.data.network.ApiRoutes
 import com.towich.cosmicintrigue.data.source.Constants
 import com.towich.cosmicintrigue.databinding.FragmentLoginBinding
-import com.towich.cosmicintrigue.ui.util.App
 import com.towich.cosmicintrigue.ui.viewmodel.LoginViewModel
 import io.reactivex.disposables.CompositeDisposable
 
