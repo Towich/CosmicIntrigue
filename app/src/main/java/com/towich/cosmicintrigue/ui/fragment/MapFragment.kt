@@ -33,13 +33,13 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.towich.cosmicintrigue.R
+import com.towich.cosmicintrigue.application.App
 import com.towich.cosmicintrigue.data.model.GeoPositionModel
 import com.towich.cosmicintrigue.data.model.TaskGeoPositionModel
 import com.towich.cosmicintrigue.data.source.Constants
 import com.towich.cosmicintrigue.data.source.CustomMath
 import com.towich.cosmicintrigue.data.util.MyLocationListener
 import com.towich.cosmicintrigue.databinding.FragmentMapBinding
-import com.towich.cosmicintrigue.ui.util.App
 import com.towich.cosmicintrigue.ui.viewmodel.MapViewModel
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.Job

@@ -9,9 +9,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.towich.cosmicintrigue.R
+import com.towich.cosmicintrigue.application.App
 import com.towich.cosmicintrigue.databinding.FragmentWroomBinding
 import com.towich.cosmicintrigue.ui.adapters.WaitAdapter
-import com.towich.cosmicintrigue.ui.util.App
 import com.towich.cosmicintrigue.ui.viewmodel.WRoomViewModel
 
 

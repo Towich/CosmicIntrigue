@@ -26,7 +26,7 @@
     </fragment>
     <activity
         android:id="@+id/gameActivity"
-        android:name="com.towich.cosmicintrigue.ui.activity.GameActivity"
+        android:name="com.towich.cosmicintrigue.application.activity.GameActivity"
         android:label="activity_maps"
         tools:layout="@layout/activity_maps" />
 

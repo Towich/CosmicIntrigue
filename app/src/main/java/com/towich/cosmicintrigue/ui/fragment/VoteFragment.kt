@@ -11,11 +11,11 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.towich.cosmicintrigue.R
+import com.towich.cosmicintrigue.application.App
 import com.towich.cosmicintrigue.data.model.Player
 import com.towich.cosmicintrigue.data.source.Constants.VOTE_TIMER_MILIS
 import com.towich.cosmicintrigue.databinding.FragmentVoteBinding
 import com.towich.cosmicintrigue.ui.adapters.VoteAdapter
-import com.towich.cosmicintrigue.ui.util.App
 import com.towich.cosmicintrigue.ui.viewmodel.VoteViewModel
 
 /**

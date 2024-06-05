@@ -1,14 +1,13 @@
 package com.towich.cosmicintrigue.di.component
 
 import android.content.Context
+import com.towich.cosmicintrigue.application.activity.GameActivity
+import com.towich.cosmicintrigue.application.activity.MenuActivity
 import com.towich.cosmicintrigue.di.module.AppModule
 import com.towich.cosmicintrigue.di.module.NetworkModule
 import com.towich.cosmicintrigue.di.module.ViewModelModule
 import com.towich.cosmicintrigue.di.scope.AppScope
-import com.towich.cosmicintrigue.ui.activity.GameActivity
-import com.towich.cosmicintrigue.ui.activity.MenuActivity
 import com.towich.cosmicintrigue.ui.util.ViewModelFactory
-
 import dagger.BindsInstance
 import dagger.Component
 
