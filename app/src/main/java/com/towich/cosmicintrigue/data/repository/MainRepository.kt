@@ -80,7 +80,7 @@ interface MainRepository {
         onReceivedGameState: (gameState: GameState) -> Unit
     )
     fun sendEmptyToGameStateTopic()
-
+    fun getCurrentGameState(): GameState
 
     // Restart server
     suspend fun restartServer()

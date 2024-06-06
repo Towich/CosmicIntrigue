@@ -18,6 +18,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.get
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -102,16 +103,20 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
                 initTopics()
 
-                binding.statusBox.setBackgroundColor(Color.GREEN)
+                if(_binding != null)
+                    binding.statusBox.setBackgroundColor(Color.GREEN)
             },
             onError = {
-                binding.statusBox.setBackgroundColor(Color.RED)
+                if(_binding != null)
+                    binding.statusBox.setBackgroundColor(Color.RED)
             },
             onFailedServerHeartbeat = {
-                binding.statusBox.setBackgroundColor(Color.RED)
+                if(_binding != null)
+                    binding.statusBox.setBackgroundColor(Color.RED)
             },
             onClosed = {
-                binding.statusBox.setBackgroundColor(Color.RED)
+                if(_binding != null)
+                    binding.statusBox.setBackgroundColor(Color.RED)
                 if(reconnectJob == null) {
                     reconnectJob = requireActivity().lifecycleScope.launch {
                         while (isActive) {
@@ -524,6 +529,42 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 viewModel.setCurrPlayerIdToKill(id = null)
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val gameState = viewModel.getCurrentGameState()
+        val navController = findNavController()
+
+        when(gameState.gameState){
+            // Vote started
+            2 -> {
+                if(navController.currentDestination?.id != navController.graph[R.id.VoteFragment].id && _binding != null) {
+                    stopLocationUpdates()
+                    navController.navigate(R.id.action_Map_to_Vote)
+                }
+            }
+
+            // Innocents wins
+            3 -> {
+                if(navController.currentDestination?.id != navController.graph[R.id.FinalFragment].id && _binding != null) {
+                    viewModel.setWinners(innocentsWins = true)
+                    stopLocationUpdates()
+                    navController.navigate(R.id.action_MapFragment_to_FinalFragment)
+                }
+            }
+
+            // Imposters wins
+            4 -> {
+                if(navController.currentDestination?.id != navController.graph[R.id.FinalFragment].id && _binding != null) {
+                    viewModel.setWinners(innocentsWins = false)
+                    stopLocationUpdates()
+                    navController.navigate(R.id.action_MapFragment_to_FinalFragment)
+                }
+            }
+        }
+
     }
 
     override fun onDestroyView() {

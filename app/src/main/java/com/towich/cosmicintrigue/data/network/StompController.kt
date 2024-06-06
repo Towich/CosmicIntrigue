@@ -332,8 +332,11 @@ class StompController(
 
     // Topic GameState
     fun subscribeGameStateTopic(
-        onReceivedGameState: (gameState: GameState) -> Unit
+        onReceivedGameState: (gameState: GameState) -> Unit,
+        changeCurrentGameState: (gameState: GameState) -> Unit
     ){
+        var localGameState: GameState? = null
+
         if(gameStateTopicDisposable != null){
             compositeDisposable?.delete(gameStateTopicDisposable!!)
         }
@@ -356,8 +359,9 @@ class StompController(
                     "GAME_TOPIC | RECEIVED STATE: gameState = ${gameState.gameState}"
                 )
 
-                // вызываем коллбэк
+                // вызываем коллбэки
                 onReceivedGameState(gameState)
+                changeCurrentGameState(gameState)
             },
                 {
                     Log.e("StompClient", "Error!", it) // обработка ошибок

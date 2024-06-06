@@ -10,7 +10,6 @@ import com.towich.cosmicintrigue.data.model.TaskGeoPositionModel
 import com.towich.cosmicintrigue.data.network.ApiResult
 import com.towich.cosmicintrigue.data.repository.MainRepository
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.launch
 
 class MapViewModel(
@@ -114,6 +113,10 @@ class MapViewModel(
 
     fun setWinners(innocentsWins: Boolean){
         repository.setWinners(innocentsWins = innocentsWins)
+    }
+
+    fun getCurrentGameState(): GameState {
+        return repository.getCurrentGameState()
     }
 
     override fun onCleared() {

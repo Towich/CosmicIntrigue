@@ -2,7 +2,6 @@ package com.towich.cosmicintrigue.data.repository
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.google.gson.Gson
 import com.towich.cosmicintrigue.data.model.GameState
 import com.towich.cosmicintrigue.data.model.GeoPositionModel
 import com.towich.cosmicintrigue.data.model.Player
@@ -13,7 +12,6 @@ import com.towich.cosmicintrigue.data.network.StompController
 import com.towich.cosmicintrigue.data.source.SessionStorage
 import io.reactivex.disposables.CompositeDisposable
 import retrofit2.Response
-import ua.naiksoftware.stomp.StompClient
 
 class MainRepositoryImpl(
     private val stompController: StompController,
@@ -204,12 +202,23 @@ class MainRepositoryImpl(
         }
     }
 
-    override fun subscribeGameStateTopic(onReceivedGameState: (gameState: GameState) -> Unit) {
-        stompController.subscribeGameStateTopic(onReceivedGameState)
+    override fun subscribeGameStateTopic(
+        onReceivedGameState: (gameState: GameState) -> Unit
+    ) {
+        stompController.subscribeGameStateTopic(
+            onReceivedGameState = onReceivedGameState,
+            changeCurrentGameState = {
+                sessionStorage.currentGameState = it
+            }
+        )
     }
 
     override fun sendEmptyToGameStateTopic() {
         stompController.sendEmptyToGameStateTopic()
+    }
+
+    override fun getCurrentGameState(): GameState {
+        return sessionStorage.currentGameState
     }
 
     override suspend fun restartServer() {
