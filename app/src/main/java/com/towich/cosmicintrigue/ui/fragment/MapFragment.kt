@@ -30,6 +30,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.GroundOverlayOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
@@ -64,7 +65,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
 
-    private val listOfUsersMarks = mutableListOf<Pair<Long, Marker?>>()
+    private val listOfUsersMarks = mutableListOf<Pair<GeoPositionModel, Marker?>>()
     private val listOfTasksMarks = mutableListOf<Pair<Long, Marker?>>()
 
     private var reconnectJob: Job? = null
@@ -168,7 +169,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 val ourPlayerId = viewModel.getPlayerId() ?: -1
 
                 for (i in 0 until listOfUsersMarks.size) {
-                    if (listOfUsersMarks[i].first == geoPosition.id) {
+                    if (listOfUsersMarks[i].first.id == geoPosition.id) {
                         listOfUsersMarks[i].second?.remove()
                         Log.i("MapFragment", "Removed player $i in listOfUsersMarks")
                     }
@@ -182,7 +183,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                         findNavController().navigate(R.id.action_Map_to_Death)
                     }
 
-                    listOfUsersMarks.removeIf { it.first == geoPosition.id }
+                    listOfUsersMarks.removeIf { it.first.id == geoPosition.id }
 
                     return@subscribeGeoPosTopic
                 }
@@ -201,13 +202,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                         )
                 )
 
-                if(!listOfUsersMarks.map { it.first }.contains(geoPosition.id)){
-                    listOfUsersMarks.add(Pair(geoPosition.id, newMarker))
+                if(!listOfUsersMarks.map { it.first.id }.contains(geoPosition.id)){
+                    listOfUsersMarks.add(Pair(geoPosition, newMarker))
                 }
                 else{
                     for(i in 0 until listOfUsersMarks.size){
-                        if(listOfUsersMarks[i].first == geoPosition.id){
-                            listOfUsersMarks[i] = Pair(geoPosition.id, newMarker)
+                        if(listOfUsersMarks[i].first.id == geoPosition.id){
+                            listOfUsersMarks[i] = Pair(geoPosition, newMarker)
                         }
                     }
                 }
@@ -220,9 +221,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     // Getting our location
                     var ourLocation: GeoPositionModel? = null
                     for (mark in listOfUsersMarks) {
-                        if (mark.first == ourPlayerId) {
+                        if (mark.first.id == ourPlayerId) {
                             ourLocation = GeoPositionModel(
                                 id = ourPlayerId,
+                                login = "",
                                 latitude = mark.second?.position?.latitude,
                                 longitude = mark.second?.position?.longitude,
                                 dead = false
@@ -232,9 +234,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     }
 
                     // Looking for any player which are nearly with us
-                    var foundedClosePlayerPairMark: Pair<Long, Marker?>? = null
+                    var foundedClosePlayerPairMark: Pair<GeoPositionModel, Marker?>? = null
                     for (pairMark in listOfUsersMarks) {
-                        if (pairMark.first != ourLocation?.id && CustomMath.checkIfPlayerIsNear(
+                        if (pairMark.first.id != ourLocation?.id && CustomMath.checkIfPlayerIsNear(
                                 ourGeoPos = ourLocation,
                                 otherPlayerGeoPos = pairMark.second
                             )
@@ -338,6 +340,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     viewModel.sendGeoPosition(
                         geoPosition = GeoPositionModel(
                             id = playerToKill,
+                            login = "",
                             latitude = 0.0,
                             longitude = 0.0,
                             dead = true
@@ -395,10 +398,19 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             )
         }
 
+
         map = googleMap
+
         // Add a marker in Moscow and move the camera
         val park50years = LatLng(55.684132, 37.502607)
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(park50years, 14.5f))
+
+        // Add ground overlay to (55.801284, 37.806323)
+        val newarkLatLng = LatLng(55.801284, 37.806323)
+        val newarkMap = GroundOverlayOptions()
+            .image(BitmapDescriptorFactory.fromResource(R.drawable.image_2))
+            .position(newarkLatLng, 50f, 50f)
+        map.addGroundOverlay(newarkMap)
 
         googleMap.isMyLocationEnabled = true
 
@@ -444,6 +456,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     viewModel.sendGeoPosition(
                         GeoPositionModel(
                             id = viewModel.getPlayerId() ?: -1,
+                            login = "",
                             latitude = location?.latitude,
                             longitude = location?.longitude,
                             dead = false
@@ -514,14 +527,14 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         return foundedTaskId
     }
 
-    private fun changeKillFABStatus(isActive: Boolean, foundedClosePlayerPairMark: Pair<Long, Marker?>?){
+    private fun changeKillFABStatus(isActive: Boolean, foundedClosePlayerPairMark: Pair<GeoPositionModel, Marker?>?){
         if(_binding != null) {
             if (isActive) {
                 binding.killTextView.text =
-                    getString(R.string.kill) + " #${foundedClosePlayerPairMark?.first}"
+                    getString(R.string.kill) + " #${foundedClosePlayerPairMark?.first?.id}"
                 binding.killFab.isEnabled = true
                 binding.killFab.backgroundTintList = ColorStateList.valueOf(Color.RED)
-                viewModel.setCurrPlayerIdToKill(id = foundedClosePlayerPairMark?.first)
+                viewModel.setCurrPlayerIdToKill(id = foundedClosePlayerPairMark?.first?.id)
             } else {
                 binding.killTextView.text = ""
                 binding.killFab.isEnabled = false

@@ -23,7 +23,7 @@ class GeoTrackingService: Service() {
     private fun start(){
         val notification = NotificationCompat.Builder(this, "geo_tracking_channel")
             .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentTitle("CosmicIntrique запущен")
+            .setContentTitle("Игра в процессе")
             .setContentText("Ваше местоположение отслеживается!")
             .build()
 
